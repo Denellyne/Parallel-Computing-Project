@@ -11,6 +11,7 @@ void freeArr(int **ptr, const int size) {
   }
   free(ptr);
 }
+
 int **alloc(int size) {
   int **matrix = malloc(sizeof(int *) * size);
   for (int i = 0; i < size; i++) {
@@ -18,6 +19,7 @@ int **alloc(int size) {
   }
   return matrix;
 }
+
 int **matrixMultiply(int **arr, const int size) {
   int **matrix = alloc(size);
   for (int i = 0; i < size; i++) {
@@ -25,8 +27,8 @@ int **matrixMultiply(int **arr, const int size) {
       matrix[i][j] = INT32_MAX;
       for (int k = 0; k < size; k++) {
         const int v1 = matrix[i][j];
-        const int v2 = arr[i][k] + arr[k][j];
-        matrix[i][j] = v1 * (v1 < v2) + v2 * (v2 <= v1);
+        const int v2 = (arr[i][k] != INT32_MAX && arr[k][j] != INT32_MAX) ? (arr[i][k] + arr[k][j]) : INT32_MAX;
+        matrix[i][j] = v1 * (v1 < v2) + v2 * (v1 >= v2);
       }
     }
   }
@@ -43,27 +45,33 @@ int main(int argc, char *argv[]) {
   int nodes = 0;
   scanf("%d", &nodes);
   int **graph = alloc(nodes);
-  for (int i = 0; i < nodes; i++)
+  for (int i = 0; i < nodes; i++) {
     for (int k = 0; k < nodes; k++) {
       scanf("%d", &graph[i][k]);
+      if (graph[i][k] == 0 && i != k) graph[i][k] = INT32_MAX;
+      printf("%d ", graph[i][k]);
     }
+    printf("\n");
+  }
   int steps = 0;
   int power = 1;
   while (power < nodes) {
     steps++;
     power *= 2;
   }
-
+  printf("\n");
+  
   for (int i = 0; i < steps; i++) {
     int **m = matrixMultiply(graph, nodes);
     freeArr(graph, nodes);
     graph = m;
     for (int i = 0; i < nodes; i++) {
       for (int k = 0; k < nodes; k++) {
-        printf("%d", graph[i][k]);
+        printf("%d ", (graph[i][k] == INT32_MAX) ? 0 : graph[i][k]);
       }
       printf("\n");
     }
+    printf("\n");
   }
   freeArr(graph, nodes);
 
