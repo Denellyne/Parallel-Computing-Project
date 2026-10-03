@@ -33,9 +33,8 @@ static inline void matrixMultiply(int *restrict matrix,
       for (int k = 0; k < size; k++) {
         const int graphCost = graphRow[k];
         const int transCost = transRow[k];
-        const int cost = (graphCost + transCost);
-        if (cost < minCost)
-          minCost = cost;
+        if ((unsigned long long)(graphCost + transCost) < minCost)
+          minCost = (graphCost + transCost);
       }
       mRow[col] = minCost;
     }
