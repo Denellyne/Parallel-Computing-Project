@@ -1,5 +1,5 @@
 CXX = mpicc
-CFLAGS = 
+CFLAGS = -O2
 OBJ := $(shell find . -name '*.c')
 TEST := *.md
 DEBUG = -g -Wall -Wextra -pedantic

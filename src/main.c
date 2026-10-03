@@ -19,19 +19,36 @@ int **alloc(int size) {
   }
   return matrix;
 }
+int **transpose(int **arr, const int size) {
+  int **matrix = alloc(size);
+  for (int i = 0; i < size; i++)
+    for (int j = 0; j < size; j++) {
+      matrix[i][j] = arr[j][i];
+    }
+  return matrix;
+}
 
 int **matrixMultiply(int **arr, const int size) {
   int **matrix = alloc(size);
+  int **trans = transpose(arr, size);
   for (int i = 0; i < size; i++) {
     for (int j = 0; j < size; j++) {
+      if (i == j) {
+        matrix[i][j] = 0;
+        continue;
+      }
+
       matrix[i][j] = INT32_MAX;
       for (int k = 0; k < size; k++) {
         const int v1 = matrix[i][j];
-        const int v2 = (arr[i][k] != INT32_MAX && arr[k][j] != INT32_MAX) ? (arr[i][k] + arr[k][j]) : INT32_MAX;
+        const int v2 = (arr[i][k] != INT32_MAX && trans[j][k] != INT32_MAX)
+                           ? (arr[i][k] + trans[j][k])
+                           : INT32_MAX;
         matrix[i][j] = v1 * (v1 < v2) + v2 * (v1 >= v2);
       }
     }
   }
+  freeArr(trans, size);
 
   return matrix;
 }
@@ -48,10 +65,11 @@ int main(int argc, char *argv[]) {
   for (int i = 0; i < nodes; i++) {
     for (int k = 0; k < nodes; k++) {
       scanf("%d", &graph[i][k]);
-      if (graph[i][k] == 0 && i != k) graph[i][k] = INT32_MAX;
-      printf("%d ", graph[i][k]);
+      if (graph[i][k] == 0 && i != k)
+        graph[i][k] = INT32_MAX;
+      // printf("%d ", graph[i][k]);
     }
-    printf("\n");
+    // printf("\n");
   }
   int steps = 0;
   int power = 1;
@@ -59,17 +77,23 @@ int main(int argc, char *argv[]) {
     steps++;
     power *= 2;
   }
-  printf("\n");
-  
+  // printf("\n");
+
   for (int i = 0; i < steps; i++) {
     int **m = matrixMultiply(graph, nodes);
     freeArr(graph, nodes);
     graph = m;
-    for (int i = 0; i < nodes; i++) {
-      for (int k = 0; k < nodes; k++) {
-        printf("%d ", (graph[i][k] == INT32_MAX) ? 0 : graph[i][k]);
-      }
-      printf("\n");
+    // for (int i = 0; i < nodes; i++) {
+    //   for (int k = 0; k < nodes; k++) {
+    //     printf("%d ", (graph[i][k] == INT32_MAX) ? 0 : graph[i][k]);
+    //   }
+    //   printf("\n");
+    // }
+    // printf("\n");
+  }
+  for (int i = 0; i < nodes; i++) {
+    for (int k = 0; k < nodes; k++) {
+      printf("%d ", (graph[i][k] == INT32_MAX) ? 0 : graph[i][k]);
     }
     printf("\n");
   }
