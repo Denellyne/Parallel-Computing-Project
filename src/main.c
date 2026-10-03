@@ -5,42 +5,41 @@
 
 #define MASTER 0
 
-static inline int *alloc(int size) {
+static inline int *alloc(const int size) {
   return malloc(sizeof(int) * (size * size));
 }
-static inline void transpose(int *matrix, const int *arr, const int size) {
+static inline void transpose(int *restrict matrix,
+                             const int *const restrict graph, const int size) {
   for (int i = 0; i < size; i++) {
-    int *mRow = &matrix[i * size];
+    int *restrict mRow = &matrix[i * size];
     for (int j = 0; j < size; j++)
-      mRow[j] = arr[j * size + i];
+      mRow[j] = graph[j * size + i];
   }
 }
 
-static inline int *matrixMultiply(int *matrix, const int *trans, const int *arr,
+static inline void matrixMultiply(int *restrict matrix,
+                                  const int *const restrict trans,
+                                  const int *const restrict graph,
                                   const int size) {
-  for (int i = 0; i < size; i++) {
-    int *mRow = &matrix[i * size];
-    const int *arrRow = &arr[i * size];
+  for (int row = 0; row < size; row++) {
+    int *restrict mRow = &matrix[row * size];
+    const int *restrict graphRow = &graph[row * size];
 
-    for (int j = 0; j < size; j++) {
-      const int *transRow = &trans[j * size];
-      int *m = &mRow[j];
-      if (i == j)
-        *m = 0;
-      else {
-        *m = INT32_MAX;
-        for (int k = 0; k < size; k++) {
-          const int v1 = *m;
-          const int v2 = (arrRow[k] != INT32_MAX && transRow[k] != INT32_MAX)
-                             ? (arrRow[k] + transRow[k])
-                             : INT32_MAX;
-          *m = v1 * (v1 < v2) + v2 * (v1 >= v2);
-        }
+    for (int col = 0; col < size; col++) {
+      const int *restrict transRow = &trans[col * size];
+      int minCost = INT32_MAX;
+
+#pragma GCC ivdep
+      for (int k = 0; k < size; k++) {
+        const int graphCost = graphRow[k];
+        const int transCost = transRow[k];
+        const int cost = (graphCost + transCost);
+        if (cost < minCost)
+          minCost = cost;
       }
+      mRow[col] = minCost;
     }
   }
-
-  return matrix;
 }
 
 int main(int argc, char *argv[]) {
@@ -49,11 +48,12 @@ int main(int argc, char *argv[]) {
   MPI_Init(&argc, &argv);
   MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
   int nodes = 0;
   scanf("%d", &nodes);
-  int *graph = alloc(nodes);
+  int *restrict graph = alloc(nodes);
   for (int i = 0; i < nodes; i++) {
-    int *graphRow = &graph[i * nodes];
+    int *restrict graphRow = &graph[i * nodes];
     for (int k = 0; k < nodes; k++) {
       scanf("%d", &graphRow[k]);
       if (graphRow[k] == 0 && i != k)
@@ -71,12 +71,13 @@ int main(int argc, char *argv[]) {
   }
   // printf("\n");
 
-  int *matrix = alloc(nodes);
-  int *trans = alloc(nodes);
+  int *restrict matrix = alloc(nodes);
+  int *restrict trans = alloc(nodes);
+
   for (int i = 0; i < steps; i++) {
     transpose(trans, graph, nodes);
     matrixMultiply(matrix, trans, graph, nodes);
-    int *tmp = graph;
+    int *const tmp = graph;
     graph = matrix;
     matrix = tmp;
     // for (int i = 0; i < nodes; i++) {
@@ -88,8 +89,9 @@ int main(int argc, char *argv[]) {
     // }
     // printf("\n");
   }
+
   for (int i = 0; i < nodes; i++) {
-    const int *graphRow = &graph[i * nodes];
+    const int *const restrict graphRow = &graph[i * nodes];
     for (int k = 0; k < nodes; k++)
       printf("%d ", (graphRow[k] == INT32_MAX) ? 0 : graphRow[k]);
 
@@ -101,4 +103,6 @@ int main(int argc, char *argv[]) {
   free(graph);
 
   MPI_Finalize();
+
+  return 0;
 }
