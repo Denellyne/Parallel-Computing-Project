@@ -1,0 +1,20 @@
+
+    for (int foxSteps = 0; foxSteps < sqrtNumProcs; foxSteps++) {
+      if (rank == rowGroupRanks[initialIdx]) {
+        memcpy(received, trans, subSize * subSize * sizeof(int));
+        printf("im root %d\n", rank);
+      }
+
+      MPI_Bcast(received, subSize * subSize * sizeof(int), MPI_INT, initialIdx,
+                rowCommunicator);
+
+      matrixMultiply(resultMatrix, received, subMatrix, subSize);
+      initialIdx = (initialIdx + 1) % sqrtNumProcs;
+
+      sendArray(trans, subSize, subSize * subSize * sizeof(int), subSize,
+                (rank + (sqrtNumProcs >> 1)) % numProcs);
+      receiveArray(subSize, trans, (rank + sqrtNumProcs) % numProcs);
+    }
+      sendArray(trans, subSize, subSize * subSize * sizeof(int), subSize,
+                (rank + (sqrtNumProcs << 1)) % numProcs);
+      receiveArray(subSize, trans, (rank + sqrtNumProcs) % numProcs);

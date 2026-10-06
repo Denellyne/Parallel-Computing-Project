@@ -1,105 +1,215 @@
+#include "./Math/Math.h"
+#include "./Misc/Misc.h"
+#include "MPIHelper/MPIHelper.h"
+#include <math.h>
 #include <mpi.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define MASTER 0
 
-static inline int *alloc(const int size) {
-  return malloc(sizeof(int) * (size * size));
-}
-static inline void transpose(int *restrict matrix,
-                             const int *const restrict graph, const int size) {
-  for (int i = 0; i < size; i++) {
-    int *restrict mRow = &matrix[i * size];
-    for (int j = 0; j < size; j++)
-      mRow[j] = graph[j * size + i];
-  }
-}
-
-static inline void matrixMultiply(int *restrict matrix,
-                                  const int *const restrict trans,
-                                  const int *const restrict graph,
-                                  const int size) {
-  for (int row = 0; row < size; row++) {
-    int *restrict mRow = &matrix[row * size];
-    const int *restrict graphRow = &graph[row * size];
-
-    for (int col = 0; col < size; col++) {
-      const int *restrict transRow = &trans[col * size];
-      int minCost = INT32_MAX;
-
-#pragma GCC ivdep
-      for (int k = 0; k < size; k++) {
-        const int graphCost = graphRow[k];
-        const int transCost = transRow[k];
-        if ((unsigned long long)(graphCost + transCost) < minCost)
-          minCost = (graphCost + transCost);
-      }
-      mRow[col] = minCost;
-    }
-  }
-}
-
 int main(int argc, char *argv[]) {
-  int numprocs, rank;
+  int numProcs, rank, subSize, nodes;
 
   MPI_Init(&argc, &argv);
-  MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
+  MPI_Comm_size(MPI_COMM_WORLD, &numProcs);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-  int nodes = 0;
-  scanf("%d", &nodes);
-  int *restrict graph = alloc(nodes);
-  for (int i = 0; i < nodes; i++) {
-    int *restrict graphRow = &graph[i * nodes];
-    for (int k = 0; k < nodes; k++) {
-      scanf("%d", &graphRow[k]);
-      if (graphRow[k] == 0 && i != k)
-        graphRow[k] = INT32_MAX;
-      // printf("%d ", graph[i*size +k]);
+  const int sqrtNumProcs = (int)sqrt(numProcs);
 
-      // printf("\n");
+  const int group = rank % sqrtNumProcs;
+  MPI_Group worldGroup;
+  MPI_Comm_group(MPI_COMM_WORLD, &worldGroup);
+
+  MPI_Group rowGroup;
+  int rowGroupRanks[sqrtNumProcs];
+  int columnGroupRanks[sqrtNumProcs];
+
+  for (int i = 0; i < sqrtNumProcs; i++)
+    rowGroupRanks[i] = rank + i - group;
+
+  for (int i = 0; i < sqrtNumProcs; i++)
+    columnGroupRanks[i] = (rank % sqrtNumProcs + i * sqrtNumProcs) % numProcs;
+
+  int initialIdx = 0;
+  for (int i = 0; i < sqrtNumProcs; i++) {
+    if (rowGroupRanks[i] % sqrtNumProcs == rowGroupRanks[i] / sqrtNumProcs) {
+      initialIdx = i;
+      break;
     }
   }
+
+  MPI_Group_incl(worldGroup, sqrtNumProcs, rowGroupRanks, &rowGroup);
+  MPI_Comm rowCommunicator;
+  MPI_Comm_create_group(MPI_COMM_WORLD, rowGroup, 0, &rowCommunicator);
+
+  if (rank == 0) {
+    scanf("%d", &nodes);
+    if (nodes % sqrtNumProcs != 0) {
+      printf(
+          "Number of processes must evenly divide the number of nodes in the "
+          "matrix\n");
+      return 1;
+    }
+
+    subSize = nodes / sqrtNumProcs;
+  }
+  MPI_Bcast(&subSize, 1, MPI_INT, 0, MPI_COMM_WORLD);
+  int *restrict subMatrix = alloc(subSize);
+  int *restrict trans = alloc(subSize);
+
+  if (rank == 0) {
+    int *restrict graph = alloc(nodes);
+    for (int i = 0; i < nodes; i++) {
+      int *restrict graphRow = &graph[i * nodes];
+      for (int k = 0; k < nodes; k++) {
+        scanf("%d", &graphRow[k]);
+        if (graphRow[k] == 0 && i != k)
+          graphRow[k] = INT32_MAX;
+        // printf("%d ", graph[i*size +k]);
+        // printf("\n");
+      }
+    }
+    int *restrict x = alloc(nodes);
+    transpose(x, graph, nodes);
+
+    int row = 0;
+    int rowIdx = 1;
+    int size = 0;
+    MPI_Pack_size(subSize * subSize, MPI_INT, MPI_COMM_WORLD, &size);
+    for (int i = 1; i < numProcs; i++) {
+      if (i % sqrtNumProcs == 0) {
+        row += subSize;
+        rowIdx = 0;
+      }
+
+      const int *restrict graphRow = &graph[rowIdx * subSize + (row * nodes)];
+      const int *restrict transRow = &x[rowIdx++ * subSize + (row * nodes)];
+      sendArray(graphRow, subSize, size, nodes, i);
+      sendArray(transRow, subSize, size, nodes, i);
+    }
+
+    const int *restrict graphRow = graph;
+    const int *restrict transRow = x;
+    for (int k = 0; k < subSize; k++) {
+      memcpy(&subMatrix[k * subSize], graphRow, size);
+      memcpy(&trans[k * subSize], transRow, size);
+      graphRow += nodes;
+      transRow += nodes;
+    }
+    free(graph);
+    free(x);
+  } else {
+    receiveArray(subSize, subMatrix, 0);
+    receiveArray(subSize, trans, 0);
+  }
+
   int steps = 0;
-  int power = 1;
-  while (power < nodes) {
-    steps++;
-    power *= 2;
+  if (rank == 0) {
+    int power = 1;
+    while (power < nodes) {
+      steps++;
+      power *= 2;
+    }
   }
-  // printf("\n");
 
-  int *restrict matrix = alloc(nodes);
-  int *restrict trans = alloc(nodes);
+  MPI_Bcast(&steps, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
+  int *restrict resultMatrix = alloc(subSize);
+  transpose(trans, subMatrix, subSize);
   for (int i = 0; i < steps; i++) {
-    transpose(trans, graph, nodes);
-    matrixMultiply(matrix, trans, graph, nodes);
-    int *const tmp = graph;
-    graph = matrix;
-    matrix = tmp;
-    // for (int i = 0; i < nodes; i++) {
-    //   for (int k = 0; k < nodes; k++) {
-    //     printf("%d ", (graph[i*size +k] == INT32_MAX) ? 0 : graph[i*size
-    //     +k]);
-    //   }
-    //   printf("\n");
-    // }
-    // printf("\n");
+    int received[subSize * subSize];
+    for (int foxSteps = 0; foxSteps < sqrtNumProcs; foxSteps++) {
+      if (rank == rowGroupRanks[initialIdx])
+        memcpy(received, trans, subSize * subSize * sizeof(int));
+
+      MPI_Bcast(received, subSize * subSize * sizeof(int), MPI_INT, initialIdx,
+                rowCommunicator);
+
+      matrixMultiply(resultMatrix, received, subMatrix, subSize);
+      initialIdx = (initialIdx + 1) % sqrtNumProcs;
+
+      MPI_Send(trans, subSize * subSize, MPI_INT,
+               (rank + (sqrtNumProcs << 1)) % numProcs, 0, MPI_COMM_WORLD);
+      MPI_Recv(trans, subSize * subSize, MPI_INT,
+               (rank + sqrtNumProcs) % numProcs, 0, MPI_COMM_WORLD, 0);
+    }
+    transpose(trans, resultMatrix, subSize);
   }
 
-  for (int i = 0; i < nodes; i++) {
-    const int *const restrict graphRow = &graph[i * nodes];
-    for (int k = 0; k < nodes; k++)
-      printf("%d ", (graphRow[k] == INT32_MAX) ? 0 : graphRow[k]);
+  if (rank == 0) {
+    int *restrict graph = alloc(nodes);
+    int *restrict graphRow = graph;
+    for (int k = 0; k < subSize; k++) {
+      memcpy(graphRow, &resultMatrix[k * subSize],
+             subSize * subSize * sizeof(int));
+      graphRow += nodes;
+    }
 
+    int rowIdx = 1;
+    int row = 0;
+    for (int i = 1; i < numProcs; i++) {
+      if (i % sqrtNumProcs == 0) {
+        row += subSize;
+        rowIdx = 0;
+      }
+      graphRow = &graph[rowIdx++ * subSize + (row * nodes)];
+      int position = 0;
+      int size = subSize * subSize * sizeof(int);
+      int buf[size];
+      MPI_Recv(buf, size, MPI_PACKED, i, 0, MPI_COMM_WORLD, 0);
+      for (int i = 0; i < subSize; i++)
+        MPI_Unpack(buf, size, &position, &subMatrix[i * subSize], subSize,
+                   MPI_INT, MPI_COMM_WORLD);
+      for (int k = 0; k < subSize; k++) {
+        memcpy(graphRow, &resultMatrix[k * subSize],
+               subSize * subSize * sizeof(int));
+        graphRow += nodes;
+      }
+    }
+
+    for (int i = 0; i < nodes * nodes; i++) {
+      if (i % nodes == 0)
+        printf("\n");
+      printf("%d ", (graph[i] == INT32_MAX) ? 0 : graph[i]);
+    }
     printf("\n");
-  }
+    free(graph);
+  } else
+    sendArray(resultMatrix, subSize, subSize * subSize * sizeof(int), subSize,
+              0);
 
-  free(matrix);
+  // for (int i = 0; i < steps; i++) {
+  //   matrixMultiply(matrix, trans, subMatrix, subSize);
+  //   int *const tmp = graph;
+  //   graph = matrix;
+  //   matrix = tmp;
+  //   // for (int i = 0; i < nodes; i++) {
+  //   //   for (int k = 0; k < nodes; k++) {
+  //   //     printf("%d ", (graph[i*size +k] == INT32_MAX) ? 0 : graph[i*size
+  //   //     +k]);
+  //   //   }
+  //   //   printf("\n");
+  //   // }
+  //   // printf("\n");
+  // }
+  //
+  // for (int i = 0; i < nodes; i++) {
+  //   const int *const restrict graphRow = &graph[i * nodes];
+  //   for (int k = 0; k < nodes; k++)
+  //     printf("%d ", (graphRow[k] == INT32_MAX) ? 0 : graphRow[k]);
+  //
+  //   printf("\n");
+  // }
+
+  free(subMatrix);
+  free(resultMatrix);
   free(trans);
-  free(graph);
+  MPI_Group_free(&worldGroup);
+  MPI_Group_free(&rowGroup);
+  MPI_Comm_free(&rowCommunicator);
 
   MPI_Finalize();
 
