@@ -1,5 +1,5 @@
 CXX = mpicc
-CFLAGS = -O2 -ftree-vectorize -fvect-cost-model=dynamic -march=native -ffast-math -funroll-loops -flto=auto -pthread -falign-loops=32 -fno-semantic-interposition -fvisibility=hidden -fopt-info-vec-missed
+CFLAGS = -O2 -ftree-vectorize -fvect-cost-model=dynamic -march=native -ffast-math -funroll-loops -flto=auto -pthread -falign-loops=32 -fno-semantic-interposition -fvisibility=hidden -fopt-info-vec-missed -lm
 OBJ := $(shell find . -name '*.c')
 TEST := *.md
 DEBUG = -g -Wall -Wextra -pedantic
