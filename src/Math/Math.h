@@ -3,25 +3,26 @@
 #include <stdint.h>
 #include <stdio.h>
 
-static inline void transpose(int *restrict matrix,
+static inline void transpose(int *const restrict matrix,
                              const int *const restrict graph, const int size) {
   for (int i = 0; i < size; i++) {
     int *restrict mRow = &matrix[i * size];
+#pragma GCC ivdep
     for (int j = 0; j < size; j++)
       mRow[j] = graph[j * size + i];
   }
 }
 
 static inline void matrixMultiply(int *restrict matrix,
-                                  const int *const restrict trans,
-                                  const int *const restrict graph,
+                                  const int *const restrict A,
+                                  const int *const restrict transposed,
                                   const int size) {
   for (int row = 0; row < size; row++) {
-    int *restrict mRow = &matrix[row * size];
-    const int *restrict graphRow = &graph[row * size];
+    int *const restrict mRow = &matrix[row * size];
+    const int *const restrict graphRow = &A[row * size];
 
     for (int col = 0; col < size; col++) {
-      const int *restrict transRow = &trans[col * size];
+      const int *const restrict transRow = &transposed[col * size];
       int minCost = INT32_MAX;
 
 #pragma GCC ivdep

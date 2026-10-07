@@ -3,6 +3,6 @@
 #include <stdlib.h>
 
 static inline int *alloc(const int size) {
-  return malloc(sizeof(int) * (size * size));
+  return calloc(size * size, sizeof(int));
 }
 #endif // !MISC.H
