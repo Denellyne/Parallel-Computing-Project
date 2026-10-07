@@ -138,9 +138,9 @@ int main(int argc, char *argv[]) {
 
       transpose(transposed, subMatrix, subSize);
       matrixMultiply(resultMatrix, received, transposed, subSize);
-      MPI_Sendrecv_replace(subMatrix, subSize * subSize, MPI_INT,
-                           columnGroupRanks[sendTo], 0,
-                           columnGroupRanks[receiveFrom], 0, MPI_COMM_WORLD, 0);
+      MPI_Sendrecv_replace(
+          subMatrix, subSize * subSize, MPI_INT, columnGroupRanks[sendTo], 0,
+          columnGroupRanks[receiveFrom], 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 #pragma GCC ivdep
       for (size_t idx = 0; idx < subSize * subSize; idx++)
         if (result[idx] == -1 || (long)(resultMatrix[idx]) < result[idx])
@@ -176,7 +176,11 @@ int main(int argc, char *argv[]) {
     for (size_t i = 0; i < nodes * nodes; i++) {
       if (i != 0 && i % nodes == 0)
         printf("\n");
-      printf("%d ", (graph[i] == INT16_MAX) ? 0 : graph[i]);
+
+      if (i % nodes < nodes - 1)
+        printf("%d ", (graph[i] == INT16_MAX) ? 0 : graph[i]);
+      else
+        printf("%d", (graph[i] == INT16_MAX) ? 0 : graph[i]);
     }
     printf("\n");
 
