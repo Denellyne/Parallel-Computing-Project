@@ -17,7 +17,6 @@ int main(int argc, char *argv[]) {
   MPI_Init(&argc, &argv);
   MPI_Comm_size(MPI_COMM_WORLD, &numProcs);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-  MPI_Barrier(MPI_COMM_WORLD);
 
   startTime = MPI_Wtime();
   const int sqrtNumProcs = (int)sqrt(numProcs);
@@ -66,7 +65,7 @@ int main(int argc, char *argv[]) {
       int *restrict graphRow = &graph[i * nodes];
       for (size_t k = 0; k < nodes; k++) {
         if (fscanf(stdin, "%d", &graphRow[k]) != 1) {
-          fprintf(stderr, "ERROR: scanf failed at [%d][%d]!\n", i, k);
+          fprintf(stderr, "ERROR: scanf failed at [%zu][%zu]!\n", i, k);
           MPI_Abort(MPI_COMM_WORLD, 1);
           return 1;
         }
@@ -96,7 +95,6 @@ int main(int argc, char *argv[]) {
 
   } else
     receiveArray(subSize, subMatrix, 0, &requests[1]);
-  MPI_Barrier(MPI_COMM_WORLD);
 
   int steps = 0;
   if (rank == 0) {
@@ -110,15 +108,14 @@ int main(int argc, char *argv[]) {
   MPI_Bcast(&steps, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
   int *const restrict resultMatrix = alloc(subSize);
-  int *const restrict result = alloc(subSize);
   int *const restrict local = alloc(subSize);
   int *const restrict transposed = alloc(subSize);
   int *const restrict received = alloc(subSize);
   const int sendTo = (initialColumnIdx + sqrtNumProcs - 1) % sqrtNumProcs;
   const int receiveFrom = (initialColumnIdx + sqrtNumProcs + 1) % sqrtNumProcs;
+  simdMemset(resultMatrix, INF, subSize * subSize);
   for (size_t i = 0; i < steps; i++) {
     simdMemcpy(local, subMatrix, subSize * subSize);
-    simdMemset(result, INF, subSize * subSize);
     for (size_t foxSteps = 0; foxSteps < sqrtNumProcs; foxSteps++) {
       if (rank == rowGroupRanks[initialIdx])
         simdMemcpy(received, local, subSize * subSize);
@@ -131,16 +128,15 @@ int main(int argc, char *argv[]) {
       MPI_Sendrecv_replace(
           subMatrix, subSize * subSize, MPI_INT, columnGroupRanks[sendTo], 0,
           columnGroupRanks[receiveFrom], 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-      simdMinimum(result, resultMatrix, subSize);
+      // simdMinimum(result, resultMatrix, subSize);
 
       initialIdx = (initialIdx + 1) % sqrtNumProcs;
     }
-    simdMemcpy(subMatrix, result, subSize * subSize);
+    simdMemcpyAndSet(subMatrix, resultMatrix, INF, subSize * subSize);
   }
   free(transposed);
   free(received);
   free(local);
-  free(result);
   if (rank == 0) {
     int *restrict graphRow = graph;
     for (size_t k = 0; k < subSize; k++)
@@ -175,7 +171,6 @@ int main(int argc, char *argv[]) {
   } else
     sendArrayBasic(subMatrix, subSize, 0, &requests[0]);
 
-  MPI_Barrier(MPI_COMM_WORLD);
   endTime = MPI_Wtime();
   totalTime = endTime - startTime;
   free(subMatrix);

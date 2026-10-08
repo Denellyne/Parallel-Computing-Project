@@ -1,0 +1,1594 @@
+ Percent |	Source code & Disassembly of main for cpu/cycles/Pu (8523 samples, percent: local period)
+---------------------------------------------------------------------------------------------------------
+         : 0      0x400540 <main>:
+    0.00 : [35m  400540:[m[34m        leaq    0x8(%rsp), %r10[m
+    0.00 : [35m  400545:[m[34m        andq    $-0x20, %rsp[m
+    0.00 : [35m  400549:[m[34m        pushq   -0x8(%r10)[m
+    0.00 : [35m  40054d:[m[34m        pushq   %rbp[m
+    0.00 : [35m  40054e:[m[34m        movq    %rsp, %rbp[m
+    0.00 : [35m  400551:[m[34m        pushq   %r15[m
+    0.00 : [35m  400553:[m[34m        pushq   %r14[m
+    0.00 : [35m  400555:[m[34m        pushq   %r13[m
+    0.00 : [35m  400557:[m[34m        pushq   %r12[m
+    0.00 : [35m  400559:[m[34m        pushq   %r10[m
+    0.00 : [35m  40055b:[m[34m        pushq   %rbx[m
+    0.00 : [35m  40055c:[m[34m        subq    $0x120, %rsp[m
+    0.00 : [35m  400563:[m[34m        movl    %edi, -0x84(%rbp)[m
+    0.00 : [35m  400569:[m[34m        movq    %rsi, -0x90(%rbp)[m
+    0.00 : [35m  400570:[m[34m        leaq    -0x84(%rbp), %rdi[m
+    0.00 : [35m  400577:[m[34m        leaq    -0x90(%rbp), %rsi[m
+    0.00 : [35m  40057e:[m[34m        callq   0x4003e0 <_init+0xa4>[m
+    0.00 : [35m  400583:[m[34m        leaq    -0x74(%rbp), %rsi[m
+    0.00 : [35m  400587:[m[34m        movl    $0x405520, %edi[m
+    0.00 : [35m  40058c:[m[34m        callq   0x400430 <_init+0xf4>[m
+    0.00 : [35m  400591:[m[34m        leaq    -0x70(%rbp), %rsi[m
+    0.00 : [35m  400595:[m[34m        movl    $0x405520, %edi[m
+    0.00 : [35m  40059a:[m[34m        callq   0x400490 <_init+0x154>[m
+    0.00 : [35m  40059f:[m[34m        callq   0x400500 <_init+0x1c4>[m
+    0.00 : [35m  4005a4:[m[34m        leaq    -0x58(%rbp), %rsi[m
+    0.00 : [35m  4005a8:[m[34m        movl    $0x405520, %edi[m
+    0.00 : [35m  4005ad:[m[34m        vmovsd  %xmm0, -0x120(%rbp)[m
+    0.00 : [35m  4005b5:[m[34m        movl    -0x70(%rbp), %ebx[m
+    0.00 : [35m  4005b8:[m[34m        vxorps  %xmm0, %xmm0, %xmm0[m
+    0.00 : [35m  4005bc:[m[34m        vcvtsi2sdl      -0x74(%rbp), %xmm0, %xmm1[m
+    0.00 : [35m  4005c1:[m[34m        vsqrtsd %xmm1, %xmm1, %xmm1[m
+    0.00 : [35m  4005c5:[m[34m        vcvttsd2si      %xmm1, %r15d[m
+    0.00 : [35m  4005c9:[m[34m        callq   0x4004e0 <_init+0x1a4>[m
+    0.00 : [35m  4005ce:[m[34m        movl    %r15d, %r11d[m
+    0.00 : [35m  4005d1:[m[34m        leaq    0xf(,%r11,4), %rax[m
+    0.00 : [35m  4005d9:[m[34m        movslq  -0x70(%rbp), %r12[m
+    0.00 : [35m  4005dd:[m[34m        movq    %r11, -0xa8(%rbp)[m
+    0.00 : [35m  4005e4:[m[34m        shrq    $0x4, %rax[m
+    0.00 : [35m  4005e8:[m[34m        shlq    $0x4, %rax[m
+    0.00 : [35m  4005ec:[m[34m        subq    %rax, %rsp[m
+    0.00 : [35m  4005ef:[m[34m        movq    %rsp, -0xa0(%rbp)[m
+    0.00 : [35m  4005f6:[m[34m        subq    %rax, %rsp[m
+    0.00 : [35m  4005f9:[m[34m        movq    %rsp, -0xd0(%rbp)[m
+    0.00 : [35m  400600:[m[34m        testl   %r15d, %r15d[m
+    0.00 : [35m  400603:[m[34m        je      0x401e63 <main+0x1923>[m
+    0.00 : [35m  400609:[m[34m        movl    %ebx, %eax[m
+    0.00 : [35m  40060b:[m[34m        movl    %r12d, %r8d[m
+    0.00 : [35m  40060e:[m[34m        movq    %r12, %rdi[m
+    0.00 : [35m  400611:[m[34m        xorl    %ecx, %ecx[m
+    0.00 : [35m  400613:[m[34m        cltd[m
+    0.00 : [35m  400614:[m[34m        movq    $-0x1, -0x98(%rbp)[m
+    0.00 : [35m  40061f:[m[34m        idivl   %r15d[m
+    0.00 : [35m  400622:[m[34m        movl    %r12d, %eax[m
+    0.00 : [35m  400625:[m[34m        subl    %edx, %r8d[m
+    0.00 : [35m  400628:[m[34m        cltd[m
+    0.00 : [35m  400629:[m[34m        idivl   %r15d[m
+    0.00 : [35m  40062c:[m[34m        movslq  %edx, %rsi[m
+    0.00 : [35m  40062f:[m[34m        andl    $0x3, %r11d[m
+    0.00 : [35m  400633:[m[34m        je      0x4012e0 <main+0xda0>[m
+    0.00 : [35m  400639:[m[34m        cmpq    $0x1, %r11[m
+    0.00 : [35m  40063d:[m[34m        je      0x4006ef <main+0x1af>[m
+    0.00 : [35m  400643:[m[34m        cmpq    $0x2, %r11[m
+    0.00 : [35m  400647:[m[34m        je      0x40069a <main+0x15a>[m
+    0.00 : [35m  400649:[m[34m        movq    -0xa0(%rbp), %r9[m
+    0.00 : [35m  400650:[m[34m        movq    %rsi, %rax[m
+    0.00 : [35m  400653:[m[34m        xorl    %edx, %edx[m
+    0.00 : [35m  400655:[m[34m        movq    -0xd0(%rbp), %r10[m
+    0.00 : [35m  40065c:[m[34m        movq    $-0x1, %rbx[m
+    0.00 : [35m  400663:[m[34m        movl    %r8d, (%r9)[m
+    0.00 : [35m  400666:[m[34m        movslq  -0x74(%rbp), %r13[m
+    0.00 : [35m  40066a:[m[34m        divq    %r13[m
+    0.00 : [35m  40066d:[m[34m        movl    %r8d, %eax[m
+    0.00 : [35m  400670:[m[34m        movq    %rdx, %r14[m
+    0.00 : [35m  400673:[m[34m        movl    %edx, (%r10)[m
+    0.00 : [35m  400676:[m[34m        cltd[m
+    0.00 : [35m  400677:[m[34m        idivl   %r15d[m
+    0.00 : [35m  40067a:[m[34m        cmpl    %eax, %edx[m
+    0.00 : [35m  40067c:[m[34m        cmoveq  %rcx, %rbx[m
+    0.00 : [35m  400680:[m[34m        cmpl    %r14d, %r12d[m
+    0.00 : [35m  400683:[m[34m        cmoveq  %rcx, %r12[m
+    0.00 : [35m  400687:[m[34m        addq    -0xa8(%rbp), %rsi[m
+    0.00 : [35m  40068e:[m[34m        movq    %rbx, -0x98(%rbp)[m
+    0.00 : [35m  400695:[m[34m        movl    $0x1, %ecx[m
+    0.00 : [35m  40069a:[m[34m        movq    -0xa0(%rbp), %r9[m
+    0.00 : [35m  4006a1:[m[34m        leal    (%r8,%rcx), %r11d[m
+    0.00 : [35m  4006a5:[m[34m        movq    %rsi, %rax[m
+    0.00 : [35m  4006a8:[m[34m        xorl    %edx, %edx[m
+    0.00 : [35m  4006aa:[m[34m        movq    -0xd0(%rbp), %r10[m
+    0.00 : [35m  4006b1:[m[34m        movq    -0x98(%rbp), %rbx[m
+    0.00 : [35m  4006b8:[m[34m        movl    %r11d, (%r9,%rcx,4)[m
+    0.00 : [35m  4006bc:[m[34m        movslq  -0x74(%rbp), %r13[m
+    0.00 : [35m  4006c0:[m[34m        divq    %r13[m
+    0.00 : [35m  4006c3:[m[34m        movl    %r11d, %eax[m
+    0.00 : [35m  4006c6:[m[34m        movq    %rdx, %r14[m
+    0.00 : [35m  4006c9:[m[34m        movl    %edx, (%r10,%rcx,4)[m
+    0.00 : [35m  4006cd:[m[34m        cltd[m
+    0.00 : [35m  4006ce:[m[34m        idivl   %r15d[m
+    0.00 : [35m  4006d1:[m[34m        cmpl    %eax, %edx[m
+    0.00 : [35m  4006d3:[m[34m        cmoveq  %rcx, %rbx[m
+    0.00 : [35m  4006d7:[m[34m        cmpl    %r14d, %edi[m
+    0.00 : [35m  4006da:[m[34m        cmoveq  %rcx, %r12[m
+    0.00 : [35m  4006de:[m[34m        addq    -0xa8(%rbp), %rsi[m
+    0.00 : [35m  4006e5:[m[34m        movq    %rbx, -0x98(%rbp)[m
+    0.00 : [35m  4006ec:[m[34m        incq    %rcx[m
+    0.00 : [35m  4006ef:[m[34m        movq    -0xa0(%rbp), %r9[m
+    0.00 : [35m  4006f6:[m[34m        leal    (%r8,%rcx), %r11d[m
+    0.00 : [35m  4006fa:[m[34m        movq    %rsi, %rax[m
+    0.00 : [35m  4006fd:[m[34m        xorl    %edx, %edx[m
+    0.00 : [35m  4006ff:[m[34m        movq    -0xd0(%rbp), %r10[m
+    0.00 : [35m  400706:[m[34m        movq    -0x98(%rbp), %rbx[m
+    0.00 : [35m  40070d:[m[34m        movl    %r11d, (%r9,%rcx,4)[m
+    0.00 : [35m  400711:[m[34m        movslq  -0x74(%rbp), %r13[m
+    0.00 : [35m  400715:[m[34m        divq    %r13[m
+    0.00 : [35m  400718:[m[34m        movl    %r11d, %eax[m
+    0.00 : [35m  40071b:[m[34m        movq    -0xa8(%rbp), %r11[m
+    0.00 : [35m  400722:[m[34m        movq    %rdx, %r14[m
+    0.00 : [35m  400725:[m[34m        movl    %edx, (%r10,%rcx,4)[m
+    0.00 : [35m  400729:[m[34m        cltd[m
+    0.00 : [35m  40072a:[m[34m        idivl   %r15d[m
+    0.00 : [35m  40072d:[m[34m        cmpl    %eax, %edx[m
+    0.00 : [35m  40072f:[m[34m        cmoveq  %rcx, %rbx[m
+    0.00 : [35m  400733:[m[34m        cmpl    %r14d, %edi[m
+    0.00 : [35m  400736:[m[34m        cmoveq  %rcx, %r12[m
+    0.00 : [35m  40073a:[m[34m        incq    %rcx[m
+    0.00 : [35m  40073d:[m[34m        movq    %rbx, -0x98(%rbp)[m
+    0.00 : [35m  400744:[m[34m        addq    %r11, %rsi[m
+    0.00 : [35m  400747:[m[34m        cmpq    %rcx, %r11[m
+    0.00 : [35m  40074a:[m[34m        je      0x40086a <main+0x32a>[m
+    0.00 : [35m  400750:[m[34m        movq    -0xa8(%rbp), %r10[m
+    0.00 : [35m  400757:[m[34m        movq    -0x98(%rbp), %rbx[m
+    0.00 : [35m  40075e:[m[34m        movq    %r12, %r9[m
+    0.00 : [35m  400761:[m[34m        movq    -0xd0(%rbp), %r11[m
+    0.00 : [35m  400768:[m[34m        movq    -0xa0(%rbp), %r14[m
+    0.00 : [35m  40076f:[m[34m        leal    (%r8,%rcx), %r13d[m
+    0.00 : [35m  400773:[m[34m        movq    %rsi, %rax[m
+    0.00 : [35m  400776:[m[34m        xorl    %edx, %edx[m
+    0.00 : [35m  400778:[m[34m        movl    %r13d, (%r14,%rcx,4)[m
+    0.00 : [35m  40077c:[m[34m        movslq  -0x74(%rbp), %r12[m
+    0.00 : [35m  400780:[m[34m        divq    %r12[m
+    0.00 : [35m  400783:[m[34m        movl    %r13d, %eax[m
+    0.00 : [35m  400786:[m[34m        leaq    0x1(%rcx), %r13[m
+    0.00 : [35m  40078a:[m[34m        movl    %edx, (%r11,%rcx,4)[m
+    0.00 : [35m  40078e:[m[34m        movq    %rdx, %r12[m
+    0.00 : [35m  400791:[m[34m        cltd[m
+    0.00 : [35m  400792:[m[34m        idivl   %r15d[m
+    0.00 : [35m  400795:[m[34m        cmpl    %eax, %edx[m
+    0.00 : [35m  400797:[m[34m        leaq    (%rsi,%r10), %rax[m
+    0.00 : [35m  40079b:[m[34m        leaq    (%rsi,%r10,2), %rsi[m
+    0.00 : [35m  40079f:[m[34m        cmoveq  %rcx, %rbx[m
+    0.00 : [35m  4007a3:[m[34m        cmpl    %r12d, %edi[m
+    0.00 : [35m  4007a6:[m[34m        leal    0x1(%r8,%rcx), %r12d[m
+    0.00 : [35m  4007ab:[m[34m        movl    %r12d, (%r14,%r13,4)[m
+    0.00 : [35m  4007af:[m[34m        movslq  -0x74(%rbp), %r14[m
+    0.00 : [35m  4007b3:[m[34m        cmoveq  %rcx, %r9[m
+    0.00 : [35m  4007b7:[m[34m        xorl    %edx, %edx[m
+    0.00 : [35m  4007b9:[m[34m        divq    %r14[m
+    0.00 : [35m  4007bc:[m[34m        movl    %r12d, %eax[m
+    0.00 : [35m  4007bf:[m[34m        leaq    0x2(%rcx), %r12[m
+    0.00 : [35m  4007c3:[m[34m        movl    %edx, (%r11,%r13,4)[m
+    0.00 : [35m  4007c7:[m[34m        movq    %rdx, %r14[m
+    0.00 : [35m  4007ca:[m[34m        cltd[m
+    0.00 : [35m  4007cb:[m[34m        idivl   %r15d[m
+    0.00 : [35m  4007ce:[m[34m        cmpl    %eax, %edx[m
+    0.00 : [35m  4007d0:[m[34m        movq    %rsi, %rax[m
+    0.00 : [35m  4007d3:[m[34m        cmoveq  %r13, %rbx[m
+    0.00 : [35m  4007d7:[m[34m        cmpl    %r14d, %edi[m
+    0.00 : [35m  4007da:[m[34m        leal    0x2(%r8,%rcx), %r14d[m
+    0.00 : [35m  4007df:[m[34m        cmoveq  %r13, %r9[m
+    0.00 : [35m  4007e3:[m[34m        movq    -0xa0(%rbp), %r13[m
+    0.00 : [35m  4007ea:[m[34m        xorl    %edx, %edx[m
+    0.00 : [35m  4007ec:[m[34m        movl    %r14d, (%r13,%r12,4)[m
+    0.00 : [35m  4007f1:[m[34m        movslq  -0x74(%rbp), %r13[m
+    0.00 : [35m  4007f5:[m[34m        divq    %r13[m
+    0.00 : [35m  4007f8:[m[34m        movl    %r14d, %eax[m
+    0.00 : [35m  4007fb:[m[34m        movq    -0xa0(%rbp), %r14[m
+    0.00 : [35m  400802:[m[34m        movl    %edx, (%r11,%r12,4)[m
+    0.00 : [35m  400806:[m[34m        movq    %rdx, %r13[m
+    0.00 : [35m  400809:[m[34m        cltd[m
+    0.00 : [35m  40080a:[m[34m        idivl   %r15d[m
+    0.00 : [35m  40080d:[m[34m        cmpl    %eax, %edx[m
+    0.00 : [35m  40080f:[m[34m        leaq    (%rsi,%r10), %rax[m
+    0.00 : [35m  400813:[m[34m        leaq    (%rsi,%r10,2), %rsi[m
+    0.00 : [35m  400817:[m[34m        cmoveq  %r12, %rbx[m
+    0.00 : [35m  40081b:[m[34m        cmpl    %r13d, %edi[m
+    0.00 : [35m  40081e:[m[34m        leal    0x3(%r8,%rcx), %r13d[m
+    0.00 : [35m  400823:[m[34m        cmovneq %r9, %r12[m
+    0.00 : [35m  400827:[m[34m        leaq    0x3(%rcx), %r9[m
+    0.00 : [35m  40082b:[m[34m        xorl    %edx, %edx[m
+    0.00 : [35m  40082d:[m[34m        movl    %r13d, (%r14,%r9,4)[m
+    0.00 : [35m  400831:[m[34m        movslq  -0x74(%rbp), %r14[m
+    0.00 : [35m  400835:[m[34m        divq    %r14[m
+    0.00 : [35m  400838:[m[34m        movl    %r13d, %eax[m
+    0.00 : [35m  40083b:[m[34m        movq    %rdx, %r14[m
+    0.00 : [35m  40083e:[m[34m        movl    %edx, (%r11,%r9,4)[m
+    0.00 : [35m  400842:[m[34m        cltd[m
+    0.00 : [35m  400843:[m[34m        idivl   %r15d[m
+    0.00 : [35m  400846:[m[34m        cmpl    %eax, %edx[m
+    0.00 : [35m  400848:[m[34m        cmoveq  %r9, %rbx[m
+    0.00 : [35m  40084c:[m[34m        cmpl    %r14d, %edi[m
+    0.00 : [35m  40084f:[m[34m        cmovneq %r12, %r9[m
+    0.00 : [35m  400853:[m[34m        addq    $0x4, %rcx[m
+    0.00 : [35m  400857:[m[34m        cmpq    %rcx, %r10[m
+    0.00 : [35m  40085a:[m[34m        jne     0x400768 <main+0x228>[m
+    0.00 : [35m  400860:[m[34m        movq    %r9, %r12[m
+    0.00 : [35m  400863:[m[34m        movq    %rbx, -0x98(%rbp)[m
+    0.00 : [35m  40086a:[m[34m        movq    -0xa0(%rbp), %rdx[m
+    0.00 : [35m  400871:[m[34m        leaq    -0x50(%rbp), %rcx[m
+    0.00 : [35m  400875:[m[34m        movl    %r15d, %esi[m
+    0.00 : [35m  400878:[m[34m        movq    -0x58(%rbp), %rdi[m
+    0.00 : [35m  40087c:[m[34m        callq   0x4004f0 <_init+0x1b4>[m
+    0.00 : [35m  400881:[m[34m        movq    -0x50(%rbp), %rsi[m
+    0.00 : [35m  400885:[m[34m        leaq    -0x48(%rbp), %rcx[m
+    0.00 : [35m  400889:[m[34m        xorl    %edx, %edx[m
+    0.00 : [35m  40088b:[m[34m        movl    $0x405520, %edi[m
+    0.00 : [35m  400890:[m[34m        callq   0x400440 <_init+0x104>[m
+    0.00 : [35m  400895:[m[34m        movl    -0x70(%rbp), %ecx[m
+    0.00 : [35m  400898:[m[34m        testl   %ecx, %ecx[m
+    0.00 : [35m  40089a:[m[34m        jne     0x4008c5 <main+0x385>[m
+    0.00 : [35m  40089c:[m[34m        movq    0x4c5d(%rip), %rdi  # 0x405500 <stdin@GLIBC_2.2.5>[m
+    0.00 : [35m  4008a3:[m[34m        leaq    -0x68(%rbp), %rdx[m
+    0.00 : [35m  4008a7:[m[34m        movl    $0x403a10, %esi[m
+    0.00 : [35m  4008ac:[m[34m        xorl    %eax, %eax[m
+    0.00 : [35m  4008ae:[m[34m        callq   0x4003f0 <_init+0xb4>[m
+    0.00 : [35m  4008b3:[m[34m        movl    -0x68(%rbp), %eax[m
+    0.00 : [35m  4008b6:[m[34m        cltd[m
+    0.00 : [35m  4008b7:[m[34m        idivl   %r15d[m
+    0.00 : [35m  4008ba:[m[34m        testl   %edx, %edx[m
+    0.00 : [35m  4008bc:[m[34m        jne     0x401f51 <main+0x1a11>[m
+    0.00 : [35m  4008c2:[m[34m        movl    %eax, -0x6c(%rbp)[m
+    0.00 : [35m  4008c5:[m[34m        leaq    -0x6c(%rbp), %rdi[m
+    0.00 : [35m  4008c9:[m[34m        movl    $0x405520, %r8d[m
+    0.00 : [35m  4008cf:[m[34m        xorl    %ecx, %ecx[m
+    0.00 : [35m  4008d1:[m[34m        movl    $0x405300, %edx[m
+    0.00 : [35m  4008d6:[m[34m        movl    $0x1, %esi[m
+    0.00 : [35m  4008db:[m[34m        callq   0x4004a0 <_init+0x164>[m
+    0.00 : [35m  4008e0:[m[34m        movl    -0x6c(%rbp), %r13d[m
+    0.00 : [35m  4008e4:[m[34m        movl    %r13d, %edi[m
+    0.00 : [35m  4008e7:[m[34m        callq   0x402150 <alloc>[m
+    0.00 : [35m  4008ec:[m[34m        movl    -0x70(%rbp), %edi[m
+    0.00 : [35m  4008ef:[m[34m        movq    %rax, -0xd8(%rbp)[m
+    0.00 : [35m  4008f6:[m[34m        testl   %edi, %edi[m
+    0.00 : [35m  4008f8:[m[34m        jne     0x4009b6 <main+0x476>[m
+    0.00 : [35m  4008fe:[m[34m        movl    -0x68(%rbp), %r13d[m
+    0.00 : [35m  400902:[m[34m        movl    %r13d, %edi[m
+    0.00 : [35m  400905:[m[34m        callq   0x402150 <alloc>[m
+    0.00 : [35m  40090a:[m[34m        movslq  %r13d, %rcx[m
+    0.00 : [35m  40090d:[m[34m        movq    %rax, -0xb0(%rbp)[m
+    0.00 : [35m  400914:[m[34m        testq   %rcx, %rcx[m
+    0.00 : [35m  400917:[m[34m        je      0x401309 <main+0xdc9>[m
+    0.00 : [35m  40091d:[m[34m        xorl    %ebx, %ebx[m
+    0.00 : [35m  40091f:[m[34m        movq    -0xb0(%rbp), %r9[m
+    0.00 : [35m  400926:[m[34m        imulq   %rbx, %rcx[m
+    0.00 : [35m  40092a:[m[34m        xorl    %r13d, %r13d[m
+    0.00 : [35m  40092d:[m[34m        leaq    (%r9,%rcx,4), %r14[m
+    0.00 : [35m  400931:[m[34m        jmp     0x40095a <main+0x41a>[m
+    0.00 : [35m  400933:[m[34m        movl    (%r14), %esi[m
+    0.00 : [35m  400936:[m[34m        testl   %esi, %esi[m
+    0.00 : [35m  400938:[m[34m        jne     0x400946 <main+0x406>[m
+    0.00 : [35m  40093a:[m[34m        cmpq    %rbx, %r13[m
+    0.00 : [35m  40093d:[m[34m        je      0x400946 <main+0x406>[m
+    0.00 : [35m  40093f:[m[34m        movl    $0xf4240, (%r14)[m
+    0.00 : [35m  400946:[m[34m        movslq  -0x68(%rbp), %rcx[m
+    0.01 : [35m  40094a:[m[34m        incq    %r13[m
+    0.00 : [35m  40094d:[m[34m        addq    $0x4, %r14[m
+    0.00 : [35m  400951:[m[34m        cmpq    %rcx, %r13[m
+    0.00 : [35m  400954:[m[34m        jae     0x4012fd <main+0xdbd>[m
+    0.00 : [35m  40095a:[m[34m        movq    0x4b9f(%rip), %rdi  # 0x405500 <stdin@GLIBC_2.2.5>[m
+    0.00 : [35m  400961:[m[34m        xorl    %eax, %eax[m
+    0.00 : [35m  400963:[m[34m        movq    %r14, %rdx[m
+    0.00 : [35m  400966:[m[34m        movl    $0x403a10, %esi[m
+    0.00 : [35m  40096b:[m[34m        callq   0x4003f0 <_init+0xb4>[m
+    0.00 : [35m  400970:[m[34m        cmpl    $0x1, %eax[m
+    0.02 : [35m  400973:[m[34m        je      0x400933 <main+0x3f3>[m
+    0.00 : [35m  400975:[m[34m        movq    0x4da4(%rip), %rdi  # 0x405720 <stderr@GLIBC_2.2.5>[m
+    0.00 : [35m  40097c:[m[34m        movl    $0x403a88, %esi[m
+    0.00 : [35m  400981:[m[34m        movq    %r13, %rcx[m
+    0.00 : [35m  400984:[m[34m        movq    %rbx, %rdx[m
+    0.00 : [35m  400987:[m[34m        xorl    %eax, %eax[m
+    0.00 : [35m  400989:[m[34m        callq   0x400520 <_init+0x1e4>[m
+    0.00 : [35m  40098e:[m[34m        movl    $0x1, %esi[m
+    0.00 : [35m  400993:[m[34m        movl    $0x405520, %edi[m
+    0.00 : [35m  400998:[m[34m        callq   0x400450 <_init+0x114>[m
+    0.00 : [35m  40099d:[m[34m        movl    $0x1, %eax[m
+    0.00 : [35m  4009a2:[m[34m        leaq    -0x30(%rbp), %rsp[m
+    0.00 : [35m  4009a6:[m[34m        popq    %rbx[m
+    0.00 : [35m  4009a7:[m[34m        popq    %rdx[m
+    0.00 : [35m  4009a8:[m[34m        popq    %r12[m
+    0.00 : [35m  4009aa:[m[34m        popq    %r13[m
+    0.00 : [35m  4009ac:[m[34m        popq    %r14[m
+    0.00 : [35m  4009ae:[m[34m        popq    %r15[m
+    0.00 : [35m  4009b0:[m[34m        popq    %rbp[m
+    0.00 : [35m  4009b1:[m[34m        leaq    -0x8(%rdx), %rsp[m
+    0.00 : [35m  4009b5:[m[34m        retq[m
+    0.00 : [35m  4009b6:[m[34m        imull   %r13d, %r13d[m
+    0.00 : [35m  4009ba:[m[34m        xorl    %r8d, %r8d[m
+    0.00 : [35m  4009bd:[m[34m        leaq    -0x5c(%rbp), %rcx[m
+    0.00 : [35m  4009c1:[m[34m        movl    $0x405520, %edx[m
+    0.00 : [35m  4009c6:[m[34m        movl    $0x405300, %esi[m
+    0.00 : [35m  4009cb:[m[34m        movl    %r8d, -0x60(%rbp)[m
+    0.00 : [35m  4009cf:[m[34m        movl    %r13d, %edi[m
+    0.00 : [35m  4009d2:[m[34m        callq   0x400410 <_init+0xd4>[m
+    0.00 : [35m  4009d7:[m[34m        movslq  -0x5c(%rbp), %rdi[m
+    0.00 : [35m  4009db:[m[34m        movl    %edi, -0xb0(%rbp)[m
+    0.00 : [35m  4009e1:[m[34m        callq   0x4003d0 <_init+0x94>[m
+    0.00 : [35m  4009e6:[m[34m        pushq   %r14[m
+    0.00 : [35m  4009e8:[m[34m        leaq    -0x38(%rbp), %r14[m
+    0.00 : [35m  4009ec:[m[34m        movl    -0xb0(%rbp), %esi[m
+    0.00 : [35m  4009f2:[m[34m        pushq   %r14[m
+    0.00 : [35m  4009f4:[m[34m        movl    $0x405520, %r9d[m
+    0.00 : [35m  4009fa:[m[34m        xorl    %r8d, %r8d[m
+    0.00 : [35m  4009fd:[m[34m        xorl    %ecx, %ecx[m
+    0.00 : [35m  4009ff:[m[34m        movl    $0x405100, %edx[m
+    0.00 : [35m  400a04:[m[34m        movq    %rax, %rdi[m
+    0.00 : [35m  400a07:[m[34m        movq    %rax, %rbx[m
+    0.00 : [35m  400a0a:[m[34m        callq   0x4003a0 <_init+0x64>[m
+    0.00 : [35m  400a0f:[m[34m        xorl    %esi, %esi[m
+    0.00 : [35m  400a11:[m[34m        movq    %r14, %rdi[m
+    0.00 : [35m  400a14:[m[34m        callq   0x400470 <_init+0x134>[m
+    0.00 : [35m  400a19:[m[34m        movq    -0xd8(%rbp), %rcx[m
+    0.00 : [35m  400a20:[m[34m        leaq    -0x60(%rbp), %rdx[m
+    0.00 : [35m  400a24:[m[34m        movq    $0x405520, (%rsp)[m
+    0.00 : [35m  400a2c:[m[34m        movl    -0x5c(%rbp), %esi[m
+    0.00 : [35m  400a2f:[m[34m        movl    $0x405300, %r9d[m
+    0.00 : [35m  400a35:[m[34m        movl    %r13d, %r8d[m
+    0.00 : [35m  400a38:[m[34m        movq    %rbx, %rdi[m
+    0.00 : [35m  400a3b:[m[34m        callq   0x400460 <_init+0x124>[m
+    0.00 : [35m  400a40:[m[34m        movq    %rbx, %rdi[m
+    0.00 : [35m  400a43:[m[34m        callq   0x400420 <_init+0xe4>[m
+    0.00 : [35m  400a48:[m[34m        xorl    %r11d, %r11d[m
+    0.00 : [35m  400a4b:[m[34m        popq    %rax[m
+    0.00 : [35m  400a4c:[m[34m        popq    %rdx[m
+    0.00 : [35m  400a4d:[m[34m        movq    %r11, -0xb0(%rbp)[m
+    0.00 : [35m  400a54:[m[34m        xorl    %edx, %edx[m
+    0.00 : [35m  400a56:[m[34m        cmpl    $0x0, -0x70(%rbp)[m
+    0.00 : [35m  400a5a:[m[34m        movl    %edx, -0x64(%rbp)[m
+    0.00 : [35m  400a5d:[m[34m        jne     0x400a85 <main+0x545>[m
+    0.00 : [35m  400a5f:[m[34m        movl    -0x68(%rbp), %edi[m
+    0.00 : [35m  400a62:[m[34m        cmpl    $0x1, %edi[m
+    0.00 : [35m  400a65:[m[34m        jle     0x400a85 <main+0x545>[m
+    0.00 : [35m  400a67:[m[34m        movl    $0x1, %r8d[m
+    0.00 : [35m  400a6d:[m[34m        movl    $0x1, %r10d[m
+    0.00 : [35m  400a73:[m[34m        addl    %r10d, %r10d[m
+    0.00 : [35m  400a76:[m[34m        movl    %r8d, %r11d[m
+    0.00 : [35m  400a79:[m[34m        incl    %r8d[m
+    0.00 : [35m  400a7c:[m[34m        cmpl    %edi, %r10d[m
+    0.00 : [35m  400a7f:[m[34m        jl      0x400a73 <main+0x533>[m
+    0.00 : [35m  400a81:[m[34m        movl    %r11d, -0x64(%rbp)[m
+    0.00 : [35m  400a85:[m[34m        movl    $0x405520, %r8d[m
+    0.00 : [35m  400a8b:[m[34m        xorl    %ecx, %ecx[m
+    0.00 : [35m  400a8d:[m[34m        movl    $0x405300, %edx[m
+    0.00 : [35m  400a92:[m[34m        movl    $0x1, %esi[m
+    0.00 : [35m  400a97:[m[34m        leaq    -0x64(%rbp), %rdi[m
+    0.00 : [35m  400a9b:[m[34m        callq   0x4004a0 <_init+0x164>[m
+    0.00 : [35m  400aa0:[m[34m        movl    -0x6c(%rbp), %r13d[m
+    0.00 : [35m  400aa4:[m[34m        movl    %r13d, %edi[m
+    0.00 : [35m  400aa7:[m[34m        callq   0x402150 <alloc>[m
+    0.00 : [35m  400aac:[m[34m        movl    %r13d, %edi[m
+    0.00 : [35m  400aaf:[m[34m        movq    %rax, %r14[m
+    0.00 : [35m  400ab2:[m[34m        callq   0x402150 <alloc>[m
+    0.00 : [35m  400ab7:[m[34m        movl    %r13d, %edi[m
+    0.00 : [35m  400aba:[m[34m        movq    %rax, -0xc0(%rbp)[m
+    0.00 : [35m  400ac1:[m[34m        callq   0x402150 <alloc>[m
+    0.00 : [35m  400ac6:[m[34m        movl    %r13d, %edi[m
+    0.00 : [35m  400ac9:[m[34m        imull   %r13d, %r13d[m
+    0.00 : [35m  400acd:[m[34m        movq    %rax, -0xe8(%rbp)[m
+    0.00 : [35m  400ad4:[m[34m        callq   0x402150 <alloc>[m
+    0.00 : [35m  400ad9:[m[34m        movq    %rax, -0xe0(%rbp)[m
+    0.00 : [35m  400ae0:[m[34m        movl    %r13d, %r9d[m
+    0.00 : [35m  400ae3:[m[34m        cmpl    $0x7, %r13d[m
+    0.00 : [35m  400ae7:[m[34m        jle     0x401f4a <main+0x1a0a>[m
+    0.00 : [35m  400aed:[m[34m        leaq    -0x8(%r9), %rcx[m
+    0.00 : [35m  400af1:[m[34m        vmovdqa 0x2fc7(%rip), %ymm2  # 0x403ac0 <__dso_handle+0xb8>[m
+    0.00 : [35m  400af9:[m[34m        movq    %r14, %rax[m
+    0.00 : [35m  400afc:[m[34m        movq    %rcx, %rbx[m
+    0.00 : [35m  400aff:[m[34m        shrq    $0x3, %rbx[m
+    0.00 : [35m  400b03:[m[34m        incq    %rbx[m
+    0.00 : [35m  400b06:[m[34m        shlq    $0x5, %rbx[m
+    0.00 : [35m  400b0a:[m[34m        leaq    (%r14,%rbx), %rdx[m
+    0.00 : [35m  400b0e:[m[34m        subq    $0x20, %rbx[m
+    0.00 : [35m  400b12:[m[34m        shrq    $0x5, %rbx[m
+    0.00 : [35m  400b16:[m[34m        incq    %rbx[m
+    0.00 : [35m  400b19:[m[34m        andl    $0x7, %ebx[m
+    0.00 : [35m  400b1c:[m[34m        je      0x400b80 <main+0x640>[m
+    0.00 : [35m  400b1e:[m[34m        cmpq    $0x1, %rbx[m
+    0.00 : [35m  400b22:[m[34m        je      0x400b73 <main+0x633>[m
+    0.00 : [35m  400b24:[m[34m        cmpq    $0x2, %rbx[m
+    0.00 : [35m  400b28:[m[34m        je      0x400b6b <main+0x62b>[m
+    0.00 : [35m  400b2a:[m[34m        cmpq    $0x3, %rbx[m
+    0.00 : [35m  400b2e:[m[34m        je      0x400b63 <main+0x623>[m
+    0.00 : [35m  400b30:[m[34m        cmpq    $0x4, %rbx[m
+    0.00 : [35m  400b34:[m[34m        je      0x400b5b <main+0x61b>[m
+    0.00 : [35m  400b36:[m[34m        cmpq    $0x5, %rbx[m
+    0.00 : [35m  400b3a:[m[34m        je      0x400b53 <main+0x613>[m
+    0.00 : [35m  400b3c:[m[34m        cmpq    $0x6, %rbx[m
+    0.00 : [35m  400b40:[m[34m        je      0x400b4b <main+0x60b>[m
+    0.00 : [35m  400b42:[m[34m        vmovdqa %ymm2, (%r14)[m
+    0.00 : [35m  400b47:[m[34m        leaq    0x20(%r14), %rax[m
+    0.00 : [35m  400b4b:[m[34m        vmovdqa %ymm2, (%rax)[m
+    0.00 : [35m  400b4f:[m[34m        addq    $0x20, %rax[m
+    0.00 : [35m  400b53:[m[34m        vmovdqa %ymm2, (%rax)[m
+    0.00 : [35m  400b57:[m[34m        addq    $0x20, %rax[m
+    0.00 : [35m  400b5b:[m[34m        vmovdqa %ymm2, (%rax)[m
+    0.00 : [35m  400b5f:[m[34m        addq    $0x20, %rax[m
+    0.00 : [35m  400b63:[m[34m        vmovdqa %ymm2, (%rax)[m
+    0.00 : [35m  400b67:[m[34m        addq    $0x20, %rax[m
+    0.00 : [35m  400b6b:[m[34m        vmovdqa %ymm2, (%rax)[m
+    0.00 : [35m  400b6f:[m[34m        addq    $0x20, %rax[m
+    0.00 : [35m  400b73:[m[34m        vmovdqa %ymm2, (%rax)[m
+    0.00 : [35m  400b77:[m[34m        addq    $0x20, %rax[m
+    0.00 : [35m  400b7b:[m[34m        cmpq    %rax, %rdx[m
+    0.00 : [35m  400b7e:[m[34m        je      0x400bb5 <main+0x675>[m
+    0.00 : [35m  400b80:[m[34m        vmovdqa %ymm2, (%rax)[m
+    0.00 : [35m  400b84:[m[34m        vmovdqa %ymm2, 0x20(%rax)[m
+    0.00 : [35m  400b89:[m[34m        vmovdqa %ymm2, 0x40(%rax)[m
+    0.00 : [35m  400b8e:[m[34m        addq    $0x100, %rax[m
+    0.00 : [35m  400b94:[m[34m        vmovdqa %ymm2, -0xa0(%rax)[m
+    0.00 : [35m  400b9c:[m[34m        vmovdqa %ymm2, -0x80(%rax)[m
+    0.00 : [35m  400ba1:[m[34m        vmovdqa %ymm2, -0x60(%rax)[m
+    0.01 : [35m  400ba6:[m[34m        vmovdqa %ymm2, -0x40(%rax)[m
+    0.00 : [35m  400bab:[m[34m        vmovdqa %ymm2, -0x20(%rax)[m
+    0.00 : [35m  400bb0:[m[34m        cmpq    %rax, %rdx[m
+    0.00 : [35m  400bb3:[m[34m        jne     0x400b80 <main+0x640>[m
+    0.00 : [35m  400bb5:[m[34m        movq    %rcx, %rsi[m
+    0.00 : [35m  400bb8:[m[34m        andq    $-0x8, %rsi[m
+    0.00 : [35m  400bbc:[m[34m        addq    $0x8, %rsi[m
+    0.00 : [35m  400bc0:[m[34m        leaq    0x3(%rsi), %rdi[m
+    0.00 : [35m  400bc4:[m[34m        cmpq    %r9, %rdi[m
+    0.00 : [35m  400bc7:[m[34m        jae     0x400bdb <main+0x69b>[m
+    0.00 : [35m  400bc9:[m[34m        vmovdqa 0x2eef(%rip), %xmm3  # 0x403ac0 <__dso_handle+0xb8>[m
+    0.00 : [35m  400bd1:[m[34m        vmovdqa %xmm3, (%r14,%rsi,4)[m
+    0.00 : [35m  400bd7:[m[34m        addq    $0x4, %rsi[m
+    0.00 : [35m  400bdb:[m[34m        cmpq    %r9, %rsi[m
+    0.00 : [35m  400bde:[m[34m        jb      0x401f29 <main+0x19e9>[m
+    0.00 : [35m  400be4:[m[34m        cmpl    $0x0, -0x64(%rbp)[m
+    0.00 : [35m  400be8:[m[34m        je      0x401945 <main+0x1405>[m
+    0.00 : [35m  400bee:[m[34m        movq    -0xa8(%rbp), %r8[m
+    0.00 : [35m  400bf5:[m[34m        xorl    %edx, %edx[m
+    0.00 : [35m  400bf7:[m[34m        movl    %r15d, -0x88(%rbp)[m
+    0.00 : [35m  400bfe:[m[34m        movq    -0xd8(%rbp), %r15[m
+    0.00 : [35m  400c05:[m[34m        xorl    %ebx, %ebx[m
+    0.00 : [35m  400c07:[m[34m        leaq    -0x1(%r8,%r12), %rax[m
+    0.00 : [35m  400c0c:[m[34m        divq    %r8[m
+    0.00 : [35m  400c0f:[m[34m        leaq    0x1(%r8,%r12), %rax[m
+    0.00 : [35m  400c14:[m[34m        movq    %rdx, -0x100(%rbp)[m
+    0.00 : [35m  400c1b:[m[34m        xorl    %edx, %edx[m
+    0.00 : [35m  400c1d:[m[34m        divq    %r8[m
+    0.00 : [35m  400c20:[m[34m        movq    %r14, %r8[m
+    0.00 : [35m  400c23:[m[34m        movq    %rdx, -0x108(%rbp)[m
+    0.00 : [35m  400c2a:[m[34m        movl    -0x6c(%rbp), %r12d[m
+    0.00 : [35m  400c2e:[m[34m        movl    %r12d, %r14d[m
+    0.00 : [35m  400c31:[m[34m        imull   %r12d, %r14d[m
+    0.00 : [35m  400c35:[m[34m        movl    %r14d, %r13d[m
+    0.00 : [35m  400c38:[m[34m        cmpl    $0x7, %r14d[m
+    0.00 : [35m  400c3c:[m[34m        jle     0x401e1c <main+0x18dc>[m
+    0.00 : [35m  400c42:[m[34m        movq    -0xc0(%rbp), %rdi[m
+    0.00 : [35m  400c49:[m[34m        leaq    -0x8(%r13), %rdx[m
+    0.00 : [35m  400c4d:[m[34m        movq    %r8, -0xb8(%rbp)[m
+    0.00 : [35m  400c54:[m[34m        movq    %r15, %rsi[m
+    0.00 : [35m  400c57:[m[34m        shrq    $0x3, %rdx[m
+    0.00 : [35m  400c5b:[m[34m        incq    %rdx[m
+    0.00 : [35m  400c5e:[m[34m        shlq    $0x5, %rdx[m
+    0.00 : [35m  400c62:[m[34m        vzeroupper[m
+    0.00 : [35m  400c65:[m[34m        callq   0x400530 <_init+0x1f4>[m
+    0.00 : [35m  400c6a:[m[34m        movq    -0xb8(%rbp), %r8[m
+    0.00 : [35m  400c71:[m[34m        leaq    -0x8(%r13), %r10[m
+    0.00 : [35m  400c75:[m[34m        andq    $-0x8, %r10[m
+    0.00 : [35m  400c79:[m[34m        addq    $0x8, %r10[m
+    0.00 : [35m  400c7d:[m[34m        leaq    0x3(%r10), %r11[m
+    0.00 : [35m  400c81:[m[34m        cmpq    %r13, %r11[m
+    0.00 : [35m  400c84:[m[34m        jae     0x400c9d <main+0x75d>[m
+    0.00 : [35m  400c86:[m[34m        vmovdqa (%r15,%r10,4), %xmm4[m
+    0.00 : [35m  400c8c:[m[34m        movq    -0xc0(%rbp), %r9[m
+    0.00 : [35m  400c93:[m[34m        vmovdqa %xmm4, (%r9,%r10,4)[m
+    0.00 : [35m  400c99:[m[34m        addq    $0x4, %r10[m
+    0.00 : [35m  400c9d:[m[34m        cmpq    %r13, %r10[m
+    0.00 : [35m  400ca0:[m[34m        jb      0x401e24 <main+0x18e4>[m
+    0.00 : [35m  400ca6:[m[34m        movl    -0x88(%rbp), %esi[m
+    0.00 : [35m  400cac:[m[34m        testl   %esi, %esi[m
+    0.00 : [35m  400cae:[m[34m        je      0x401e14 <main+0x18d4>[m
+    0.00 : [35m  400cb4:[m[34m        movl    -0x108(%rbp), %ecx[m
+    0.00 : [35m  400cba:[m[34m        movl    -0x100(%rbp), %edi[m
+    0.00 : [35m  400cc0:[m[34m        movq    %rbx, -0x128(%rbp)[m
+    0.00 : [35m  400cc7:[m[34m        movq    $0x0, -0xf0(%rbp)[m
+    0.00 : [35m  400cd2:[m[34m        movq    %r8, -0xf8(%rbp)[m
+    0.00 : [35m  400cd9:[m[34m        movl    %r12d, %ebx[m
+    0.00 : [35m  400cdc:[m[34m        movq    %rcx, -0x118(%rbp)[m
+    0.00 : [35m  400ce3:[m[34m        movq    %rdi, -0x110(%rbp)[m
+    0.00 : [35m  400cea:[m[34m        vzeroupper[m
+    0.00 : [35m  400ced:[m[34m        movq    -0xa0(%rbp), %r8[m
+    0.00 : [35m  400cf4:[m[34m        movq    -0x98(%rbp), %rax[m
+    0.00 : [35m  400cfb:[m[34m        imull   %ebx, %ebx[m
+    0.00 : [35m  400cfe:[m[34m        movl    -0x70(%rbp), %edx[m
+    0.00 : [35m  400d01:[m[34m        cmpl    %edx, (%r8,%rax,4)[m
+    0.00 : [35m  400d05:[m[34m        je      0x40185b <main+0x131b>[m
+    0.00 : [35m  400d0b:[m[34m        movq    -0x48(%rbp), %r8[m
+    0.00 : [35m  400d0f:[m[34m        movl    -0x98(%rbp), %ecx[m
+    0.00 : [35m  400d15:[m[34m        movl    %ebx, %esi[m
+    0.00 : [35m  400d17:[m[34m        movl    $0x405300, %edx[m
+    0.00 : [35m  400d1c:[m[34m        movq    -0xe0(%rbp), %rdi[m
+    0.00 : [35m  400d23:[m[34m        callq   0x4004a0 <_init+0x164>[m
+    0.00 : [35m  400d28:[m[34m        movslq  -0x6c(%rbp), %rsi[m
+    0.00 : [35m  400d2c:[m[34m        movq    %rsi, %r14[m
+    0.00 : [35m  400d2f:[m[34m        testq   %rsi, %rsi[m
+    0.00 : [35m  400d32:[m[34m        je      0x4015ed <main+0x10ad>[m
+    0.00 : [35m  400d38:[m[34m        movq    %rsi, %rdi[m
+    0.00 : [35m  400d3b:[m[34m        movq    -0xe8(%rbp), %r8[m
+    0.00 : [35m  400d42:[m[34m        movq    %r15, %r9[m
+    0.00 : [35m  400d45:[m[34m        leaq    (,%rsi,4), %r11[m
+    0.00 : [35m  400d4d:[m[34m        shrq    %rdi[m
+    0.00 : [35m  400d50:[m[34m        leaq    (,%rsi,8), %rcx[m
+    0.00 : [35m  400d58:[m[34m        xorl    %ebx, %ebx[m
+    0.00 : [35m  400d5a:[m[34m        xorl    %r10d, %r10d[m
+    0.00 : [35m  400d5d:[m[34m        leaq    (,%rdi,8), %r13[m
+    0.00 : [35m  400d65:[m[34m        addq    %rdi, %rdi[m
+    0.00 : [35m  400d68:[m[34m        movq    %rdi, -0xb8(%rbp)[m
+    0.00 : [35m  400d6f:[m[34m        cmpl    $0x1, %r14d[m
+    0.00 : [35m  400d73:[m[34m        je      0x401854 <main+0x1314>[m
+    0.00 : [35m  400d79:[m[34m        movq    -0xb8(%rbp), %rax[m
+    0.00 : [35m  400d80:[m[34m        movq    %rax, -0xc8(%rbp)[m
+    0.00 : [35m  400d87:[m[34m        leaq    -0x8(%r13), %r12[m
+    0.00 : [35m  400d8b:[m[34m        leaq    (%r13,%r8), %rdx[m
+    0.00 : [35m  400d90:[m[34m        movq    %r9, %rax[m
+    0.00 : [35m  400d93:[m[34m        movq    %r8, %rdi[m
+    0.00 : [35m  400d96:[m[34m        shrq    $0x3, %r12[m
+    0.00 : [35m  400d9a:[m[34m        incq    %r12[m
+    0.00 : [35m  400d9d:[m[34m        andl    $0x7, %r12d[m
+    0.00 : [35m  400da1:[m[34m        je      0x400e7f <main+0x93f>[m
+    0.00 : [35m  400da7:[m[34m        cmpq    $0x1, %r12[m
+    0.00 : [35m  400dab:[m[34m        je      0x400e5f <main+0x91f>[m
+    0.00 : [35m  400db1:[m[34m        cmpq    $0x2, %r12[m
+    0.00 : [35m  400db5:[m[34m        je      0x400e48 <main+0x908>[m
+    0.00 : [35m  400dbb:[m[34m        cmpq    $0x3, %r12[m
+    0.00 : [35m  400dbf:[m[34m        je      0x400e31 <main+0x8f1>[m
+    0.00 : [35m  400dc1:[m[34m        cmpq    $0x4, %r12[m
+    0.00 : [35m  400dc5:[m[34m        je      0x400e1a <main+0x8da>[m
+    0.00 : [35m  400dc7:[m[34m        cmpq    $0x5, %r12[m
+    0.00 : [35m  400dcb:[m[34m        je      0x400e03 <main+0x8c3>[m
+    0.00 : [35m  400dcd:[m[34m        cmpq    $0x6, %r12[m
+    0.00 : [35m  400dd1:[m[34m        je      0x400dec <main+0x8ac>[m
+    0.00 : [35m  400dd3:[m[34m        vmovd   (%r9), %xmm6[m
+    0.00 : [35m  400dd8:[m[34m        leaq    0x8(%r8), %rdi[m
+    0.00 : [35m  400ddc:[m[34m        leaq    (%r9,%rcx), %rax[m
+    0.00 : [35m  400de0:[m[34m        vpinsrd $0x1, (%r9,%rsi,4), %xmm6, %xmm7[m
+    0.00 : [35m  400de7:[m[34m        vmovq   %xmm7, (%r8)[m
+    0.00 : [35m  400dec:[m[34m        vmovd   (%rax), %xmm8[m
+    0.00 : [35m  400df0:[m[34m        addq    $0x8, %rdi[m
+    0.00 : [35m  400df4:[m[34m        vpinsrd $0x1, (%rax,%rsi,4), %xmm8, %xmm9[m
+    0.00 : [35m  400dfb:[m[34m        addq    %rcx, %rax[m
+    0.00 : [35m  400dfe:[m[34m        vmovq   %xmm9, -0x8(%rdi)[m
+    0.00 : [35m  400e03:[m[34m        vmovd   (%rax), %xmm10[m
+    0.00 : [35m  400e07:[m[34m        addq    $0x8, %rdi[m
+    0.00 : [35m  400e0b:[m[34m        vpinsrd $0x1, (%rax,%rsi,4), %xmm10, %xmm11[m
+    0.00 : [35m  400e12:[m[34m        addq    %rcx, %rax[m
+    0.00 : [35m  400e15:[m[34m        vmovq   %xmm11, -0x8(%rdi)[m
+    0.00 : [35m  400e1a:[m[34m        vmovd   (%rax), %xmm12[m
+    0.00 : [35m  400e1e:[m[34m        addq    $0x8, %rdi[m
+    0.00 : [35m  400e22:[m[34m        vpinsrd $0x1, (%rax,%rsi,4), %xmm12, %xmm13[m
+    0.00 : [35m  400e29:[m[34m        addq    %rcx, %rax[m
+    0.00 : [35m  400e2c:[m[34m        vmovq   %xmm13, -0x8(%rdi)[m
+    0.00 : [35m  400e31:[m[34m        vmovd   (%rax), %xmm14[m
+    0.00 : [35m  400e35:[m[34m        addq    $0x8, %rdi[m
+    0.00 : [35m  400e39:[m[34m        vpinsrd $0x1, (%rax,%rsi,4), %xmm14, %xmm15[m
+    0.00 : [35m  400e40:[m[34m        addq    %rcx, %rax[m
+    0.00 : [35m  400e43:[m[34m        vmovq   %xmm15, -0x8(%rdi)[m
+    0.00 : [35m  400e48:[m[34m        vmovd   (%rax), %xmm0[m
+    0.00 : [35m  400e4c:[m[34m        addq    $0x8, %rdi[m
+    0.00 : [35m  400e50:[m[34m        vpinsrd $0x1, (%rax,%rsi,4), %xmm0, %xmm1[m
+    0.00 : [35m  400e57:[m[34m        addq    %rcx, %rax[m
+    0.00 : [35m  400e5a:[m[34m        vmovq   %xmm1, -0x8(%rdi)[m
+    0.00 : [35m  400e5f:[m[34m        vmovd   (%rax), %xmm2[m
+    0.00 : [35m  400e63:[m[34m        addq    $0x8, %rdi[m
+    0.00 : [35m  400e67:[m[34m        vpinsrd $0x1, (%rax,%rsi,4), %xmm2, %xmm3[m
+    0.00 : [35m  400e6e:[m[34m        addq    %rcx, %rax[m
+    0.00 : [35m  400e71:[m[34m        vmovq   %xmm3, -0x8(%rdi)[m
+    0.00 : [35m  400e76:[m[34m        cmpq    %rdx, %rdi[m
+    0.00 : [35m  400e79:[m[34m        je      0x400f24 <main+0x9e4>[m
+    0.00 : [35m  400e7f:[m[34m        vmovd   (%rax), %xmm4[m
+    0.03 : [35m  400e83:[m[34m        addq    $0x40, %rdi[m
+    0.00 : [35m  400e87:[m[34m        vpinsrd $0x1, (%rax,%rsi,4), %xmm4, %xmm5[m
+    0.00 : [35m  400e8e:[m[34m        addq    %rcx, %rax[m
+    0.00 : [35m  400e91:[m[34m        vmovd   (%rax), %xmm6[m
+    0.00 : [35m  400e95:[m[34m        vpinsrd $0x1, (%rax,%rsi,4), %xmm6, %xmm7[m
+    0.00 : [35m  400e9c:[m[34m        addq    %rcx, %rax[m
+    0.01 : [35m  400e9f:[m[34m        vmovd   (%rax), %xmm8[m
+    0.00 : [35m  400ea3:[m[34m        vpinsrd $0x1, (%rax,%rsi,4), %xmm8, %xmm9[m
+    0.04 : [35m  400eaa:[m[34m        addq    %rcx, %rax[m
+    0.00 : [35m  400ead:[m[34m        vmovd   (%rax), %xmm10[m
+    0.03 : [35m  400eb1:[m[34m        vpinsrd $0x1, (%rax,%rsi,4), %xmm10, %xmm11[m
+    0.06 : [35m  400eb8:[m[34m        addq    %rcx, %rax[m
+    0.00 : [35m  400ebb:[m[34m        vmovd   (%rax), %xmm12[m
+    0.01 : [35m  400ebf:[m[34m        vpinsrd $0x1, (%rax,%rsi,4), %xmm12, %xmm13[m
+    0.04 : [35m  400ec6:[m[34m        addq    %rcx, %rax[m
+    0.00 : [35m  400ec9:[m[34m        vmovq   %xmm5, -0x40(%rdi)[m
+    0.03 : [35m  400ece:[m[34m        vmovd   (%rax), %xmm14[m
+    0.01 : [35m  400ed2:[m[34m        vpinsrd $0x1, (%rax,%rsi,4), %xmm14, %xmm15[m
+    0.06 : [35m  400ed9:[m[34m        addq    %rcx, %rax[m
+    0.00 : [35m  400edc:[m[34m        vmovq   %xmm7, -0x38(%rdi)[m
+    0.02 : [35m  400ee1:[m[34m        vmovd   (%rax), %xmm0[m
+    0.03 : [35m  400ee5:[m[34m        vpinsrd $0x1, (%rax,%rsi,4), %xmm0, %xmm1[m
+    0.02 : [35m  400eec:[m[34m        addq    %rcx, %rax[m
+    0.00 : [35m  400eef:[m[34m        vmovq   %xmm9, -0x30(%rdi)[m
+    0.00 : [35m  400ef4:[m[34m        vmovd   (%rax), %xmm2[m
+    0.00 : [35m  400ef8:[m[34m        vpinsrd $0x1, (%rax,%rsi,4), %xmm2, %xmm3[m
+    0.06 : [35m  400eff:[m[34m        vmovq   %xmm11, -0x28(%rdi)[m
+    0.00 : [35m  400f04:[m[34m        addq    %rcx, %rax[m
+    0.00 : [35m  400f07:[m[34m        vmovq   %xmm13, -0x20(%rdi)[m
+    0.02 : [35m  400f0c:[m[34m        vmovq   %xmm15, -0x18(%rdi)[m
+    0.02 : [35m  400f11:[m[34m        vmovq   %xmm1, -0x10(%rdi)[m
+    0.00 : [35m  400f16:[m[34m        vmovq   %xmm3, -0x8(%rdi)[m
+    0.00 : [35m  400f1b:[m[34m        cmpq    %rdx, %rdi[m
+    0.00 : [35m  400f1e:[m[34m        jne     0x400e7f <main+0x93f>[m
+    0.00 : [35m  400f24:[m[34m        cmpq    -0xb8(%rbp), %rsi[m
+    0.00 : [35m  400f2b:[m[34m        je      0x4015cf <main+0x108f>[m
+    0.00 : [35m  400f31:[m[34m        movq    -0xc8(%rbp), %rdx[m
+    0.00 : [35m  400f38:[m[34m        leaq    (%rdx,%rbx), %r12[m
+    0.00 : [35m  400f3c:[m[34m        imulq   %rsi, %rdx[m
+    0.00 : [35m  400f40:[m[34m        movq    -0xe8(%rbp), %rax[m
+    0.00 : [35m  400f47:[m[34m        addq    %rsi, %rbx[m
+    0.00 : [35m  400f4a:[m[34m        addq    $0x4, %r9[m
+    0.00 : [35m  400f4e:[m[34m        addq    %r11, %r8[m
+    0.00 : [35m  400f51:[m[34m        addq    %r10, %rdx[m
+    0.00 : [35m  400f54:[m[34m        incq    %r10[m
+    0.00 : [35m  400f57:[m[34m        movl    (%r15,%rdx,4), %edi[m
+    0.00 : [35m  400f5b:[m[34m        movl    %edi, (%rax,%r12,4)[m
+    0.00 : [35m  400f5f:[m[34m        cmpq    %r10, %rsi[m
+    0.00 : [35m  400f62:[m[34m        jne     0x400d6f <main+0x82f>[m
+    0.00 : [35m  400f68:[m[34m        leaq    -0x8(%rsi), %r9[m
+    0.00 : [35m  400f6c:[m[34m        movq    -0xf8(%rbp), %r10[m
+    0.00 : [35m  400f73:[m[34m        xorl    %eax, %eax[m
+    0.00 : [35m  400f75:[m[34m        movq    %r9, %rcx[m
+    0.00 : [35m  400f78:[m[34m        shrq    $0x3, %r9[m
+    0.00 : [35m  400f7c:[m[34m        andq    $-0x8, %rcx[m
+    0.00 : [35m  400f80:[m[34m        leaq    0x8(,%r9,8), %r9[m
+    0.00 : [35m  400f88:[m[34m        leaq    0x8(%rcx), %rbx[m
+    0.00 : [35m  400f8c:[m[34m        movq    %rcx, -0xc8(%rbp)[m
+    0.00 : [35m  400f93:[m[34m        leaq    0xb(%rcx), %r12[m
+    0.00 : [35m  400f97:[m[34m        leaq    (,%rbx,4), %r8[m
+    0.00 : [35m  400f9f:[m[34m        movq    %r8, -0xb8(%rbp)[m
+    0.00 : [35m  400fa6:[m[34m        xorl    %r8d, %r8d[m
+    0.00 : [35m  400fa9:[m[34m        movq    -0xe0(%rbp), %r13[m
+    0.00 : [35m  400fb0:[m[34m        movq    %rax, -0x130(%rbp)[m
+    0.00 : [35m  400fb7:[m[34m        movl    %r14d, -0x134(%rbp)[m
+    0.00 : [35m  400fbe:[m[34m        movq    %r8, -0x140(%rbp)[m
+    0.00 : [35m  400fc5:[m[34m        movq    %r15, -0x148(%rbp)[m
+    0.00 : [35m  400fcc:[m[34m        movq    -0xb8(%rbp), %rdi[m
+    0.00 : [35m  400fd3:[m[34m        movq    -0xe8(%rbp), %rdx[m
+    0.00 : [35m  400fda:[m[34m        leaq    (%r13,%rax), %rcx[m
+    0.00 : [35m  400fdf:[m[34m        xorl    %r13d, %r13d[m
+    0.00 : [35m  400fe2:[m[34m        vmovd   (%r10,%r13,4), %xmm4[m
+    0.00 : [35m  400fe8:[m[34m        vmovd   %xmm4, %eax[m
+    0.00 : [35m  400fec:[m[34m        addq    %rcx, %rdi[m
+    0.00 : [35m  400fef:[m[34m        cmpq    $0x7, %rsi[m
+    0.00 : [35m  400ff3:[m[34m        jbe     0x4012c2 <main+0xd82>[m
+    0.00 : [35m  400ff9:[m[34m        nopl    (%rax)[m
+    0.00 : [35m  401000:[m[34m        leaq    -0x8(%r9), %r15[m
+    0.01 : [35m  401004:[m[34m        xorl    %r14d, %r14d[m
+    0.05 : [35m  401007:[m[34m        shrq    $0x3, %r15[m
+    0.02 : [35m  40100b:[m[34m        incq    %r15[m
+    0.00 : [35m  40100e:[m[34m        andl    $0x3, %r15d[m
+    0.00 : [35m  401012:[m[34m        je      0x4010f4 <main+0xbb4>[m
+    0.00 : [35m  401018:[m[34m        cmpq    $0x1, %r15[m
+    0.00 : [35m  40101c:[m[34m        je      0x4010aa <main+0xb6a>[m
+    0.00 : [35m  401022:[m[34m        cmpq    $0x2, %r15[m
+    0.00 : [35m  401026:[m[34m        je      0x401069 <main+0xb29>[m
+    0.00 : [35m  401028:[m[34m        vmovdqu (%rdx), %ymm6[m
+    0.00 : [35m  40102c:[m[34m        vmovd   %eax, %xmm4[m
+    0.00 : [35m  401030:[m[34m        movl    $0x8, %r14d[m
+    0.04 : [35m  401036:[m[34m        vpaddd  (%rcx), %ymm6, %ymm7[m
+    0.00 : [35m  40103a:[m[34m        vpbroadcastd    %xmm4, %ymm5[m
+    0.00 : [35m  40103f:[m[34m        vpminsd %ymm5, %ymm7, %ymm8[m
+    0.00 : [35m  401044:[m[34m        vextracti128    $0x1, %ymm8, %xmm9[m
+    0.00 : [35m  40104a:[m[34m        vpminsd %xmm8, %xmm9, %xmm10[m
+    0.00 : [35m  40104f:[m[34m        vpsrldq $0x8, %xmm10, %xmm11[m
+    0.00 : [35m  401055:[m[34m        vpminsd %xmm11, %xmm10, %xmm12[m
+    0.00 : [35m  40105a:[m[34m        vpsrldq $0x4, %xmm12, %xmm13[m
+    0.04 : [35m  401060:[m[34m        vpminsd %xmm13, %xmm12, %xmm14[m
+    0.04 : [35m  401065:[m[34m        vmovd   %xmm14, %eax[m
+    0.00 : [35m  401069:[m[34m        vmovdqu (%rdx,%r14,4), %ymm1[m
+    0.01 : [35m  40106f:[m[34m        vmovd   %eax, %xmm15[m
+    0.00 : [35m  401073:[m[34m        vpaddd  (%rcx,%r14,4), %ymm1, %ymm2[m
+    0.00 : [35m  401079:[m[34m        vpbroadcastd    %xmm15, %ymm0[m
+    0.00 : [35m  40107e:[m[34m        addq    $0x8, %r14[m
+    0.00 : [35m  401082:[m[34m        vpminsd %ymm0, %ymm2, %ymm3[m
+    0.11 : [35m  401087:[m[34m        vextracti128    $0x1, %ymm3, %xmm4[m
+    0.02 : [35m  40108d:[m[34m        vpminsd %xmm3, %xmm4, %xmm5[m
+    0.00 : [35m  401092:[m[34m        vpsrldq $0x8, %xmm5, %xmm6[m
+    0.00 : [35m  401097:[m[34m        vpminsd %xmm6, %xmm5, %xmm7[m
+    0.00 : [35m  40109c:[m[34m        vpsrldq $0x4, %xmm7, %xmm8[m
+    0.00 : [35m  4010a1:[m[34m        vpminsd %xmm8, %xmm7, %xmm9[m
+    0.00 : [35m  4010a6:[m[34m        vmovd   %xmm9, %eax[m
+    0.00 : [35m  4010aa:[m[34m        vmovdqu (%rdx,%r14,4), %ymm12[m
+    0.04 : [35m  4010b0:[m[34m        vmovd   %eax, %xmm10[m
+    0.02 : [35m  4010b4:[m[34m        vpaddd  (%rcx,%r14,4), %ymm12, %ymm13[m
+    0.00 : [35m  4010ba:[m[34m        vpbroadcastd    %xmm10, %ymm11[m
+    0.00 : [35m  4010bf:[m[34m        addq    $0x8, %r14[m
+    0.00 : [35m  4010c3:[m[34m        vpminsd %ymm11, %ymm13, %ymm14[m
+    0.00 : [35m  4010c8:[m[34m        vextracti128    $0x1, %ymm14, %xmm15[m
+    0.00 : [35m  4010ce:[m[34m        vpminsd %xmm14, %xmm15, %xmm0[m
+    0.00 : [35m  4010d3:[m[34m        vpsrldq $0x8, %xmm0, %xmm1[m
+    0.07 : [35m  4010d8:[m[34m        vpminsd %xmm1, %xmm0, %xmm2[m
+    0.00 : [35m  4010dd:[m[34m        vpsrldq $0x4, %xmm2, %xmm3[m
+    0.00 : [35m  4010e2:[m[34m        vpminsd %xmm3, %xmm2, %xmm4[m
+    0.00 : [35m  4010e7:[m[34m        vmovd   %xmm4, %eax[m
+    0.00 : [35m  4010eb:[m[34m        cmpq    %r14, %r9[m
+    0.00 : [35m  4010ee:[m[34m        je      0x4011e8 <main+0xca8>[m
+    0.00 : [35m  4010f4:[m[34m        vmovdqu (%rdx,%r14,4), %ymm7[m
+    0.23 : [35m  4010fa:[m[34m        vmovdqu 0x20(%rcx,%r14,4), %ymm1[m
+    0.06 : [35m  401101:[m[34m        vmovd   %eax, %xmm5[m
+[31m    5.72[m : [35m  401105:[m[34m        vpaddd  (%rcx,%r14,4), %ymm7, %ymm8[m
+    0.02 : [35m  40110b:[m[34m        vpaddd  0x20(%rdx,%r14,4), %ymm1, %ymm2[m
+    0.13 : [35m  401112:[m[34m        vpbroadcastd    %xmm5, %ymm6[m
+[31m    6.64[m : [35m  401117:[m[34m        vpminsd %ymm6, %ymm8, %ymm9[m
+[32m    2.90[m : [35m  40111c:[m[34m        vextracti128    $0x1, %ymm9, %xmm10[m
+[31m    5.06[m : [35m  401122:[m[34m        vpminsd %xmm9, %xmm10, %xmm11[m
+[32m    4.50[m : [35m  401127:[m[34m        vpsrldq $0x8, %xmm11, %xmm12[m
+[32m    1.34[m : [35m  40112d:[m[34m        vpminsd %xmm12, %xmm11, %xmm13[m
+[32m    1.64[m : [35m  401132:[m[34m        vmovdqu 0x40(%rcx,%r14,4), %ymm11[m
+    0.04 : [35m  401139:[m[34m        vpaddd  0x40(%rdx,%r14,4), %ymm11, %ymm12[m
+    0.21 : [35m  401140:[m[34m        vpsrldq $0x4, %xmm13, %xmm14[m
+[32m    1.42[m : [35m  401146:[m[34m        vpminsd %xmm14, %xmm13, %xmm15[m
+[32m    1.52[m : [35m  40114b:[m[34m        vpbroadcastd    %xmm15, %ymm0[m
+[32m    3.63[m : [35m  401150:[m[34m        vpminsd %ymm0, %ymm2, %ymm3[m
+[32m    2.75[m : [35m  401155:[m[34m        vextracti128    $0x1, %ymm3, %xmm4[m
+[32m    4.88[m : [35m  40115b:[m[34m        vpminsd %xmm3, %xmm4, %xmm5[m
+[32m    4.63[m : [35m  401160:[m[34m        vpsrldq $0x8, %xmm5, %xmm6[m
+[32m    1.39[m : [35m  401165:[m[34m        vpminsd %xmm6, %xmm5, %xmm7[m
+[32m    1.47[m : [35m  40116a:[m[34m        vmovdqu 0x60(%rcx,%r14,4), %ymm5[m
+    0.02 : [35m  401171:[m[34m        vpsrldq $0x4, %xmm7, %xmm8[m
+[32m    1.75[m : [35m  401176:[m[34m        vpaddd  0x60(%rdx,%r14,4), %ymm5, %ymm6[m
+    0.17 : [35m  40117d:[m[34m        vpminsd %xmm8, %xmm7, %xmm9[m
+[32m    1.37[m : [35m  401182:[m[34m        addq    $0x20, %r14[m
+    0.00 : [35m  401186:[m[34m        vpbroadcastd    %xmm9, %ymm10[m
+[32m    3.72[m : [35m  40118b:[m[34m        vpminsd %ymm10, %ymm12, %ymm13[m
+[32m    3.01[m : [35m  401190:[m[34m        vextracti128    $0x1, %ymm13, %xmm14[m
+[31m    5.25[m : [35m  401196:[m[34m        vpminsd %xmm13, %xmm14, %xmm15[m
+[32m    3.83[m : [35m  40119b:[m[34m        vpsrldq $0x8, %xmm15, %xmm0[m
+[32m    1.50[m : [35m  4011a1:[m[34m        vpminsd %xmm0, %xmm15, %xmm2[m
+[32m    1.54[m : [35m  4011a6:[m[34m        vpsrldq $0x4, %xmm2, %xmm1[m
+[32m    1.46[m : [35m  4011ab:[m[34m        vpminsd %xmm1, %xmm2, %xmm3[m
+[32m    1.40[m : [35m  4011b0:[m[34m        vpbroadcastd    %xmm3, %ymm4[m
+[32m    3.75[m : [35m  4011b5:[m[34m        vpminsd %ymm4, %ymm6, %ymm7[m
+[32m    3.06[m : [35m  4011ba:[m[34m        vextracti128    $0x1, %ymm7, %xmm8[m
+[31m    5.48[m : [35m  4011c0:[m[34m        vpminsd %xmm7, %xmm8, %xmm9[m
+[32m    4.83[m : [35m  4011c5:[m[34m        vpsrldq $0x8, %xmm9, %xmm10[m
+[32m    1.52[m : [35m  4011cb:[m[34m        vpminsd %xmm10, %xmm9, %xmm11[m
+[32m    1.64[m : [35m  4011d0:[m[34m        vpsrldq $0x4, %xmm11, %xmm12[m
+[32m    1.42[m : [35m  4011d6:[m[34m        vpminsd %xmm12, %xmm11, %xmm4[m
+[32m    1.51[m : [35m  4011db:[m[34m        vmovd   %xmm4, %eax[m
+    0.00 : [35m  4011df:[m[34m        cmpq    %r14, %r9[m
+    0.00 : [35m  4011e2:[m[34m        jne     0x4010f4 <main+0xbb4>[m
+    0.00 : [35m  4011e8:[m[34m        movq    %rbx, %r8[m
+    0.00 : [35m  4011eb:[m[34m        cmpq    %rsi, %r12[m
+    0.00 : [35m  4011ee:[m[34m        jae     0x401239 <main+0xcf9>[m
+    0.00 : [35m  4011f0:[m[34m        movq    -0xb8(%rbp), %r15[m
+    0.00 : [35m  4011f7:[m[34m        movq    -0xc8(%rbp), %r8[m
+    0.00 : [35m  4011fe:[m[34m        movq    %rdi, %r14[m
+    0.00 : [35m  401201:[m[34m        addq    %rdx, %r15[m
+    0.00 : [35m  401204:[m[34m        leaq    0xc(%r8), %r8[m
+    0.00 : [35m  401208:[m[34m        vmovdqu (%r15), %xmm13[m
+    0.00 : [35m  40120d:[m[34m        vmovd   %eax, %xmm15[m
+    0.00 : [35m  401211:[m[34m        vpaddd  (%r14), %xmm13, %xmm14[m
+    0.00 : [35m  401216:[m[34m        vpbroadcastd    %xmm15, %xmm0[m
+    0.00 : [35m  40121b:[m[34m        vpminsd %xmm0, %xmm14, %xmm1[m
+    0.00 : [35m  401220:[m[34m        vpsrldq $0x8, %xmm1, %xmm2[m
+    0.00 : [35m  401225:[m[34m        vpminsd %xmm2, %xmm1, %xmm3[m
+    0.00 : [35m  40122a:[m[34m        vpsrldq $0x4, %xmm3, %xmm5[m
+    0.00 : [35m  40122f:[m[34m        vpminsd %xmm5, %xmm3, %xmm6[m
+    0.00 : [35m  401234:[m[34m        vpminsd %xmm6, %xmm4, %xmm4[m
+    0.00 : [35m  401239:[m[34m        cmpq    %rsi, %r8[m
+    0.00 : [35m  40123c:[m[34m        jae     0x401295 <main+0xd55>[m
+    0.00 : [35m  40123e:[m[34m        vmovd   (%rdx,%r8,4), %xmm7[m
+    0.00 : [35m  401244:[m[34m        vmovd   (%rcx,%r8,4), %xmm8[m
+    0.00 : [35m  40124a:[m[34m        leaq    0x1(%r8), %r15[m
+    0.00 : [35m  40124e:[m[34m        vpaddd  %xmm7, %xmm8, %xmm9[m
+    0.00 : [35m  401252:[m[34m        vpminsd %xmm9, %xmm4, %xmm4[m
+    0.00 : [35m  401257:[m[34m        cmpq    %rsi, %r15[m
+    0.00 : [35m  40125a:[m[34m        jae     0x401295 <main+0xd55>[m
+    0.00 : [35m  40125c:[m[34m        vmovd   0x4(%rdx,%r8,4), %xmm10[m
+    0.00 : [35m  401263:[m[34m        vmovd   0x4(%rcx,%r8,4), %xmm11[m
+    0.00 : [35m  40126a:[m[34m        leaq    0x2(%r8), %r14[m
+    0.00 : [35m  40126e:[m[34m        vpaddd  %xmm11, %xmm10, %xmm12[m
+    0.00 : [35m  401273:[m[34m        vpminsd %xmm12, %xmm4, %xmm4[m
+    0.00 : [35m  401278:[m[34m        cmpq    %rsi, %r14[m
+    0.00 : [35m  40127b:[m[34m        jae     0x401295 <main+0xd55>[m
+    0.00 : [35m  40127d:[m[34m        vmovd   0x8(%rcx,%r8,4), %xmm13[m
+    0.00 : [35m  401284:[m[34m        vmovd   0x8(%rdx,%r8,4), %xmm14[m
+    0.00 : [35m  40128b:[m[34m        vpaddd  %xmm14, %xmm13, %xmm15[m
+    0.00 : [35m  401290:[m[34m        vpminsd %xmm15, %xmm4, %xmm4[m
+    0.00 : [35m  401295:[m[34m        leaq    0x1(%r13), %rax[m
+    0.00 : [35m  401299:[m[34m        vmovd   %xmm4, (%r10,%r13,4)[m
+    0.05 : [35m  40129f:[m[34m        addq    %r11, %rdx[m
+    0.05 : [35m  4012a2:[m[34m        cmpq    %rax, %rsi[m
+    0.00 : [35m  4012a5:[m[34m        je      0x4015a0 <main+0x1060>[m
+    0.00 : [35m  4012ab:[m[34m        movq    %rax, %r13[m
+    0.00 : [35m  4012ae:[m[34m        vmovd   (%r10,%r13,4), %xmm4[m
+    0.01 : [35m  4012b4:[m[34m        vmovd   %xmm4, %eax[m
+    0.00 : [35m  4012b8:[m[34m        cmpq    $0x7, %rsi[m
+    0.00 : [35m  4012bc:[m[34m        ja      0x401000 <main+0xac0>[m
+    0.00 : [35m  4012c2:[m[34m        xorl    %r8d, %r8d[m
+    0.00 : [35m  4012c5:[m[34m        cmpq    $0x3, %rsi[m
+    0.00 : [35m  4012c9:[m[34m        jbe     0x40123e <main+0xcfe>[m
+    0.00 : [35m  4012cf:[m[34m        movq    %rdx, %r15[m
+    0.00 : [35m  4012d2:[m[34m        movq    %rcx, %r14[m
+    0.00 : [35m  4012d5:[m[34m        movl    $0x4, %r8d[m
+    0.00 : [35m  4012db:[m[34m        jmp     0x401208 <main+0xcc8>[m
+    0.00 : [35m  4012e0:[m[34m        movq    -0xa8(%rbp), %r10[m
+    0.00 : [35m  4012e7:[m[34m        movq    -0xd0(%rbp), %r11[m
+    0.00 : [35m  4012ee:[m[34m        movq    %r12, %r9[m
+    0.00 : [35m  4012f1:[m[34m        movq    $-0x1, %rbx[m
+    0.00 : [35m  4012f8:[m[34m        jmp     0x400768 <main+0x228>[m
+    0.00 : [35m  4012fd:[m[34m        incq    %rbx[m
+    0.00 : [35m  401300:[m[34m        cmpq    %rcx, %rbx[m
+    0.00 : [35m  401303:[m[34m        jb      0x40091f <main+0x3df>[m
+    0.00 : [35m  401309:[m[34m        xorl    %eax, %eax[m
+    0.00 : [35m  40130b:[m[34m        movq    $0x1, -0xb8(%rbp)[m
+    0.00 : [35m  401316:[m[34m        movl    $0x1, %r13d[m
+    0.00 : [35m  40131c:[m[34m        movl    %r15d, -0xf0(%rbp)[m
+    0.00 : [35m  401323:[m[34m        movl    %eax, -0xc0(%rbp)[m
+    0.00 : [35m  401329:[m[34m        movq    %r12, -0xf8(%rbp)[m
+    0.00 : [35m  401330:[m[34m        movslq  -0x74(%rbp), %r15[m
+    0.00 : [35m  401334:[m[34m        cmpq    %r15, -0xb8(%rbp)[m
+    0.00 : [35m  40133b:[m[34m        jae     0x401f6f <main+0x1a2f>[m
+    0.00 : [35m  401341:[m[34m        movq    -0xb8(%rbp), %rax[m
+    0.00 : [35m  401348:[m[34m        xorl    %edx, %edx[m
+    0.00 : [35m  40134a:[m[34m        movl    -0xc0(%rbp), %esi[m
+    0.00 : [35m  401350:[m[34m        movl    $0x0, %r11d[m
+    0.00 : [35m  401356:[m[34m        movl    -0x6c(%rbp), %ebx[m
+    0.00 : [35m  401359:[m[34m        movl    -0xb8(%rbp), %r14d[m
+    0.00 : [35m  401360:[m[34m        leaq    -0x5c(%rbp), %rcx[m
+    0.00 : [35m  401364:[m[34m        movl    -0x68(%rbp), %r12d[m
+    0.00 : [35m  401368:[m[34m        divq    -0xa8(%rbp)[m
+    0.00 : [35m  40136f:[m[34m        leal    (%rsi,%rbx), %r15d[m
+    0.00 : [35m  401373:[m[34m        movl    %ebx, %edi[m
+    0.00 : [35m  401375:[m[34m        movl    %r14d, -0xe0(%rbp)[m
+    0.00 : [35m  40137c:[m[34m        testq   %rdx, %rdx[m
+    0.00 : [35m  40137f:[m[34m        movl    $0x405520, %edx[m
+    0.00 : [35m  401384:[m[34m        cmovnel %esi, %r15d[m
+    0.00 : [35m  401388:[m[34m        cmovel  %r11d, %r13d[m
+    0.00 : [35m  40138c:[m[34m        movl    $0x405300, %esi[m
+    0.00 : [35m  401391:[m[34m        xorl    %r8d, %r8d[m
+    0.00 : [35m  401394:[m[34m        imull   %ebx, %edi[m
+    0.00 : [35m  401397:[m[34m        movl    %r13d, -0xc8(%rbp)[m
+    0.00 : [35m  40139e:[m[34m        movl    %r8d, -0x60(%rbp)[m
+    0.00 : [35m  4013a2:[m[34m        movl    %r8d, -0x5c(%rbp)[m
+    0.00 : [35m  4013a6:[m[34m        movl    %r15d, -0xc0(%rbp)[m
+    0.00 : [35m  4013ad:[m[34m        callq   0x400410 <_init+0xd4>[m
+    0.00 : [35m  4013b2:[m[34m        movslq  -0x5c(%rbp), %rdi[m
+    0.00 : [35m  4013b6:[m[34m        callq   0x4003d0 <_init+0x94>[m
+    0.00 : [35m  4013bb:[m[34m        movq    %rax, %r13[m
+    0.00 : [35m  4013be:[m[34m        testl   %ebx, %ebx[m
+    0.00 : [35m  4013c0:[m[34m        je      0x401543 <main+0x1003>[m
+    0.00 : [35m  4013c6:[m[34m        movl    -0xc8(%rbp), %eax[m
+    0.00 : [35m  4013cc:[m[34m        imull   %r12d, %r15d[m
+    0.00 : [35m  4013d0:[m[34m        movq    -0xb0(%rbp), %rdi[m
+    0.00 : [35m  4013d7:[m[34m        movslq  %r12d, %r14[m
+    0.00 : [35m  4013da:[m[34m        movslq  %ebx, %rcx[m
+    0.00 : [35m  4013dd:[m[34m        movq    %rbx, %r9[m
+    0.00 : [35m  4013e0:[m[34m        shlq    $0x2, %r14[m
+    0.00 : [35m  4013e4:[m[34m        xorl    %r12d, %r12d[m
+    0.00 : [35m  4013e7:[m[34m        movq    %rcx, -0xe8(%rbp)[m
+    0.00 : [35m  4013ee:[m[34m        imull   %ebx, %eax[m
+    0.00 : [35m  4013f1:[m[34m        addl    %r15d, %eax[m
+    0.00 : [35m  4013f4:[m[34m        cltq[m
+    0.00 : [35m  4013f6:[m[34m        leaq    (%rdi,%rax,4), %r15[m
+    0.00 : [35m  4013fa:[m[34m        andl    $0x3, %r9d[m
+    0.00 : [35m  4013fe:[m[34m        je      0x40149b <main+0xf5b>[m
+    0.00 : [35m  401404:[m[34m        cmpq    $0x1, %r9[m
+    0.00 : [35m  401408:[m[34m        je      0x401467 <main+0xf27>[m
+    0.00 : [35m  40140a:[m[34m        cmpq    $0x2, %r9[m
+    0.00 : [35m  40140e:[m[34m        je      0x40143e <main+0xefe>[m
+    0.00 : [35m  401410:[m[34m        pushq   %r9[m
+    0.00 : [35m  401412:[m[34m        movl    -0x5c(%rbp), %r8d[m
+    0.00 : [35m  401416:[m[34m        pushq   $0x405520[m
+    0.00 : [35m  40141b:[m[34m        movq    %r15, %rdi[m
+    0.00 : [35m  40141e:[m[34m        leaq    -0x60(%rbp), %r9[m
+    0.00 : [35m  401422:[m[34m        movq    %r13, %rcx[m
+    0.00 : [35m  401425:[m[34m        movl    $0x405300, %edx[m
+    0.00 : [35m  40142a:[m[34m        movl    %ebx, %esi[m
+    0.00 : [35m  40142c:[m[34m        movl    $0x1, %r12d[m
+    0.00 : [35m  401432:[m[34m        addq    %r14, %r15[m
+    0.00 : [35m  401435:[m[34m        callq   0x4004c0 <_init+0x184>[m
+    0.00 : [35m  40143a:[m[34m        popq    %r10[m
+    0.00 : [35m  40143c:[m[34m        popq    %r11[m
+    0.00 : [35m  40143e:[m[34m        pushq   %rsi[m
+    0.00 : [35m  40143f:[m[34m        movl    -0x5c(%rbp), %r8d[m
+    0.00 : [35m  401443:[m[34m        pushq   $0x405520[m
+    0.00 : [35m  401448:[m[34m        movq    %r15, %rdi[m
+    0.00 : [35m  40144b:[m[34m        leaq    -0x60(%rbp), %r9[m
+    0.00 : [35m  40144f:[m[34m        movq    %r13, %rcx[m
+    0.00 : [35m  401452:[m[34m        movl    $0x405300, %edx[m
+    0.00 : [35m  401457:[m[34m        movl    %ebx, %esi[m
+    0.00 : [35m  401459:[m[34m        incq    %r12[m
+    0.00 : [35m  40145c:[m[34m        addq    %r14, %r15[m
+    0.00 : [35m  40145f:[m[34m        callq   0x4004c0 <_init+0x184>[m
+    0.00 : [35m  401464:[m[34m        popq    %rdi[m
+    0.00 : [35m  401465:[m[34m        popq    %r8[m
+    0.00 : [35m  401467:[m[34m        pushq   %rax[m
+    0.00 : [35m  401468:[m[34m        movl    -0x5c(%rbp), %r8d[m
+    0.00 : [35m  40146c:[m[34m        pushq   $0x405520[m
+    0.00 : [35m  401471:[m[34m        movq    %r13, %rcx[m
+    0.00 : [35m  401474:[m[34m        movl    $0x405300, %edx[m
+    0.00 : [35m  401479:[m[34m        movq    %r15, %rdi[m
+    0.00 : [35m  40147c:[m[34m        leaq    -0x60(%rbp), %r9[m
+    0.00 : [35m  401480:[m[34m        movl    %ebx, %esi[m
+    0.00 : [35m  401482:[m[34m        incq    %r12[m
+    0.00 : [35m  401485:[m[34m        addq    %r14, %r15[m
+    0.00 : [35m  401488:[m[34m        callq   0x4004c0 <_init+0x184>[m
+    0.00 : [35m  40148d:[m[34m        movslq  %ebx, %r10[m
+    0.00 : [35m  401490:[m[34m        popq    %rdx[m
+    0.00 : [35m  401491:[m[34m        popq    %rcx[m
+    0.00 : [35m  401492:[m[34m        cmpq    %r10, %r12[m
+    0.00 : [35m  401495:[m[34m        je      0x401543 <main+0x1003>[m
+    0.00 : [35m  40149b:[m[34m        movl    -0x5c(%rbp), %r8d[m
+    0.00 : [35m  40149f:[m[34m        subq    $0x8, %rsp[m
+    0.00 : [35m  4014a3:[m[34m        movq    %r15, %rdi[m
+    0.00 : [35m  4014a6:[m[34m        leaq    -0x60(%rbp), %r9[m
+    0.00 : [35m  4014aa:[m[34m        pushq   $0x405520[m
+    0.00 : [35m  4014af:[m[34m        movq    %r13, %rcx[m
+    0.00 : [35m  4014b2:[m[34m        movl    $0x405300, %edx[m
+    0.00 : [35m  4014b7:[m[34m        movl    %ebx, %esi[m
+    0.00 : [35m  4014b9:[m[34m        addq    $0x4, %r12[m
+    0.00 : [35m  4014bd:[m[34m        callq   0x4004c0 <_init+0x184>[m
+    0.00 : [35m  4014c2:[m[34m        movl    -0x5c(%rbp), %r8d[m
+    0.00 : [35m  4014c6:[m[34m        movq    $0x405520, (%rsp)[m
+    0.00 : [35m  4014ce:[m[34m        leaq    (%r15,%r14), %rdi[m
+    0.00 : [35m  4014d2:[m[34m        leaq    -0x60(%rbp), %r9[m
+    0.00 : [35m  4014d6:[m[34m        movq    %r13, %rcx[m
+    0.00 : [35m  4014d9:[m[34m        movl    $0x405300, %edx[m
+    0.00 : [35m  4014de:[m[34m        movl    %ebx, %esi[m
+    0.00 : [35m  4014e0:[m[34m        leaq    (%r15,%r14,2), %r15[m
+    0.00 : [35m  4014e4:[m[34m        callq   0x4004c0 <_init+0x184>[m
+    0.00 : [35m  4014e9:[m[34m        movl    -0x5c(%rbp), %r8d[m
+    0.00 : [35m  4014ed:[m[34m        movq    $0x405520, (%rsp)[m
+    0.00 : [35m  4014f5:[m[34m        movq    %r15, %rdi[m
+    0.00 : [35m  4014f8:[m[34m        leaq    -0x60(%rbp), %r9[m
+    0.00 : [35m  4014fc:[m[34m        movq    %r13, %rcx[m
+    0.00 : [35m  4014ff:[m[34m        movl    $0x405300, %edx[m
+    0.00 : [35m  401504:[m[34m        movl    %ebx, %esi[m
+    0.00 : [35m  401506:[m[34m        callq   0x4004c0 <_init+0x184>[m
+    0.00 : [35m  40150b:[m[34m        movl    -0x5c(%rbp), %r8d[m
+    0.00 : [35m  40150f:[m[34m        movq    $0x405520, (%rsp)[m
+    0.00 : [35m  401517:[m[34m        leaq    -0x60(%rbp), %r9[m
+    0.00 : [35m  40151b:[m[34m        leaq    (%r15,%r14), %rdi[m
+    0.00 : [35m  40151f:[m[34m        movq    %r13, %rcx[m
+    0.00 : [35m  401522:[m[34m        movl    $0x405300, %edx[m
+    0.00 : [35m  401527:[m[34m        movl    %ebx, %esi[m
+    0.00 : [35m  401529:[m[34m        leaq    (%r15,%r14,2), %r15[m
+    0.00 : [35m  40152d:[m[34m        callq   0x4004c0 <_init+0x184>[m
+    0.00 : [35m  401532:[m[34m        popq    %r9[m
+    0.00 : [35m  401534:[m[34m        popq    %r10[m
+    0.00 : [35m  401536:[m[34m        cmpq    -0xe8(%rbp), %r12[m
+    0.00 : [35m  40153d:[m[34m        jne     0x40149b <main+0xf5b>[m
+    0.00 : [35m  401543:[m[34m        pushq   %rsi[m
+    0.00 : [35m  401544:[m[34m        movl    -0xe0(%rbp), %ecx[m
+    0.00 : [35m  40154a:[m[34m        leaq    -0x40(%rbp), %rbx[m
+    0.00 : [35m  40154e:[m[34m        xorl    %r8d, %r8d[m
+    0.00 : [35m  401551:[m[34m        movl    -0x60(%rbp), %esi[m
+    0.00 : [35m  401554:[m[34m        pushq   %rbx[m
+    0.00 : [35m  401555:[m[34m        movl    $0x405520, %r9d[m
+    0.00 : [35m  40155b:[m[34m        movl    $0x405100, %edx[m
+    0.00 : [35m  401560:[m[34m        movq    %r13, %rdi[m
+    0.00 : [35m  401563:[m[34m        callq   0x4003c0 <_init+0x84>[m
+    0.00 : [35m  401568:[m[34m        xorl    %esi, %esi[m
+    0.00 : [35m  40156a:[m[34m        movq    %rbx, %rdi[m
+    0.00 : [35m  40156d:[m[34m        callq   0x400470 <_init+0x134>[m
+    0.00 : [35m  401572:[m[34m        movq    %r13, %rdi[m
+    0.00 : [35m  401575:[m[34m        callq   0x400420 <_init+0xe4>[m
+    0.00 : [35m  40157a:[m[34m        movl    -0xc8(%rbp), %r13d[m
+    0.00 : [35m  401581:[m[34m        incq    -0xb8(%rbp)[m
+    0.00 : [35m  401588:[m[34m        popq    %rdi[m
+    0.00 : [35m  401589:[m[34m        popq    %r8[m
+    0.00 : [35m  40158b:[m[34m        incl    %r13d[m
+    0.00 : [35m  40158e:[m[34m        jmp     0x401330 <main+0xdf0>[m
+    0.00 : [35m  401593:[m[34m        nop[m
+    0.00 : [35m  401595:[m[34m        nopw    %cs:(%rax,%rax)[m
+    0.00 : [35m  4015a0:[m[34m        movq    -0x130(%rbp), %rax[m
+    0.00 : [35m  4015a7:[m[34m        movq    -0x140(%rbp), %r8[m
+    0.00 : [35m  4015ae:[m[34m        addq    %r11, %r10[m
+    0.00 : [35m  4015b1:[m[34m        movl    -0x134(%rbp), %r14d[m
+    0.00 : [35m  4015b8:[m[34m        movq    -0x148(%rbp), %r15[m
+    0.00 : [35m  4015bf:[m[34m        addq    %r11, %rax[m
+    0.00 : [35m  4015c2:[m[34m        cmpq    %r13, %r8[m
+    0.00 : [35m  4015c5:[m[34m        je      0x4015ea <main+0x10aa>[m
+    0.00 : [35m  4015c7:[m[34m        incq    %r8[m
+    0.00 : [35m  4015ca:[m[34m        jmp     0x400fa9 <main+0xa69>[m
+    0.00 : [35m  4015cf:[m[34m        incq    %r10[m
+    0.00 : [35m  4015d2:[m[34m        addq    %rsi, %rbx[m
+    0.00 : [35m  4015d5:[m[34m        addq    $0x4, %r9[m
+    0.00 : [35m  4015d9:[m[34m        addq    %r11, %r8[m
+    0.00 : [35m  4015dc:[m[34m        cmpq    %r10, %rsi[m
+    0.00 : [35m  4015df:[m[34m        jne     0x400d87 <main+0x847>[m
+    0.00 : [35m  4015e5:[m[34m        jmp     0x400f68 <main+0xa28>[m
+    0.00 : [35m  4015ea:[m[34m        vzeroupper[m
+    0.00 : [35m  4015ed:[m[34m        movq    -0xd0(%rbp), %r11[m
+    0.00 : [35m  4015f4:[m[34m        movq    -0x118(%rbp), %rsi[m
+    0.00 : [35m  4015fb:[m[34m        imull   %r14d, %r14d[m
+    0.00 : [35m  4015ff:[m[34m        subq    $0x8, %rsp[m
+    0.00 : [35m  401603:[m[34m        movq    -0x110(%rbp), %rbx[m
+    0.00 : [35m  40160a:[m[34m        movl    $0x405300, %edx[m
+    0.00 : [35m  40160f:[m[34m        xorl    %r8d, %r8d[m
+    0.00 : [35m  401612:[m[34m        movq    %r15, %rdi[m
+    0.00 : [35m  401615:[m[34m        movl    (%r11,%rsi,4), %r9d[m
+    0.00 : [35m  401619:[m[34m        movl    %r14d, %esi[m
+    0.00 : [35m  40161c:[m[34m        movl    (%r11,%rbx,4), %ecx[m
+    0.00 : [35m  401620:[m[34m        pushq   $0x0[m
+    0.00 : [35m  401622:[m[34m        pushq   $0x405520[m
+    0.00 : [35m  401627:[m[34m        pushq   $0x0[m
+    0.00 : [35m  401629:[m[34m        callq   0x4004d0 <_init+0x194>[m
+    0.00 : [35m  40162e:[m[34m        movq    -0x98(%rbp), %rax[m
+    0.00 : [35m  401635:[m[34m        xorl    %edx, %edx[m
+    0.00 : [35m  401637:[m[34m        addq    $0x20, %rsp[m
+    0.00 : [35m  40163b:[m[34m        movq    -0xa8(%rbp), %r10[m
+    0.00 : [35m  401642:[m[34m        incq    -0xf0(%rbp)[m
+    0.00 : [35m  401649:[m[34m        movq    -0xf0(%rbp), %r12[m
+    0.00 : [35m  401650:[m[34m        movl    -0x6c(%rbp), %ebx[m
+    0.00 : [35m  401653:[m[34m        incq    %rax[m
+    0.00 : [35m  401656:[m[34m        divq    %r10[m
+    0.00 : [35m  401659:[m[34m        movq    %rdx, -0x98(%rbp)[m
+    0.00 : [35m  401660:[m[34m        cmpq    %r12, %r10[m
+    0.00 : [35m  401663:[m[34m        jne     0x400ced <main+0x7ad>[m
+    0.00 : [35m  401669:[m[34m        movl    %ebx, %edi[m
+    0.00 : [35m  40166b:[m[34m        movq    -0xf8(%rbp), %r8[m
+    0.00 : [35m  401672:[m[34m        movq    -0x128(%rbp), %rbx[m
+    0.00 : [35m  401679:[m[34m        imull   %edi, %edi[m
+    0.00 : [35m  40167c:[m[34m        movl    $0xf4240, %r9d[m
+    0.00 : [35m  401682:[m[34m        vmovd   %r9d, %xmm4[m
+    0.00 : [35m  401687:[m[34m        vpbroadcastd    %xmm4, %ymm1[m
+    0.00 : [35m  40168c:[m[34m        movl    %edi, %r13d[m
+    0.00 : [35m  40168f:[m[34m        cmpl    $0x7, %edi[m
+    0.00 : [35m  401692:[m[34m        jle     0x401908 <main+0x13c8>[m
+    0.00 : [35m  401698:[m[34m        leaq    -0x8(%r13), %r14[m
+    0.00 : [35m  40169c:[m[34m        xorl    %eax, %eax[m
+    0.00 : [35m  40169e:[m[34m        vmovdqa %ymm1, %ymm0[m
+    0.00 : [35m  4016a2:[m[34m        movq    %r14, %r11[m
+    0.00 : [35m  4016a5:[m[34m        shrq    $0x3, %r11[m
+    0.00 : [35m  4016a9:[m[34m        leaq    0x8(,%r11,8), %rsi[m
+    0.00 : [35m  4016b1:[m[34m        incq    %r11[m
+    0.00 : [35m  4016b4:[m[34m        andl    $0x7, %r11d[m
+    0.00 : [35m  4016b8:[m[34m        je      0x40178b <main+0x124b>[m
+    0.00 : [35m  4016be:[m[34m        cmpq    $0x1, %r11[m
+    0.00 : [35m  4016c2:[m[34m        je      0x40176c <main+0x122c>[m
+    0.00 : [35m  4016c8:[m[34m        cmpq    $0x2, %r11[m
+    0.00 : [35m  4016cc:[m[34m        je      0x401756 <main+0x1216>[m
+    0.00 : [35m  4016d2:[m[34m        cmpq    $0x3, %r11[m
+    0.00 : [35m  4016d6:[m[34m        je      0x401740 <main+0x1200>[m
+    0.00 : [35m  4016d8:[m[34m        cmpq    $0x4, %r11[m
+    0.00 : [35m  4016dc:[m[34m        je      0x40172a <main+0x11ea>[m
+    0.00 : [35m  4016de:[m[34m        cmpq    $0x5, %r11[m
+    0.00 : [35m  4016e2:[m[34m        je      0x401714 <main+0x11d4>[m
+    0.00 : [35m  4016e4:[m[34m        cmpq    $0x6, %r11[m
+    0.00 : [35m  4016e8:[m[34m        je      0x4016fe <main+0x11be>[m
+    0.00 : [35m  4016ea:[m[34m        vmovdqa (%r8), %ymm2[m
+    0.00 : [35m  4016ef:[m[34m        movl    $0x8, %eax[m
+    0.00 : [35m  4016f4:[m[34m        vmovdqa %ymm2, (%r15)[m
+    0.00 : [35m  4016f9:[m[34m        vmovdqa %ymm1, (%r8)[m
+    0.00 : [35m  4016fe:[m[34m        vmovdqa (%r8,%rax,4), %ymm3[m
+    0.00 : [35m  401704:[m[34m        vmovdqa %ymm3, (%r15,%rax,4)[m
+    0.00 : [35m  40170a:[m[34m        vmovdqa %ymm0, (%r8,%rax,4)[m
+    0.00 : [35m  401710:[m[34m        addq    $0x8, %rax[m
+    0.00 : [35m  401714:[m[34m        vmovdqa (%r8,%rax,4), %ymm5[m
+    0.00 : [35m  40171a:[m[34m        vmovdqa %ymm5, (%r15,%rax,4)[m
+    0.00 : [35m  401720:[m[34m        vmovdqa %ymm0, (%r8,%rax,4)[m
+    0.00 : [35m  401726:[m[34m        addq    $0x8, %rax[m
+    0.00 : [35m  40172a:[m[34m        vmovdqa (%r8,%rax,4), %ymm6[m
+    0.00 : [35m  401730:[m[34m        vmovdqa %ymm6, (%r15,%rax,4)[m
+    0.00 : [35m  401736:[m[34m        vmovdqa %ymm0, (%r8,%rax,4)[m
+    0.00 : [35m  40173c:[m[34m        addq    $0x8, %rax[m
+    0.00 : [35m  401740:[m[34m        vmovdqa (%r8,%rax,4), %ymm7[m
+    0.00 : [35m  401746:[m[34m        vmovdqa %ymm7, (%r15,%rax,4)[m
+    0.00 : [35m  40174c:[m[34m        vmovdqa %ymm0, (%r8,%rax,4)[m
+    0.00 : [35m  401752:[m[34m        addq    $0x8, %rax[m
+    0.00 : [35m  401756:[m[34m        vmovdqa (%r8,%rax,4), %ymm8[m
+    0.00 : [35m  40175c:[m[34m        vmovdqa %ymm8, (%r15,%rax,4)[m
+    0.00 : [35m  401762:[m[34m        vmovdqa %ymm0, (%r8,%rax,4)[m
+    0.00 : [35m  401768:[m[34m        addq    $0x8, %rax[m
+    0.00 : [35m  40176c:[m[34m        vmovdqa (%r8,%rax,4), %ymm9[m
+    0.00 : [35m  401772:[m[34m        vmovdqa %ymm9, (%r15,%rax,4)[m
+    0.00 : [35m  401778:[m[34m        vmovdqa %ymm0, (%r8,%rax,4)[m
+    0.00 : [35m  40177e:[m[34m        addq    $0x8, %rax[m
+    0.00 : [35m  401782:[m[34m        cmpq    %rsi, %rax[m
+    0.00 : [35m  401785:[m[34m        je      0x401844 <main+0x1304>[m
+    0.00 : [35m  40178b:[m[34m        vmovdqa (%r8,%rax,4), %ymm10[m
+    0.00 : [35m  401791:[m[34m        leaq    0x8(%rax), %r10[m
+    0.00 : [35m  401795:[m[34m        leaq    0x10(%rax), %rdx[m
+    0.00 : [35m  401799:[m[34m        leaq    0x18(%rax), %r12[m
+    0.00 : [35m  40179d:[m[34m        leaq    0x20(%rax), %rdi[m
+    0.00 : [35m  4017a1:[m[34m        leaq    0x28(%rax), %r9[m
+    0.00 : [35m  4017a5:[m[34m        leaq    0x30(%rax), %rcx[m
+    0.00 : [35m  4017a9:[m[34m        leaq    0x38(%rax), %r11[m
+    0.00 : [35m  4017ad:[m[34m        vmovdqa %ymm10, (%r15,%rax,4)[m
+    0.00 : [35m  4017b3:[m[34m        vmovdqa %ymm0, (%r8,%rax,4)[m
+    0.00 : [35m  4017b9:[m[34m        vmovdqa (%r8,%r10,4), %ymm11[m
+    0.08 : [35m  4017bf:[m[34m        addq    $0x40, %rax[m
+    0.00 : [35m  4017c3:[m[34m        vmovdqa %ymm11, (%r15,%r10,4)[m
+    0.00 : [35m  4017c9:[m[34m        vmovdqa %ymm0, (%r8,%r10,4)[m
+    0.00 : [35m  4017cf:[m[34m        vmovdqa (%r8,%rdx,4), %ymm12[m
+    0.00 : [35m  4017d5:[m[34m        vmovdqa %ymm12, (%r15,%rdx,4)[m
+    0.00 : [35m  4017db:[m[34m        vmovdqa %ymm0, (%r8,%rdx,4)[m
+    0.00 : [35m  4017e1:[m[34m        vmovdqa (%r8,%r12,4), %ymm13[m
+    0.03 : [35m  4017e7:[m[34m        vmovdqa %ymm13, (%r15,%r12,4)[m
+    0.00 : [35m  4017ed:[m[34m        vmovdqa %ymm0, (%r8,%r12,4)[m
+    0.00 : [35m  4017f3:[m[34m        vmovdqa (%r8,%rdi,4), %ymm14[m
+    0.00 : [35m  4017f9:[m[34m        vmovdqa %ymm14, (%r15,%rdi,4)[m
+    0.00 : [35m  4017ff:[m[34m        vmovdqa %ymm0, (%r8,%rdi,4)[m
+    0.00 : [35m  401805:[m[34m        vmovdqa (%r8,%r9,4), %ymm15[m
+    0.02 : [35m  40180b:[m[34m        vmovdqa %ymm15, (%r15,%r9,4)[m
+    0.01 : [35m  401811:[m[34m        vmovdqa %ymm0, (%r8,%r9,4)[m
+    0.00 : [35m  401817:[m[34m        vmovdqa (%r8,%rcx,4), %ymm4[m
+    0.00 : [35m  40181d:[m[34m        vmovdqa %ymm4, (%r15,%rcx,4)[m
+    0.02 : [35m  401823:[m[34m        vmovdqa %ymm0, (%r8,%rcx,4)[m
+    0.00 : [35m  401829:[m[34m        vmovdqa (%r8,%r11,4), %ymm2[m
+    0.10 : [35m  40182f:[m[34m        vmovdqa %ymm2, (%r15,%r11,4)[m
+    0.00 : [35m  401835:[m[34m        vmovdqa %ymm0, (%r8,%r11,4)[m
+    0.00 : [35m  40183b:[m[34m        cmpq    %rsi, %rax[m
+    0.00 : [35m  40183e:[m[34m        jne     0x40178b <main+0x124b>[m
+    0.00 : [35m  401844:[m[34m        movq    %r14, %rcx[m
+    0.00 : [35m  401847:[m[34m        andq    $-0x8, %rcx[m
+    0.00 : [35m  40184b:[m[34m        addq    $0x8, %rcx[m
+    0.00 : [35m  40184f:[m[34m        jmp     0x40190a <main+0x13ca>[m
+    0.00 : [35m  401854:[m[34m        xorl    %edx, %edx[m
+    0.00 : [35m  401856:[m[34m        jmp     0x400f38 <main+0x9f8>[m
+    0.00 : [35m  40185b:[m[34m        movl    %ebx, %r14d[m
+    0.00 : [35m  40185e:[m[34m        cmpl    $0x7, %ebx[m
+    0.00 : [35m  401861:[m[34m        jle     0x4018fd <main+0x13bd>[m
+    0.00 : [35m  401867:[m[34m        movq    -0xc0(%rbp), %rsi[m
+    0.00 : [35m  40186e:[m[34m        movq    -0xe0(%rbp), %rdi[m
+    0.00 : [35m  401875:[m[34m        leaq    -0x8(%r14), %rdx[m
+    0.00 : [35m  401879:[m[34m        leaq    -0x8(%r14), %r13[m
+    0.00 : [35m  40187d:[m[34m        shrq    $0x3, %rdx[m
+    0.00 : [35m  401881:[m[34m        andq    $-0x8, %r13[m
+    0.00 : [35m  401885:[m[34m        incq    %rdx[m
+    0.00 : [35m  401888:[m[34m        shlq    $0x5, %rdx[m
+    0.00 : [35m  40188c:[m[34m        callq   0x400530 <_init+0x1f4>[m
+    0.00 : [35m  401891:[m[34m        leaq    0x8(%r13), %r10[m
+    0.00 : [35m  401895:[m[34m        addq    $0xb, %r13[m
+    0.00 : [35m  401899:[m[34m        cmpq    %r14, %r13[m
+    0.00 : [35m  40189c:[m[34m        jae     0x4018bc <main+0x137c>[m
+    0.00 : [35m  40189e:[m[34m        movq    -0xc0(%rbp), %r11[m
+    0.00 : [35m  4018a5:[m[34m        movq    -0xe0(%rbp), %r9[m
+    0.00 : [35m  4018ac:[m[34m        vmovdqa (%r11,%r10,4), %xmm5[m
+    0.00 : [35m  4018b2:[m[34m        vmovdqa %xmm5, (%r9,%r10,4)[m
+    0.00 : [35m  4018b8:[m[34m        addq    $0x4, %r10[m
+    0.00 : [35m  4018bc:[m[34m        cmpq    %r14, %r10[m
+    0.00 : [35m  4018bf:[m[34m        jae     0x400d0b <main+0x7cb>[m
+    0.00 : [35m  4018c5:[m[34m        movq    -0xe0(%rbp), %rbx[m
+    0.00 : [35m  4018cc:[m[34m        movq    -0xc0(%rbp), %rsi[m
+    0.00 : [35m  4018d3:[m[34m        movq    %r14, %rdx[m
+    0.00 : [35m  4018d6:[m[34m        leaq    (,%r10,4), %r12[m
+    0.00 : [35m  4018de:[m[34m        subq    %r10, %rdx[m
+    0.00 : [35m  4018e1:[m[34m        shlq    $0x2, %rdx[m
+    0.00 : [35m  4018e5:[m[34m        leaq    (%rbx,%r12), %rdi[m
+    0.00 : [35m  4018e9:[m[34m        leaq    (%rsi,%r12), %rsi[m
+    0.00 : [35m  4018ed:[m[34m        callq   0x400530 <_init+0x1f4>[m
+    0.00 : [35m  4018f2:[m[34m        movl    -0x6c(%rbp), %ebx[m
+    0.00 : [35m  4018f5:[m[34m        imull   %ebx, %ebx[m
+    0.00 : [35m  4018f8:[m[34m        jmp     0x400d0b <main+0x7cb>[m
+    0.00 : [35m  4018fd:[m[34m        movl    $0x3, %r13d[m
+    0.00 : [35m  401903:[m[34m        xorl    %r10d, %r10d[m
+    0.00 : [35m  401906:[m[34m        jmp     0x401899 <main+0x1359>[m
+    0.00 : [35m  401908:[m[34m        xorl    %ecx, %ecx[m
+    0.00 : [35m  40190a:[m[34m        leaq    0x3(%rcx), %r14[m
+    0.00 : [35m  40190e:[m[34m        cmpq    %r13, %r14[m
+    0.00 : [35m  401911:[m[34m        jae     0x401929 <main+0x13e9>[m
+    0.00 : [35m  401913:[m[34m        vmovdqa (%r8,%rcx,4), %xmm0[m
+    0.00 : [35m  401919:[m[34m        vmovdqa %xmm0, (%r15,%rcx,4)[m
+    0.00 : [35m  40191f:[m[34m        vmovdqa %xmm1, (%r8,%rcx,4)[m
+    0.00 : [35m  401925:[m[34m        addq    $0x4, %rcx[m
+    0.00 : [35m  401929:[m[34m        cmpq    %r13, %rcx[m
+    0.00 : [35m  40192c:[m[34m        jb      0x401d57 <main+0x1817>[m
+    0.00 : [35m  401932:[m[34m        movslq  -0x64(%rbp), %rsi[m
+    0.00 : [35m  401936:[m[34m        incq    %rbx[m
+    0.00 : [35m  401939:[m[34m        cmpq    %rsi, %rbx[m
+    0.00 : [35m  40193c:[m[34m        jb      0x400c2a <main+0x6ea>[m
+    0.00 : [35m  401942:[m[34m        movq    %r8, %r14[m
+    0.00 : [35m  401945:[m[34m        movq    -0xe8(%rbp), %rdi[m
+    0.00 : [35m  40194c:[m[34m        vzeroupper[m
+    0.00 : [35m  40194f:[m[34m        callq   0x400420 <_init+0xe4>[m
+    0.00 : [35m  401954:[m[34m        movq    -0xe0(%rbp), %rdi[m
+    0.00 : [35m  40195b:[m[34m        callq   0x400420 <_init+0xe4>[m
+    0.00 : [35m  401960:[m[34m        movq    -0xc0(%rbp), %rdi[m
+    0.00 : [35m  401967:[m[34m        callq   0x400420 <_init+0xe4>[m
+    0.00 : [35m  40196c:[m[34m        cmpl    $0x0, -0x70(%rbp)[m
+    0.00 : [35m  401970:[m[34m        movl    -0x6c(%rbp), %r12d[m
+    0.00 : [35m  401974:[m[34m        jne     0x401e99 <main+0x1959>[m
+    0.00 : [35m  40197a:[m[34m        movslq  %r12d, %rbx[m
+    0.00 : [35m  40197d:[m[34m        testq   %rbx, %rbx[m
+    0.00 : [35m  401980:[m[34m        je      0x401a5b <main+0x151b>[m
+    0.00 : [35m  401986:[m[34m        movl    -0x68(%rbp), %r15d[m
+    0.00 : [35m  40198a:[m[34m        xorl    %r13d, %r13d[m
+    0.00 : [35m  40198d:[m[34m        jmp     0x4019a2 <main+0x1462>[m
+    0.00 : [35m  40198f:[m[34m        movslq  -0x6c(%rbp), %rbx[m
+    0.00 : [35m  401993:[m[34m        incq    %r13[m
+    0.00 : [35m  401996:[m[34m        movq    %rbx, %r12[m
+    0.00 : [35m  401999:[m[34m        cmpq    %rbx, %r13[m
+    0.00 : [35m  40199c:[m[34m        jae     0x401a5b <main+0x151b>[m
+    0.00 : [35m  4019a2:[m[34m        movq    -0xd8(%rbp), %r10[m
+    0.00 : [35m  4019a9:[m[34m        movq    -0xb0(%rbp), %rdi[m
+    0.00 : [35m  4019b0:[m[34m        movq    %rbx, %rax[m
+    0.00 : [35m  4019b3:[m[34m        movslq  %r15d, %rdx[m
+    0.00 : [35m  4019b6:[m[34m        imulq   %r13, %rax[m
+    0.00 : [35m  4019ba:[m[34m        imulq   %r13, %rdx[m
+    0.00 : [35m  4019be:[m[34m        leaq    (%r10,%rax,4), %rsi[m
+    0.00 : [35m  4019c2:[m[34m        leaq    (%rdi,%rdx,4), %r9[m
+    0.00 : [35m  4019c6:[m[34m        cmpq    $0x7, %rbx[m
+    0.00 : [35m  4019ca:[m[34m        jbe     0x401d0b <main+0x17cb>[m
+    0.00 : [35m  4019d0:[m[34m        leaq    -0x8(%rbx), %r12[m
+    0.00 : [35m  4019d4:[m[34m        movq    %r9, %rdi[m
+    0.00 : [35m  4019d7:[m[34m        movq    %rsi, -0x98(%rbp)[m
+    0.00 : [35m  4019de:[m[34m        movq    %r12, %rdx[m
+    0.00 : [35m  4019e1:[m[34m        andq    $-0x8, %r12[m
+    0.00 : [35m  4019e5:[m[34m        shrq    $0x3, %rdx[m
+    0.00 : [35m  4019e9:[m[34m        incq    %rdx[m
+    0.00 : [35m  4019ec:[m[34m        shlq    $0x5, %rdx[m
+    0.00 : [35m  4019f0:[m[34m        callq   0x400530 <_init+0x1f4>[m
+    0.00 : [35m  4019f5:[m[34m        leaq    0x8(%r12), %rcx[m
+    0.00 : [35m  4019fa:[m[34m        addq    $0xb, %r12[m
+    0.00 : [35m  4019fe:[m[34m        movq    -0x98(%rbp), %rsi[m
+    0.00 : [35m  401a05:[m[34m        cmpq    %rbx, %r12[m
+    0.00 : [35m  401a08:[m[34m        movq    %rax, %r9[m
+    0.00 : [35m  401a0b:[m[34m        jae     0x401a1c <main+0x14dc>[m
+    0.00 : [35m  401a0d:[m[34m        vmovdqa (%rsi,%rcx,4), %xmm1[m
+    0.00 : [35m  401a12:[m[34m        vmovdqa %xmm1, (%r9,%rcx,4)[m
+    0.00 : [35m  401a18:[m[34m        addq    $0x4, %rcx[m
+    0.00 : [35m  401a1c:[m[34m        cmpq    %rbx, %rcx[m
+    0.00 : [35m  401a1f:[m[34m        jae     0x40198f <main+0x144f>[m
+    0.00 : [35m  401a25:[m[34m        leaq    (,%rcx,4), %r11[m
+    0.00 : [35m  401a2d:[m[34m        subq    %rcx, %rbx[m
+    0.00 : [35m  401a30:[m[34m        incq    %r13[m
+    0.00 : [35m  401a33:[m[34m        leaq    (,%rbx,4), %rdx[m
+    0.00 : [35m  401a3b:[m[34m        leaq    (%r9,%r11), %rdi[m
+    0.00 : [35m  401a3f:[m[34m        addq    %r11, %rsi[m
+    0.00 : [35m  401a42:[m[34m        callq   0x400530 <_init+0x1f4>[m
+    0.00 : [35m  401a47:[m[34m        movslq  -0x6c(%rbp), %rbx[m
+    0.00 : [35m  401a4b:[m[34m        movl    -0x68(%rbp), %r15d[m
+    0.00 : [35m  401a4f:[m[34m        movq    %rbx, %r12[m
+    0.00 : [35m  401a52:[m[34m        cmpq    %rbx, %r13[m
+    0.00 : [35m  401a55:[m[34m        jb      0x4019a2 <main+0x1462>[m
+    0.00 : [35m  401a5b:[m[34m        movslq  -0x74(%rbp), %r8[m
+    0.00 : [35m  401a5f:[m[34m        cmpq    $0x1, %r8[m
+    0.00 : [35m  401a63:[m[34m        jbe     0x401c81 <main+0x1741>[m
+    0.00 : [35m  401a69:[m[34m        movl    -0x68(%rbp), %esi[m
+    0.00 : [35m  401a6c:[m[34m        xorl    %r13d, %r13d[m
+    0.00 : [35m  401a6f:[m[34m        movl    %r12d, %ecx[m
+    0.00 : [35m  401a72:[m[34m        movq    $0x1, -0x98(%rbp)[m
+    0.00 : [35m  401a7d:[m[34m        movl    %r13d, -0xa0(%rbp)[m
+    0.00 : [35m  401a84:[m[34m        movl    $0x1, %r13d[m
+    0.00 : [35m  401a8a:[m[34m        movl    %esi, %r12d[m
+    0.00 : [35m  401a8d:[m[34m        movq    -0x98(%rbp), %rax[m
+    0.00 : [35m  401a94:[m[34m        xorl    %edx, %edx[m
+    0.00 : [35m  401a96:[m[34m        divq    -0xa8(%rbp)[m
+    0.00 : [35m  401a9d:[m[34m        testq   %rdx, %rdx[m
+    0.00 : [35m  401aa0:[m[34m        je      0x401d43 <main+0x1803>[m
+    0.00 : [35m  401aa6:[m[34m        movl    %r13d, %r10d[m
+    0.00 : [35m  401aa9:[m[34m        incl    %r13d[m
+    0.00 : [35m  401aac:[m[34m        imull   %ecx, %r10d[m
+    0.00 : [35m  401ab0:[m[34m        movl    %ecx, %ebx[m
+    0.00 : [35m  401ab2:[m[34m        movl    $0x405520, %edx[m
+    0.00 : [35m  401ab7:[m[34m        movl    $0x405300, %esi[m
+    0.00 : [35m  401abc:[m[34m        movl    %r10d, -0xc0(%rbp)[m
+    0.00 : [35m  401ac3:[m[34m        imull   %ecx, %ebx[m
+    0.00 : [35m  401ac6:[m[34m        leaq    -0x5c(%rbp), %rcx[m
+    0.00 : [35m  401aca:[m[34m        movl    $0x0, -0x60(%rbp)[m
+    0.00 : [35m  401ad1:[m[34m        movl    %ebx, %edi[m
+    0.00 : [35m  401ad3:[m[34m        callq   0x400410 <_init+0xd4>[m
+    0.00 : [35m  401ad8:[m[34m        movslq  -0x5c(%rbp), %rdi[m
+    0.00 : [35m  401adc:[m[34m        movl    %edi, -0xb8(%rbp)[m
+    0.00 : [35m  401ae2:[m[34m        callq   0x4003d0 <_init+0x94>[m
+    0.00 : [35m  401ae7:[m[34m        movl    -0x98(%rbp), %ecx[m
+    0.00 : [35m  401aed:[m[34m        subq    $0x8, %rsp[m
+    0.00 : [35m  401af1:[m[34m        movl    -0xb8(%rbp), %esi[m
+    0.00 : [35m  401af7:[m[34m        leaq    -0x38(%rbp), %rdi[m
+    0.00 : [35m  401afb:[m[34m        movl    $0x405520, %r9d[m
+    0.00 : [35m  401b01:[m[34m        xorl    %r8d, %r8d[m
+    0.00 : [35m  401b04:[m[34m        pushq   %rdi[m
+    0.00 : [35m  401b05:[m[34m        movl    $0x405100, %edx[m
+    0.00 : [35m  401b0a:[m[34m        movq    %rax, %rdi[m
+    0.00 : [35m  401b0d:[m[34m        movq    %rax, %r15[m
+    0.00 : [35m  401b10:[m[34m        callq   0x4003a0 <_init+0x64>[m
+    0.00 : [35m  401b15:[m[34m        xorl    %esi, %esi[m
+    0.00 : [35m  401b17:[m[34m        leaq    -0x38(%rbp), %rdi[m
+    0.00 : [35m  401b1b:[m[34m        callq   0x400470 <_init+0x134>[m
+    0.00 : [35m  401b20:[m[34m        movl    -0x5c(%rbp), %esi[m
+    0.00 : [35m  401b23:[m[34m        movq    $0x405520, (%rsp)[m
+    0.00 : [35m  401b2b:[m[34m        movl    %ebx, %r8d[m
+    0.00 : [35m  401b2e:[m[34m        movq    %r14, %rcx[m
+    0.00 : [35m  401b31:[m[34m        movl    $0x405300, %r9d[m
+    0.00 : [35m  401b37:[m[34m        leaq    -0x60(%rbp), %rdx[m
+    0.00 : [35m  401b3b:[m[34m        movq    %r15, %rdi[m
+    0.00 : [35m  401b3e:[m[34m        callq   0x400460 <_init+0x124>[m
+    0.00 : [35m  401b43:[m[34m        movq    %r15, %rdi[m
+    0.00 : [35m  401b46:[m[34m        callq   0x400420 <_init+0xe4>[m
+    0.00 : [35m  401b4b:[m[34m        movslq  -0x6c(%rbp), %rbx[m
+    0.00 : [35m  401b4f:[m[34m        popq    %rsi[m
+    0.00 : [35m  401b50:[m[34m        movl    -0x68(%rbp), %r11d[m
+    0.00 : [35m  401b54:[m[34m        popq    %rdi[m
+    0.00 : [35m  401b55:[m[34m        movq    %rbx, %rcx[m
+    0.00 : [35m  401b58:[m[34m        testq   %rbx, %rbx[m
+    0.00 : [35m  401b5b:[m[34m        je      0x401d3b <main+0x17fb>[m
+    0.00 : [35m  401b61:[m[34m        movl    -0xa0(%rbp), %r8d[m
+    0.00 : [35m  401b68:[m[34m        xorl    %r15d, %r15d[m
+    0.00 : [35m  401b6b:[m[34m        imull   %r12d, %r8d[m
+    0.00 : [35m  401b6f:[m[34m        addl    -0xc0(%rbp), %r8d[m
+    0.00 : [35m  401b76:[m[34m        movslq  %r8d, %rsi[m
+    0.00 : [35m  401b79:[m[34m        movl    %r11d, %r8d[m
+    0.00 : [35m  401b7c:[m[34m        movq    %rsi, -0xb8(%rbp)[m
+    0.00 : [35m  401b83:[m[34m        jmp     0x401b98 <main+0x1658>[m
+    0.00 : [35m  401b85:[m[34m        movslq  -0x6c(%rbp), %rbx[m
+    0.00 : [35m  401b89:[m[34m        incq    %r15[m
+    0.00 : [35m  401b8c:[m[34m        movq    %rbx, %rcx[m
+    0.00 : [35m  401b8f:[m[34m        cmpq    %rbx, %r15[m
+    0.00 : [35m  401b92:[m[34m        jae     0x401c66 <main+0x1726>[m
+    0.00 : [35m  401b98:[m[34m        movslq  %r8d, %rdx[m
+    0.00 : [35m  401b9b:[m[34m        movq    -0xb0(%rbp), %r10[m
+    0.00 : [35m  401ba2:[m[34m        movq    %rbx, %rax[m
+    0.00 : [35m  401ba5:[m[34m        imulq   %r15, %rdx[m
+    0.00 : [35m  401ba9:[m[34m        addq    -0xb8(%rbp), %rdx[m
+    0.00 : [35m  401bb0:[m[34m        imulq   %r15, %rax[m
+    0.00 : [35m  401bb4:[m[34m        leaq    (%r14,%rax,4), %r12[m
+    0.00 : [35m  401bb8:[m[34m        leaq    (%r10,%rdx,4), %rdi[m
+    0.00 : [35m  401bbc:[m[34m        cmpq    $0x7, %rbx[m
+    0.00 : [35m  401bc0:[m[34m        jbe     0x401d20 <main+0x17e0>[m
+    0.00 : [35m  401bc6:[m[34m        movl    %r8d, -0xc8(%rbp)[m
+    0.00 : [35m  401bcd:[m[34m        leaq    -0x8(%rbx), %r8[m
+    0.00 : [35m  401bd1:[m[34m        movq    %r12, %rsi[m
+    0.00 : [35m  401bd4:[m[34m        movq    %r8, %rdx[m
+    0.00 : [35m  401bd7:[m[34m        movq    %r8, -0xc0(%rbp)[m
+    0.00 : [35m  401bde:[m[34m        shrq    $0x3, %rdx[m
+    0.00 : [35m  401be2:[m[34m        incq    %rdx[m
+    0.00 : [35m  401be5:[m[34m        shlq    $0x5, %rdx[m
+    0.00 : [35m  401be9:[m[34m        callq   0x400530 <_init+0x1f4>[m
+    0.00 : [35m  401bee:[m[34m        movq    -0xc0(%rbp), %rdx[m
+    0.00 : [35m  401bf5:[m[34m        movl    -0xc8(%rbp), %r8d[m
+    0.00 : [35m  401bfc:[m[34m        movq    %rax, %rdi[m
+    0.00 : [35m  401bff:[m[34m        andq    $-0x8, %rdx[m
+    0.00 : [35m  401c03:[m[34m        leaq    0xb(%rdx), %rsi[m
+    0.00 : [35m  401c07:[m[34m        leaq    0x8(%rdx), %r11[m
+    0.00 : [35m  401c0b:[m[34m        cmpq    %rbx, %rsi[m
+    0.00 : [35m  401c0e:[m[34m        jae     0x401c29 <main+0x16e9>[m
+    0.00 : [35m  401c10:[m[34m        shlq    $0x2, %r11[m
+    0.00 : [35m  401c14:[m[34m        leaq    (%rax,%r11), %rcx[m
+    0.00 : [35m  401c18:[m[34m        leaq    (%r12,%r11), %r9[m
+    0.00 : [35m  401c1c:[m[34m        leaq    0xc(%rdx), %r11[m
+    0.00 : [35m  401c20:[m[34m        vmovdqa (%r9), %xmm3[m
+    0.00 : [35m  401c25:[m[34m        vmovdqa %xmm3, (%rcx)[m
+    0.00 : [35m  401c29:[m[34m        cmpq    %rbx, %r11[m
+    0.00 : [35m  401c2c:[m[34m        jae     0x401b85 <main+0x1645>[m
+    0.00 : [35m  401c32:[m[34m        subq    %r11, %rbx[m
+    0.00 : [35m  401c35:[m[34m        shlq    $0x2, %r11[m
+    0.00 : [35m  401c39:[m[34m        addq    %r11, %r12[m
+    0.00 : [35m  401c3c:[m[34m        addq    %r11, %rdi[m
+    0.00 : [35m  401c3f:[m[34m        leaq    (,%rbx,4), %rdx[m
+    0.00 : [35m  401c47:[m[34m        movq    %r12, %rsi[m
+    0.00 : [35m  401c4a:[m[34m        incq    %r15[m
+    0.00 : [35m  401c4d:[m[34m        callq   0x400530 <_init+0x1f4>[m
+    0.00 : [35m  401c52:[m[34m        movslq  -0x6c(%rbp), %rbx[m
+    0.00 : [35m  401c56:[m[34m        movl    -0x68(%rbp), %r8d[m
+    0.00 : [35m  401c5a:[m[34m        movq    %rbx, %rcx[m
+    0.00 : [35m  401c5d:[m[34m        cmpq    %rbx, %r15[m
+    0.00 : [35m  401c60:[m[34m        jb      0x401b98 <main+0x1658>[m
+    0.00 : [35m  401c66:[m[34m        movl    %r8d, %r12d[m
+    0.00 : [35m  401c69:[m[34m        incq    -0x98(%rbp)[m
+    0.00 : [35m  401c70:[m[34m        movslq  -0x74(%rbp), %rdi[m
+    0.00 : [35m  401c74:[m[34m        cmpq    %rdi, -0x98(%rbp)[m
+    0.00 : [35m  401c7b:[m[34m        jb      0x401a8d <main+0x154d>[m
+    0.00 : [35m  401c81:[m[34m        movl    -0x68(%rbp), %r15d[m
+    0.00 : [35m  401c85:[m[34m        xorl    %ebx, %ebx[m
+    0.00 : [35m  401c87:[m[34m        xorl    %r12d, %r12d[m
+    0.00 : [35m  401c8a:[m[34m        movl    %r15d, %eax[m
+    0.00 : [35m  401c8d:[m[34m        imull   %r15d, %eax[m
+    0.00 : [35m  401c91:[m[34m        testl   %eax, %eax[m
+    0.00 : [35m  401c93:[m[34m        je      0x401db0 <main+0x1870>[m
+    0.00 : [35m  401c99:[m[34m        xorl    %edx, %edx[m
+    0.00 : [35m  401c9b:[m[34m        movslq  %r15d, %r13[m
+    0.00 : [35m  401c9e:[m[34m        movq    %rbx, %rax[m
+    0.00 : [35m  401ca1:[m[34m        movq    -0xb0(%rbp), %r10[m
+    0.00 : [35m  401ca8:[m[34m        divq    %r13[m
+    0.04 : [35m  401cab:[m[34m        leal    -0x1(%r15), %eax[m
+    0.00 : [35m  401caf:[m[34m        cltq[m
+    0.00 : [35m  401cb1:[m[34m        movl    (%r10,%rbx,4), %esi[m
+    0.00 : [35m  401cb5:[m[34m        cmpl    $0xf4240, %esi[m
+    0.00 : [35m  401cbb:[m[34m        cmovel  %r12d, %esi[m
+    0.00 : [35m  401cbf:[m[34m        cmpq    %rax, %rdx[m
+    0.01 : [35m  401cc2:[m[34m        jae     0x401d9f <main+0x185f>[m
+    0.00 : [35m  401cc8:[m[34m        movl    $0x403a13, %edi[m
+    0.00 : [35m  401ccd:[m[34m        xorl    %eax, %eax[m
+    0.00 : [35m  401ccf:[m[34m        callq   0x400370 <_init+0x34>[m
+    0.01 : [35m  401cd4:[m[34m        movl    -0x68(%rbp), %r15d[m
+    0.03 : [35m  401cd8:[m[34m        incq    %rbx[m
+    0.00 : [35m  401cdb:[m[34m        movl    %r15d, %r9d[m
+    0.00 : [35m  401cde:[m[34m        imull   %r15d, %r9d[m
+    0.01 : [35m  401ce2:[m[34m        cmpq    %r9, %rbx[m
+    0.03 : [35m  401ce5:[m[34m        jae     0x401db0 <main+0x1870>[m
+    0.00 : [35m  401ceb:[m[34m        movslq  %r15d, %rcx[m
+    0.00 : [35m  401cee:[m[34m        movq    %rbx, %rax[m
+    0.00 : [35m  401cf1:[m[34m        xorl    %edx, %edx[m
+    0.00 : [35m  401cf3:[m[34m        divq    %rcx[m
+    0.07 : [35m  401cf6:[m[34m        testq   %rdx, %rdx[m
+    0.03 : [35m  401cf9:[m[34m        jne     0x401c99 <main+0x1759>[m
+    0.00 : [35m  401cfb:[m[34m        movl    $0xa, %edi[m
+    0.00 : [35m  401d00:[m[34m        callq   0x4003b0 <_init+0x74>[m
+    0.00 : [35m  401d05:[m[34m        movl    -0x68(%rbp), %r15d[m
+    0.00 : [35m  401d09:[m[34m        jmp     0x401c99 <main+0x1759>[m
+    0.00 : [35m  401d0b:[m[34m        xorl    %ecx, %ecx[m
+    0.00 : [35m  401d0d:[m[34m        cmpq    $0x3, %rbx[m
+    0.00 : [35m  401d11:[m[34m        ja      0x401a0d <main+0x14cd>[m
+    0.00 : [35m  401d17:[m[34m        jmp     0x401a25 <main+0x14e5>[m
+    0.00 : [35m  401d1c:[m[34m        nopl    (%rax)[m
+    0.00 : [35m  401d20:[m[34m        cmpq    $0x3, %rbx[m
+    0.00 : [35m  401d24:[m[34m        jbe     0x401c3f <main+0x16ff>[m
+    0.00 : [35m  401d2a:[m[34m        movq    %r12, %r9[m
+    0.00 : [35m  401d2d:[m[34m        movq    %rdi, %rcx[m
+    0.00 : [35m  401d30:[m[34m        movl    $0x4, %r11d[m
+    0.00 : [35m  401d36:[m[34m        jmp     0x401c20 <main+0x16e0>[m
+    0.00 : [35m  401d3b:[m[34m        movl    %r11d, %r12d[m
+    0.00 : [35m  401d3e:[m[34m        jmp     0x401c69 <main+0x1729>[m
+    0.00 : [35m  401d43:[m[34m        addl    %ecx, -0xa0(%rbp)[m
+    0.00 : [35m  401d49:[m[34m        xorl    %r10d, %r10d[m
+    0.00 : [35m  401d4c:[m[34m        movl    $0x1, %r13d[m
+    0.00 : [35m  401d52:[m[34m        jmp     0x401ab0 <main+0x1570>[m
+    0.00 : [35m  401d57:[m[34m        subq    %rcx, %r13[m
+    0.00 : [35m  401d5a:[m[34m        shlq    $0x2, %rcx[m
+    0.00 : [35m  401d5e:[m[34m        movq    %r8, -0xb8(%rbp)[m
+    0.00 : [35m  401d65:[m[34m        leaq    (,%r13,4), %r12[m
+    0.00 : [35m  401d6d:[m[34m        leaq    (%r8,%rcx), %r13[m
+    0.00 : [35m  401d71:[m[34m        leaq    (%r15,%rcx), %rdi[m
+    0.00 : [35m  401d75:[m[34m        vzeroupper[m
+    0.00 : [35m  401d78:[m[34m        movq    %r12, %rdx[m
+    0.00 : [35m  401d7b:[m[34m        movq    %r13, %rsi[m
+    0.00 : [35m  401d7e:[m[34m        callq   0x400530 <_init+0x1f4>[m
+    0.00 : [35m  401d83:[m[34m        movq    %r12, %rdx[m
+    0.00 : [35m  401d86:[m[34m        movl    $0xf4240, %esi[m
+    0.00 : [35m  401d8b:[m[34m        movq    %r13, %rdi[m
+    0.00 : [35m  401d8e:[m[34m        callq   0x400380 <_init+0x44>[m
+    0.00 : [35m  401d93:[m[34m        movq    -0xb8(%rbp), %r8[m
+    0.00 : [35m  401d9a:[m[34m        jmp     0x401932 <main+0x13f2>[m
+    0.00 : [35m  401d9f:[m[34m        movl    $0x403a10, %edi[m
+    0.00 : [35m  401da4:[m[34m        xorl    %eax, %eax[m
+    0.00 : [35m  401da6:[m[34m        callq   0x400370 <_init+0x34>[m
+    0.00 : [35m  401dab:[m[34m        jmp     0x401cd4 <main+0x1794>[m
+    0.00 : [35m  401db0:[m[34m        movl    $0xa, %edi[m
+    0.00 : [35m  401db5:[m[34m        callq   0x4003b0 <_init+0x74>[m
+    0.00 : [35m  401dba:[m[34m        movq    -0xb0(%rbp), %rdi[m
+    0.00 : [35m  401dc1:[m[34m        callq   0x400420 <_init+0xe4>[m
+    0.00 : [35m  401dc6:[m[34m        callq   0x400500 <_init+0x1c4>[m
+    0.00 : [35m  401dcb:[m[34m        movq    -0xd8(%rbp), %rdi[m
+    0.00 : [35m  401dd2:[m[34m        vmovsd  %xmm0, -0x98(%rbp)[m
+    0.00 : [35m  401dda:[m[34m        callq   0x400420 <_init+0xe4>[m
+    0.00 : [35m  401ddf:[m[34m        movq    %r14, %rdi[m
+    0.00 : [35m  401de2:[m[34m        callq   0x400420 <_init+0xe4>[m
+    0.00 : [35m  401de7:[m[34m        leaq    -0x48(%rbp), %rdi[m
+    0.00 : [35m  401deb:[m[34m        callq   0x400480 <_init+0x144>[m
+    0.00 : [35m  401df0:[m[34m        leaq    -0x58(%rbp), %rdi[m
+    0.00 : [35m  401df4:[m[34m        callq   0x400510 <_init+0x1d4>[m
+    0.00 : [35m  401df9:[m[34m        leaq    -0x50(%rbp), %rdi[m
+    0.00 : [35m  401dfd:[m[34m        callq   0x400510 <_init+0x1d4>[m
+    0.00 : [35m  401e02:[m[34m        cmpl    $0x0, -0x70(%rbp)[m
+    0.00 : [35m  401e06:[m[34m        je      0x401e73 <main+0x1933>[m
+    0.00 : [35m  401e08:[m[34m        callq   0x4004b0 <_init+0x174>[m
+    0.00 : [35m  401e0d:[m[34m        xorl    %eax, %eax[m
+    0.00 : [35m  401e0f:[m[34m        jmp     0x4009a2 <main+0x462>[m
+    0.00 : [35m  401e14:[m[34m        movl    -0x6c(%rbp), %edi[m
+    0.00 : [35m  401e17:[m[34m        jmp     0x401679 <main+0x1139>[m
+    0.00 : [35m  401e1c:[m[34m        xorl    %r10d, %r10d[m
+    0.00 : [35m  401e1f:[m[34m        jmp     0x400c7d <main+0x73d>[m
+    0.00 : [35m  401e24:[m[34m        movq    -0xc0(%rbp), %rdi[m
+    0.00 : [35m  401e2b:[m[34m        movq    %r13, %rdx[m
+    0.00 : [35m  401e2e:[m[34m        leaq    (,%r10,4), %r12[m
+    0.00 : [35m  401e36:[m[34m        movq    %r8, -0xb8(%rbp)[m
+    0.00 : [35m  401e3d:[m[34m        subq    %r10, %rdx[m
+    0.00 : [35m  401e40:[m[34m        leaq    (%r15,%r12), %rsi[m
+    0.00 : [35m  401e44:[m[34m        shlq    $0x2, %rdx[m
+    0.00 : [35m  401e48:[m[34m        addq    %r12, %rdi[m
+    0.00 : [35m  401e4b:[m[34m        vzeroupper[m
+    0.00 : [35m  401e4e:[m[34m        callq   0x400530 <_init+0x1f4>[m
+    0.00 : [35m  401e53:[m[34m        movl    -0x6c(%rbp), %r12d[m
+    0.00 : [35m  401e57:[m[34m        movq    -0xb8(%rbp), %r8[m
+    0.00 : [35m  401e5e:[m[34m        jmp     0x400ca6 <main+0x766>[m
+    0.00 : [35m  401e63:[m[34m        movq    $-0x1, -0x98(%rbp)[m
+    0.00 : [35m  401e6e:[m[34m        jmp     0x40086a <main+0x32a>[m
+    0.00 : [35m  401e73:[m[34m        fldl    -0x98(%rbp)[m
+    0.00 : [35m  401e79:[m[34m        movl    $0x403a17, %edi[m
+    0.00 : [35m  401e7e:[m[34m        xorl    %eax, %eax[m
+    0.00 : [35m  401e80:[m[34m        fsubl   -0x120(%rbp)[m
+    0.00 : [35m  401e86:[m[34m        pushq   %rbx[m
+    0.00 : [35m  401e87:[m[34m        pushq   %rbx[m
+    0.00 : [35m  401e88:[m[34m        fstpt   (%rsp)[m
+    0.00 : [35m  401e8b:[m[34m        callq   0x400370 <_init+0x34>[m
+    0.00 : [35m  401e90:[m[34m        popq    %r12[m
+    0.00 : [35m  401e92:[m[34m        popq    %r13[m
+    0.00 : [35m  401e94:[m[34m        jmp     0x401e08 <main+0x18c8>[m
+    0.00 : [35m  401e99:[m[34m        imull   %r12d, %r12d[m
+    0.00 : [35m  401e9d:[m[34m        leaq    -0x5c(%rbp), %rcx[m
+    0.00 : [35m  401ea1:[m[34m        movl    $0x405520, %edx[m
+    0.00 : [35m  401ea6:[m[34m        movl    $0x405300, %esi[m
+    0.00 : [35m  401eab:[m[34m        xorl    %r15d, %r15d[m
+    0.00 : [35m  401eae:[m[34m        movl    %r15d, -0x60(%rbp)[m
+    0.00 : [35m  401eb2:[m[34m        movl    %r12d, %edi[m
+    0.00 : [35m  401eb5:[m[34m        callq   0x400410 <_init+0xd4>[m
+    0.00 : [35m  401eba:[m[34m        movslq  -0x5c(%rbp), %rdi[m
+    0.00 : [35m  401ebe:[m[34m        movq    %rdi, %r13[m
+    0.00 : [35m  401ec1:[m[34m        callq   0x4003d0 <_init+0x94>[m
+    0.00 : [35m  401ec6:[m[34m        movl    %r12d, %esi[m
+    0.00 : [35m  401ec9:[m[34m        leaq    -0x60(%rbp), %r9[m
+    0.00 : [35m  401ecd:[m[34m        movq    %rax, %rbx[m
+    0.00 : [35m  401ed0:[m[34m        pushq   %rax[m
+    0.00 : [35m  401ed1:[m[34m        movq    -0xd8(%rbp), %rdi[m
+    0.00 : [35m  401ed8:[m[34m        pushq   $0x405520[m
+    0.00 : [35m  401edd:[m[34m        movl    %r13d, %r8d[m
+    0.00 : [35m  401ee0:[m[34m        movq    %rbx, %rcx[m
+    0.00 : [35m  401ee3:[m[34m        movl    $0x405300, %edx[m
+    0.00 : [35m  401ee8:[m[34m        leaq    -0x40(%rbp), %r12[m
+    0.00 : [35m  401eec:[m[34m        callq   0x4004c0 <_init+0x184>[m
+    0.00 : [35m  401ef1:[m[34m        movl    -0x60(%rbp), %esi[m
+    0.00 : [35m  401ef4:[m[34m        movl    $0x405100, %edx[m
+    0.00 : [35m  401ef9:[m[34m        movq    %r12, (%rsp)[m
+    0.00 : [35m  401efd:[m[34m        movl    $0x405520, %r9d[m
+    0.00 : [35m  401f03:[m[34m        xorl    %r8d, %r8d[m
+    0.00 : [35m  401f06:[m[34m        xorl    %ecx, %ecx[m
+    0.00 : [35m  401f08:[m[34m        movq    %rbx, %rdi[m
+    0.00 : [35m  401f0b:[m[34m        callq   0x4003c0 <_init+0x84>[m
+    0.00 : [35m  401f10:[m[34m        xorl    %esi, %esi[m
+    0.00 : [35m  401f12:[m[34m        movq    %r12, %rdi[m
+    0.00 : [35m  401f15:[m[34m        callq   0x400470 <_init+0x134>[m
+    0.00 : [35m  401f1a:[m[34m        movq    %rbx, %rdi[m
+    0.00 : [35m  401f1d:[m[34m        callq   0x400420 <_init+0xe4>[m
+    0.00 : [35m  401f22:[m[34m        popq    %rax[m
+    0.00 : [35m  401f23:[m[34m        popq    %rdx[m
+    0.00 : [35m  401f24:[m[34m        jmp     0x401dc6 <main+0x1886>[m
+    0.00 : [35m  401f29:[m[34m        subq    %rsi, %r9[m
+    0.00 : [35m  401f2c:[m[34m        leaq    (%r14,%rsi,4), %rdi[m
+    0.00 : [35m  401f30:[m[34m        movl    $0xf4240, %esi[m
+    0.00 : [35m  401f35:[m[34m        leaq    (,%r9,4), %rdx[m
+    0.00 : [35m  401f3d:[m[34m        vzeroupper[m
+    0.00 : [35m  401f40:[m[34m        callq   0x400380 <_init+0x44>[m
+    0.00 : [35m  401f45:[m[34m        jmp     0x400be4 <main+0x6a4>[m
+    0.00 : [35m  401f4a:[m[34m        xorl    %esi, %esi[m
+    0.00 : [35m  401f4c:[m[34m        jmp     0x400bc0 <main+0x680>[m
+    0.00 : [35m  401f51:[m[34m        movl    $0x403a38, %edi[m
+    0.00 : [35m  401f56:[m[34m        callq   0x400390 <_init+0x54>[m
+    0.00 : [35m  401f5b:[m[34m        movl    $0x1, %esi[m
+    0.00 : [35m  401f60:[m[34m        movl    $0x405520, %edi[m
+    0.00 : [35m  401f65:[m[34m        callq   0x400450 <_init+0x114>[m
+    0.00 : [35m  401f6a:[m[34m        jmp     0x40099d <main+0x45d>[m
+    0.00 : [35m  401f6f:[m[34m        movl    -0xf0(%rbp), %r15d[m
+    0.00 : [35m  401f76:[m[34m        movq    -0xf8(%rbp), %r12[m
+    0.00 : [35m  401f7d:[m[34m        xorl    %r14d, %r14d[m
+    0.00 : [35m  401f80:[m[34m        jmp     0x401f85 <main+0x1a45>[m
+    0.00 : [35m  401f82:[m[34m        incq    %r14[m
+    0.00 : [35m  401f85:[m[34m        movslq  -0x6c(%rbp), %rbx[m
+    0.00 : [35m  401f89:[m[34m        cmpq    %rbx, %r14[m
+    0.00 : [35m  401f8c:[m[34m        jae     0x400a54 <main+0x514>[m
+    0.00 : [35m  401f92:[m[34m        movslq  -0x68(%rbp), %r8[m
+    0.00 : [35m  401f96:[m[34m        movq    -0xb0(%rbp), %rax[m
+    0.00 : [35m  401f9d:[m[34m        movq    %rbx, %rdx[m
+    0.00 : [35m  401fa0:[m[34m        movq    -0xd8(%rbp), %rcx[m
+    0.00 : [35m  401fa7:[m[34m        imulq   %r14, %rdx[m
+    0.00 : [35m  401fab:[m[34m        imulq   %r14, %r8[m
+    0.00 : [35m  401faf:[m[34m        leaq    (%rcx,%rdx,4), %rdi[m
+    0.00 : [35m  401fb3:[m[34m        leaq    (%rax,%r8,4), %rsi[m
+    0.00 : [35m  401fb7:[m[34m        cmpq    $0x7, %rbx[m
+    0.00 : [35m  401fbb:[m[34m        jbe     0x402011 <main+0x1ad1>[m
+    0.00 : [35m  401fbd:[m[34m        leaq    -0x8(%rbx), %r13[m
+    0.00 : [35m  401fc1:[m[34m        movq    %rsi, -0xb8(%rbp)[m
+    0.00 : [35m  401fc8:[m[34m        movq    %r13, %rdx[m
+    0.00 : [35m  401fcb:[m[34m        andq    $-0x8, %r13[m
+    0.00 : [35m  401fcf:[m[34m        shrq    $0x3, %rdx[m
+    0.00 : [35m  401fd3:[m[34m        incq    %rdx[m
+    0.00 : [35m  401fd6:[m[34m        shlq    $0x5, %rdx[m
+    0.00 : [35m  401fda:[m[34m        callq   0x400530 <_init+0x1f4>[m
+    0.00 : [35m  401fdf:[m[34m        leaq    0x8(%r13), %r9[m
+    0.00 : [35m  401fe3:[m[34m        addq    $0xb, %r13[m
+    0.00 : [35m  401fe7:[m[34m        movq    -0xb8(%rbp), %rsi[m
+    0.00 : [35m  401fee:[m[34m        cmpq    %rbx, %r13[m
+    0.00 : [35m  401ff1:[m[34m        movq    %rax, %rdi[m
+    0.00 : [35m  401ff4:[m[34m        jae     0x402006 <main+0x1ac6>[m
+    0.00 : [35m  401ff6:[m[34m        vmovdqa (%rsi,%r9,4), %xmm5[m
+    0.00 : [35m  401ffc:[m[34m        vmovdqa %xmm5, (%rdi,%r9,4)[m
+    0.00 : [35m  402002:[m[34m        addq    $0x4, %r9[m
+    0.00 : [35m  402006:[m[34m        cmpq    %rbx, %r9[m
+    0.00 : [35m  402009:[m[34m        jae     0x401f82 <main+0x1a42>[m
+    0.00 : [35m  40200f:[m[34m        jmp     0x40201a <main+0x1ada>[m
+    0.00 : [35m  402011:[m[34m        xorl    %r9d, %r9d[m
+    0.00 : [35m  402014:[m[34m        cmpq    $0x3, %rbx[m
+    0.00 : [35m  402018:[m[34m        ja      0x401ff6 <main+0x1ab6>[m
+    0.00 : [35m  40201a:[m[34m        leaq    (,%r9,4), %r10[m
+    0.00 : [35m  402022:[m[34m        subq    %r9, %rbx[m
+    0.00 : [35m  402025:[m[34m        leaq    (%rdi,%r10), %rdi[m
+    0.00 : [35m  402029:[m[34m        addq    %r10, %rsi[m
+    0.00 : [35m  40202c:[m[34m        leaq    (,%rbx,4), %rdx[m
+    0.00 : [35m  402034:[m[34m        callq   0x400530 <_init+0x1f4>[m
+    0.00 : [35m  402039:[m[34m        jmp     0x401f82 <main+0x1a42>[m

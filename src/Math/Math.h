@@ -53,39 +53,42 @@ static inline void matrixMultiply(int *restrict matrix,
       const int *const restrict transRow = &transposed[col * size];
 
       size_t k = 0;
-      int minCost = INF;
+      int minCost = mRow[col];
 
-#pragma GCC ivdep
-      for (; k + 7 < size; k += 8) {
-        const __m256i graphSIMD =
-            _mm256_loadu_si256((const __m256i *)&graphRow[k]);
-        const __m256i transSIMD =
-            _mm256_loadu_si256((const __m256i *)&transRow[k]);
-        const __m256i sumSIMD = _mm256_add_epi32(graphSIMD, transSIMD);
-        const __m256i min = _mm256_min_epi32(sumSIMD, _mm256_set1_epi32(INF));
+      {
         int temp[8] __attribute__((aligned(32)));
-        _mm256_store_si256((__m256i *)temp, min);
-
+        __m256i min = _mm256_set1_epi32(minCost);
 #pragma GCC ivdep
-#pragma GCC unroll 8
+        for (; k + 7 < size; k += 8) {
+          const __m256i graphSIMD =
+              _mm256_loadu_si256((const __m256i *)&graphRow[k]);
+          const __m256i transSIMD =
+              _mm256_loadu_si256((const __m256i *)&transRow[k]);
+          const __m256i sumSIMD = _mm256_add_epi32(graphSIMD, transSIMD);
+          min = _mm256_min_epi32(sumSIMD, min);
+        }
+
+        _mm256_store_si256((__m256i *)temp, min);
+#pragma GCC ivdep
         for (size_t i = 0; i < 8; i++)
           if (temp[i] < minCost)
             minCost = temp[i];
       }
 
-#pragma GCC ivdep
-      for (; k + 3 < size; k += 4) {
-        const __m128i graphSIMD =
-            _mm_loadu_si128((const __m128i *)&graphRow[k]);
-        const __m128i transSIMD =
-            _mm_loadu_si128((const __m128i *)&transRow[k]);
-        const __m128i sumSIMD = _mm_add_epi32(graphSIMD, transSIMD);
-        const __m128i min = _mm_min_epi32(sumSIMD, _mm_set1_epi32(INF));
+      {
         int temp[4] __attribute__((aligned(32)));
-        _mm_store_si128((__m128i *)temp, min);
-
+        __m128i min = _mm_set1_epi32(minCost);
 #pragma GCC ivdep
-#pragma GCC unroll 4
+        for (; k + 3 < size; k += 4) {
+          const __m128i graphSIMD =
+              _mm_loadu_si128((const __m128i *)&graphRow[k]);
+          const __m128i transSIMD =
+              _mm_loadu_si128((const __m128i *)&transRow[k]);
+          const __m128i sumSIMD = _mm_add_epi32(graphSIMD, transSIMD);
+          min = _mm_min_epi32(sumSIMD, min);
+        }
+        _mm_store_si128((__m128i *)temp, min);
+#pragma GCC ivdep
         for (size_t i = 0; i < 4; i++)
           if (temp[i] < minCost)
             minCost = temp[i];
@@ -94,7 +97,7 @@ static inline void matrixMultiply(int *restrict matrix,
       for (; k < size; k++) {
         const int graphCost = graphRow[k];
         const int transCost = transRow[k];
-        if ((unsigned long long)(graphCost + transCost) < minCost)
+        if (graphCost + transCost < minCost)
           minCost = (graphCost + transCost);
       }
       mRow[col] = minCost;
