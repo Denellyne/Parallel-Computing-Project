@@ -55,6 +55,7 @@ static inline void matrixMultiply(int *restrict matrix,
       size_t k = 0;
       int minCost = mRow[col];
 
+#if defined(__AVX2__)
       {
         int temp[8] __attribute__((aligned(ALIGNMENT)));
         __m256i min = _mm256_set1_epi32(minCost);
@@ -75,6 +76,8 @@ static inline void matrixMultiply(int *restrict matrix,
             minCost = temp[i];
       }
 
+#endif
+#if defined(__SSE2__)
       {
         int temp[4] __attribute__((aligned(ALIGNMENT)));
         __m128i min = _mm_set1_epi32(minCost);
@@ -93,6 +96,8 @@ static inline void matrixMultiply(int *restrict matrix,
           if (temp[i] < minCost)
             minCost = temp[i];
       }
+
+#endif
 #pragma GCC ivdep
       for (; k < size; k++) {
         const int graphCost = graphRow[k];

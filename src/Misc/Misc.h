@@ -16,15 +16,19 @@ static inline void simdMemset(int *restrict dest, const int val,
                               const size_t size) {
 
   size_t idx = 0;
+#if defined(__AVX2__)
   const __m256i valSIMD256 = _mm256_set1_epi32(val);
 #pragma GCC ivdep
   for (; idx + 7 < size; idx += 8)
-    _mm256_store_si256((__m256i *)&dest[idx], valSIMD256);
+    _mm256_storeu_si256((__m256i *)&dest[idx], valSIMD256);
+#endif
 
+#if defined(__SSE2__)
   const __m128i valSIMD = _mm_set1_epi32(val);
 #pragma GCC ivdep
   for (; idx + 3 < size; idx += 4)
-    _mm_store_si128((__m128i *)&dest[idx], valSIMD);
+    _mm_storeu_si128((__m128i *)&dest[idx], valSIMD);
+#endif
 
   if (idx < size)
     memset(&dest[idx], val, (size - idx) * sizeof(int));
@@ -33,16 +37,20 @@ static inline void simdMemcpy(int *restrict dest, const int *restrict src,
                               const size_t size) {
 
   size_t idx = 0;
+#if defined(__AVX2__)
 #pragma GCC ivdep
   for (; idx + 7 < size; idx += 8) {
-    const __m256i srcSIMD = _mm256_load_si256((const __m256i *)&src[idx]);
-    _mm256_store_si256((__m256i *)&dest[idx], srcSIMD);
+    const __m256i srcSIMD = _mm256_loadu_si256((const __m256i *)&src[idx]);
+    _mm256_storeu_si256((__m256i *)&dest[idx], srcSIMD);
   }
+#endif
+#if defined(__SSE2__)
 #pragma GCC ivdep
   for (; idx + 3 < size; idx += 4) {
-    const __m128i srcSIMD = _mm_load_si128((const __m128i *)&src[idx]);
-    _mm_store_si128((__m128i *)&dest[idx], srcSIMD);
+    const __m128i srcSIMD = _mm_loadu_si128((const __m128i *)&src[idx]);
+    _mm_storeu_si128((__m128i *)&dest[idx], srcSIMD);
   }
+#endif
 
   if (idx < size)
     memcpy(&dest[idx], &src[idx], (size - idx) * sizeof(int));
@@ -53,18 +61,22 @@ static inline void simdMemcpyAndSet(int *restrict dest, int *restrict src,
 
   size_t idx = 0;
 
+#if defined(__AVX2__)
 #pragma GCC ivdep
   for (; idx + 7 < size; idx += 8) {
-    const __m256i srcSIMD = _mm256_load_si256((__m256i *)&src[idx]);
-    _mm256_store_si256((__m256i *)&dest[idx], srcSIMD);
-    _mm256_store_si256((__m256i *)&src[idx], _mm256_set1_epi32(val));
+    const __m256i srcSIMD = _mm256_loadu_si256((__m256i *)&src[idx]);
+    _mm256_storeu_si256((__m256i *)&dest[idx], srcSIMD);
+    _mm256_storeu_si256((__m256i *)&src[idx], _mm256_set1_epi32(val));
   }
+#endif
+#if defined(__SSE2__)
 #pragma GCC ivdep
   for (; idx + 3 < size; idx += 4) {
-    const __m128i srcSIMD = _mm_load_si128((__m128i *)&src[idx]);
-    _mm_store_si128((__m128i *)&dest[idx], srcSIMD);
-    _mm_store_si128((__m128i *)&src[idx], _mm_set1_epi32(val));
+    const __m128i srcSIMD = _mm_loadu_si128((__m128i *)&src[idx]);
+    _mm_storeu_si128((__m128i *)&dest[idx], srcSIMD);
+    _mm_storeu_si128((__m128i *)&src[idx], _mm_set1_epi32(val));
   }
+#endif
 
   if (idx < size) {
     memcpy(&dest[idx], &src[idx], (size - idx) * sizeof(int));
@@ -75,20 +87,24 @@ static inline void simdMinimum(int *restrict dest, const int *restrict src,
                                const size_t size) {
 
   size_t idx = 0;
+#if defined(__AVX2__)
 #pragma GCC ivdep
   for (; idx + 7 < size * size; idx += 8) {
-    const __m256i srcSIMD = _mm256_load_si256((const __m256i *)&src[idx]);
-    const __m256i destSIMD = _mm256_load_si256((__m256i *)&dest[idx]);
+    const __m256i srcSIMD = _mm256_loadu_si256((const __m256i *)&src[idx]);
+    const __m256i destSIMD = _mm256_loadu_si256((__m256i *)&dest[idx]);
     const __m256i min = _mm256_min_epi32(destSIMD, srcSIMD);
-    _mm256_store_si256((__m256i *)&dest[idx], min);
+    _mm256_storeu_si256((__m256i *)&dest[idx], min);
   }
+#endif
+#if defined(__SSE2__)
 #pragma GCC ivdep
   for (; idx + 3 < size * size; idx += 4) {
-    const __m128i srcSIMD = _mm_load_si128((const __m128i *)&src[idx]);
-    const __m128i destSIMD = _mm_load_si128((__m128i *)&dest[idx]);
+    const __m128i srcSIMD = _mm_loadu_si128((const __m128i *)&src[idx]);
+    const __m128i destSIMD = _mm_loadu_si128((__m128i *)&dest[idx]);
     const __m128i min = _mm_min_epi32(destSIMD, srcSIMD);
-    _mm_store_si128((__m128i *)&dest[idx], min);
+    _mm_storeu_si128((__m128i *)&dest[idx], min);
   }
+#endif
 
 #pragma GCC ivdep
   for (; idx < size * size; idx++)
