@@ -30,6 +30,7 @@ int main(int argc, char *argv[]) {
   int columnGroupRanks[sqrtNumProcs];
   size_t initialIdx = -1, initialColumnIdx = rank;
 
+#pragma GCC ivdep
   for (size_t i = 0; i < sqrtNumProcs; i++) {
     rowGroupRanks[i] = rank + i - group;
     columnGroupRanks[i] = (rank % sqrtNumProcs + i * sqrtNumProcs) % numProcs;

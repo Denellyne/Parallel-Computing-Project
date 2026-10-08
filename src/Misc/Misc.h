@@ -52,6 +52,7 @@ static inline void simdMemcpyAndSet(int *restrict dest, int *restrict src,
                                     const int val, const size_t size) {
 
   size_t idx = 0;
+
 #pragma GCC ivdep
   for (; idx + 7 < size; idx += 8) {
     const __m256i srcSIMD = _mm256_load_si256((__m256i *)&src[idx]);

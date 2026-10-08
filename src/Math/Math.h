@@ -56,7 +56,7 @@ static inline void matrixMultiply(int *restrict matrix,
       int minCost = mRow[col];
 
       {
-        int temp[8] __attribute__((aligned(32)));
+        int temp[8] __attribute__((aligned(ALIGNMENT)));
         __m256i min = _mm256_set1_epi32(minCost);
 #pragma GCC ivdep
         for (; k + 7 < size; k += 8) {
@@ -76,7 +76,7 @@ static inline void matrixMultiply(int *restrict matrix,
       }
 
       {
-        int temp[4] __attribute__((aligned(32)));
+        int temp[4] __attribute__((aligned(ALIGNMENT)));
         __m128i min = _mm_set1_epi32(minCost);
 #pragma GCC ivdep
         for (; k + 3 < size; k += 4) {
