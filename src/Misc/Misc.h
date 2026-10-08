@@ -47,4 +47,29 @@ static inline void simdMemcpy(int *restrict dest, const int *restrict src,
   if (idx < size)
     memcpy(&dest[idx], &src[idx], (size - idx) * sizeof(int));
 }
+
+static inline void simdMinimum(int *restrict dest, const int *restrict src,
+                               const size_t size) {
+
+  size_t idx = 0;
+#pragma GCC ivdep
+  for (; idx + 7 < size * size; idx += 8) {
+    const __m256i srcSIMD = _mm256_load_si256((const __m256i *)&src[idx]);
+    const __m256i destSIMD = _mm256_load_si256((__m256i *)&dest[idx]);
+    const __m256i min = _mm256_min_epi32(destSIMD, srcSIMD);
+    _mm256_store_si256((__m256i *)&dest[idx], min);
+  }
+#pragma GCC ivdep
+  for (; idx + 3 < size * size; idx += 4) {
+    const __m128i srcSIMD = _mm_load_si128((const __m128i *)&src[idx]);
+    const __m128i destSIMD = _mm_load_si128((__m128i *)&dest[idx]);
+    const __m128i min = _mm_min_epi32(destSIMD, srcSIMD);
+    _mm_store_si128((__m128i *)&dest[idx], min);
+  }
+
+#pragma GCC ivdep
+  for (; idx < size * size; idx++)
+    if ((long)(src[idx]) < dest[idx])
+      dest[idx] = src[idx];
+}
 #endif // !MISC.H

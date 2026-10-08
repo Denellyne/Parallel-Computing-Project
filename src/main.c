@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
           return 1;
         }
         if (graphRow[k] == 0 && i != k)
-          graphRow[k] = INT16_MAX;
+          graphRow[k] = INF;
         // printf("%d ", graph[i*size +k]);
         // printf("\n");
       }
@@ -118,7 +118,7 @@ int main(int argc, char *argv[]) {
   const int receiveFrom = (initialColumnIdx + sqrtNumProcs + 1) % sqrtNumProcs;
   for (size_t i = 0; i < steps; i++) {
     simdMemcpy(local, subMatrix, subSize * subSize);
-    simdMemset(result, -1, subSize * subSize);
+    simdMemset(result, INF, subSize * subSize);
     for (size_t foxSteps = 0; foxSteps < sqrtNumProcs; foxSteps++) {
       if (rank == rowGroupRanks[initialIdx])
         simdMemcpy(received, local, subSize * subSize);
@@ -131,10 +131,7 @@ int main(int argc, char *argv[]) {
       MPI_Sendrecv_replace(
           subMatrix, subSize * subSize, MPI_INT, columnGroupRanks[sendTo], 0,
           columnGroupRanks[receiveFrom], 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-#pragma GCC ivdep
-      for (size_t idx = 0; idx < subSize * subSize; idx++)
-        if (result[idx] == -1 || (long)(resultMatrix[idx]) < result[idx])
-          result[idx] = resultMatrix[idx];
+      simdMinimum(result, resultMatrix, subSize);
 
       initialIdx = (initialIdx + 1) % sqrtNumProcs;
     }
@@ -168,9 +165,9 @@ int main(int argc, char *argv[]) {
         printf("\n");
 
       if (i % nodes < nodes - 1)
-        printf("%d ", (graph[i] == INT16_MAX) ? 0 : graph[i]);
+        printf("%d ", (graph[i] == INF) ? 0 : graph[i]);
       else
-        printf("%d", (graph[i] == INT16_MAX) ? 0 : graph[i]);
+        printf("%d", (graph[i] == INF) ? 0 : graph[i]);
     }
     printf("\n");
 

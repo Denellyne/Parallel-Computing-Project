@@ -3,6 +3,7 @@
 #include <immintrin.h>
 #include <stdint.h>
 #include <stdio.h>
+#define INF 1000000
 
 static inline void transpose(int *const restrict matrix,
                              const int *const restrict graph, const int size) {
@@ -32,7 +33,7 @@ static inline void transpose(int *const restrict matrix,
 //           _mm256_load_si256((__m256i *)(__m256i *)&matrix[row * size + col]);
 //       graphSIMD = _mm256_add_epi32(graphSIMD, transSIMD);
 //       __m256i min = _mm256_min_epi32(graphSIMD,
-//       _mm256_set1_epi32(INT16_MAX)); matrixSIMD =
+//       _mm256_set1_epi32(INF)); matrixSIMD =
 //       _mm256_min_epi32(matrixSIMD, kin); _mm256_store_si256((__m256i
 //       *)&matrix[row * size + col], matrixSIMD);
 //     }
@@ -52,7 +53,7 @@ static inline void matrixMultiply(int *restrict matrix,
       const int *const restrict transRow = &transposed[col * size];
 
       size_t k = 0;
-      int minCost = INT16_MAX;
+      int minCost = INF;
 
 #pragma GCC ivdep
       for (; k + 7 < size; k += 8) {
@@ -61,8 +62,7 @@ static inline void matrixMultiply(int *restrict matrix,
         const __m256i transSIMD =
             _mm256_loadu_si256((const __m256i *)&transRow[k]);
         const __m256i sumSIMD = _mm256_add_epi32(graphSIMD, transSIMD);
-        const __m256i min =
-            _mm256_min_epi32(sumSIMD, _mm256_set1_epi32(INT16_MAX));
+        const __m256i min = _mm256_min_epi32(sumSIMD, _mm256_set1_epi32(INF));
         int temp[8] __attribute__((aligned(32)));
         _mm256_store_si256((__m256i *)temp, min);
 
@@ -80,7 +80,7 @@ static inline void matrixMultiply(int *restrict matrix,
         const __m128i transSIMD =
             _mm_loadu_si128((const __m128i *)&transRow[k]);
         const __m128i sumSIMD = _mm_add_epi32(graphSIMD, transSIMD);
-        const __m128i min = _mm_min_epi32(sumSIMD, _mm_set1_epi32(INT16_MAX));
+        const __m128i min = _mm_min_epi32(sumSIMD, _mm_set1_epi32(INF));
         int temp[4] __attribute__((aligned(32)));
         _mm_store_si128((__m128i *)temp, min);
 
