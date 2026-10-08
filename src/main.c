@@ -1,5 +1,4 @@
 #include "./Misc/Misc.h"
-#include "MPIHelper/MPIHelper.h"
 #include "Math/Math.h"
 #include <math.h>
 #include <mpi.h>
@@ -30,7 +29,6 @@ int main(int argc, char *argv[]) {
   int columnGroupRanks[sqrtNumProcs];
   size_t initialIdx = -1, initialColumnIdx = rank;
 
-#pragma GCC ivdep
   for (size_t i = 0; i < sqrtNumProcs; i++) {
     rowGroupRanks[i] = rank + i - group;
     columnGroupRanks[i] = (rank % sqrtNumProcs + i * sqrtNumProcs) % numProcs;
@@ -77,29 +75,37 @@ int main(int argc, char *argv[]) {
       }
     }
 
-    int row = 0;
-    int rowIdx = 1;
-    for (size_t i = 1; i < numProcs; i++) {
-      if (i % sqrtNumProcs == 0) {
+    size_t pos = 0;
+    int *restrict buf = alloc(nodes);
+    size_t row = 0;
+    size_t rowIdx = 0;
+#pragma GCC ivdep
+    for (size_t i = 0; i < numProcs; i++) {
+      if (i != 0 && i % sqrtNumProcs == 0) {
         row += subSize;
         rowIdx = 0;
       }
 
       const int *const restrict graphRow =
           &graph[rowIdx * subSize + (row * nodes)];
-      sendArray(graphRow, subSize, nodes, i, &requests[0]);
+
+      for (size_t k = 0; k < subSize; k++) {
+        simdMemcpy(&buf[pos], &graphRow[k * nodes], subSize);
+        pos += subSize;
+      }
       rowIdx++;
     }
 
-    for (size_t k = 0; k < subSize; k++)
-      simdMemcpy(&subMatrix[k * subSize], &graph[k * nodes], subSize);
-
+    MPI_Scatter(buf, subSize * subSize, MPI_INT, subMatrix, subSize * subSize,
+                MPI_INT, 0, MPI_COMM_WORLD);
+    free(buf);
   } else
-    receiveArray(subSize, subMatrix, 0, &requests[1]);
+    MPI_Scatter(NULL, 0, MPI_INT, subMatrix, subSize * subSize, MPI_INT, 0,
+                MPI_COMM_WORLD);
 
-  int steps = 0;
+  size_t steps = 0;
   if (rank == 0) {
-    int power = 1;
+    size_t power = 1;
     while (power < nodes) {
       steps++;
       power *= 2;
@@ -112,8 +118,10 @@ int main(int argc, char *argv[]) {
   int *const restrict local = alloc(subSize);
   int *const restrict transposed = alloc(subSize);
   int *const restrict received = alloc(subSize);
-  const int sendTo = (initialColumnIdx + sqrtNumProcs - 1) % sqrtNumProcs;
-  const int receiveFrom = (initialColumnIdx + sqrtNumProcs + 1) % sqrtNumProcs;
+  const size_t sendTo =
+      columnGroupRanks[(initialColumnIdx + sqrtNumProcs - 1) % sqrtNumProcs];
+  const size_t receiveFrom =
+      columnGroupRanks[(initialColumnIdx + sqrtNumProcs + 1) % sqrtNumProcs];
   simdMemset(resultMatrix, INF, subSize * subSize);
   for (size_t i = 0; i < steps; i++) {
     simdMemcpy(local, subMatrix, subSize * subSize);
@@ -126,51 +134,53 @@ int main(int argc, char *argv[]) {
 
       transpose(transposed, subMatrix, subSize);
       matrixMultiply(resultMatrix, received, transposed, subSize);
-      MPI_Sendrecv_replace(
-          subMatrix, subSize * subSize, MPI_INT, columnGroupRanks[sendTo], 0,
-          columnGroupRanks[receiveFrom], 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-      // simdMinimum(result, resultMatrix, subSize);
+      MPI_Sendrecv_replace(subMatrix, subSize * subSize, MPI_INT, sendTo, 0,
+                           receiveFrom, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-      initialIdx = (initialIdx + 1) % sqrtNumProcs;
+      if (++initialIdx >= sqrtNumProcs)
+        initialIdx -= sqrtNumProcs;
     }
     simdMemcpyAndSet(subMatrix, resultMatrix, INF, subSize * subSize);
   }
   free(transposed);
   free(received);
   free(local);
-  if (rank == 0) {
-    int *restrict graphRow = graph;
-    for (size_t k = 0; k < subSize; k++)
-      simdMemcpy(&graphRow[k * nodes], &subMatrix[k * subSize], subSize);
 
-    int rowIdx = 1;
-    int row = 0;
-    for (size_t i = 1; i < numProcs; i++) {
-      if (i % sqrtNumProcs == 0) {
+  if (rank == 0) {
+    int *restrict buf = alloc(nodes);
+    MPI_Gather(subMatrix, subSize * subSize, MPI_INT, buf, subSize * subSize,
+               MPI_INT, 0, MPI_COMM_WORLD);
+    size_t rowIdx = 0;
+    size_t row = 0;
+#pragma GCC ivdep
+    for (size_t i = 0; i < numProcs; i++) {
+      if (i != 0 && i % sqrtNumProcs == 0) {
         row += subSize;
         rowIdx = 0;
       }
-      graphRow = &graph[rowIdx * subSize + (row * nodes)];
-      receiveArray(subSize, resultMatrix, i, &requests[1]);
+      int *restrict graphRow = &graph[rowIdx * subSize + (row * nodes)];
+      const int *restrict bufPos = &buf[i * subSize * subSize];
+#pragma GCC ivdep
       for (size_t k = 0; k < subSize; k++)
-        simdMemcpy(&graphRow[k * nodes], &resultMatrix[k * subSize], subSize);
+        simdMemcpy(&graphRow[k * nodes], &bufPos[k * subSize], subSize);
       rowIdx++;
     }
+    free(buf);
 
     for (size_t i = 0; i < nodes * nodes; i++) {
       if (i != 0 && i % nodes == 0)
         printf("\n");
 
+      printf("%d", (graph[i] == INF) ? 0 : graph[i]);
       if (i % nodes < nodes - 1)
-        printf("%d ", (graph[i] == INF) ? 0 : graph[i]);
-      else
-        printf("%d", (graph[i] == INF) ? 0 : graph[i]);
+        printf(" ");
     }
     printf("\n");
 
     free(graph);
   } else
-    sendArrayBasic(subMatrix, subSize, 0, &requests[0]);
+    MPI_Gather(subMatrix, subSize * subSize, MPI_INT, NULL, 0, MPI_INT, 0,
+               MPI_COMM_WORLD);
 
   endTime = MPI_Wtime();
   totalTime = endTime - startTime;

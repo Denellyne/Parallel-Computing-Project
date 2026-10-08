@@ -23,7 +23,7 @@ static inline void simdMemset(int *restrict dest, const int val,
     _mm256_storeu_si256((__m256i *)&dest[idx], valSIMD256);
 #endif
 
-#if defined(__SSE2__)
+#if defined(__SSE4_1__)
   const __m128i valSIMD = _mm_set1_epi32(val);
 #pragma GCC ivdep
   for (; idx + 3 < size; idx += 4)
@@ -44,7 +44,7 @@ static inline void simdMemcpy(int *restrict dest, const int *restrict src,
     _mm256_storeu_si256((__m256i *)&dest[idx], srcSIMD);
   }
 #endif
-#if defined(__SSE2__)
+#if defined(__SSE4_1__)
 #pragma GCC ivdep
   for (; idx + 3 < size; idx += 4) {
     const __m128i srcSIMD = _mm_loadu_si128((const __m128i *)&src[idx]);
@@ -69,7 +69,7 @@ static inline void simdMemcpyAndSet(int *restrict dest, int *restrict src,
     _mm256_storeu_si256((__m256i *)&src[idx], _mm256_set1_epi32(val));
   }
 #endif
-#if defined(__SSE2__)
+#if defined(__SSE4_1__)
 #pragma GCC ivdep
   for (; idx + 3 < size; idx += 4) {
     const __m128i srcSIMD = _mm_loadu_si128((__m128i *)&src[idx]);
@@ -96,7 +96,7 @@ static inline void simdMinimum(int *restrict dest, const int *restrict src,
     _mm256_storeu_si256((__m256i *)&dest[idx], min);
   }
 #endif
-#if defined(__SSE2__)
+#if defined(__SSE4_1__)
 #pragma GCC ivdep
   for (; idx + 3 < size * size; idx += 4) {
     const __m128i srcSIMD = _mm_loadu_si128((const __m128i *)&src[idx]);

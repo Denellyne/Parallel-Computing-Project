@@ -77,7 +77,7 @@ static inline void matrixMultiply(int *restrict matrix,
       }
 
 #endif
-#if defined(__SSE2__)
+#if defined(__SSE4_1__)
       {
         int temp[4] __attribute__((aligned(ALIGNMENT)));
         __m128i min = _mm_set1_epi32(minCost);
