@@ -44,10 +44,8 @@ int main(int argc, char *argv[]) {
   MPI_Comm rowCommunicator;
   MPI_Comm_create_group(MPI_COMM_WORLD, rowGroup, 0, &rowCommunicator);
 
-  FILE *f = NULL;
   if (rank == 0) {
-    f = fopen(argv[1], "r");
-    fscanf(f, "%d", &nodes);
+    fscanf(stdin, "%d", &nodes);
     if (nodes % sqrtNumProcs != 0) {
       printf(
           "Number of processes must evenly divide the number of nodes in the "
@@ -64,28 +62,20 @@ int main(int argc, char *argv[]) {
 
   if (rank == 0) {
     graph = alloc(nodes);
-    int count = 0;
     for (size_t i = 0; i < nodes; i++) {
       int *restrict graphRow = &graph[i * nodes];
       for (size_t k = 0; k < nodes; k++) {
-        if (fscanf(f, "%d", &graphRow[k]) != 1) {
+        if (fscanf(stdin, "%d", &graphRow[k]) != 1) {
           fprintf(stderr, "ERROR: scanf failed at [%d][%d]!\n", i, k);
           MPI_Abort(MPI_COMM_WORLD, 1);
           return 1;
         }
-        count++;
         if (graphRow[k] == 0 && i != k)
           graphRow[k] = INT16_MAX;
         // printf("%d ", graph[i*size +k]);
         // printf("\n");
       }
-      if (count < nodes) {
-        fprintf(stderr, "Scan failed %d\n", count);
-        MPI_Abort(MPI_COMM_WORLD, 1);
-        return 1;
-      }
     }
-    fclose(f);
 
     int row = 0;
     int rowIdx = 1;
