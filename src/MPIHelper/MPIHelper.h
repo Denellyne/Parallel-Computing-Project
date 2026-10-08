@@ -21,7 +21,6 @@ static inline void sendArray(const int *const restrict graphRow,
                              const int subSize, const int nodes,
                              const int destination, MPI_Request *request) {
   int pos = 0;
-
   int size = 0;
   MPI_Pack_size(subSize * subSize, MPI_INT, MPI_COMM_WORLD, &size);
   int *restrict buf = malloc(size);

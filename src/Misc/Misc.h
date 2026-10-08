@@ -5,6 +5,9 @@
 #include <string.h>
 #define ALIGNMENT 32
 
+// This function automatically allocates whatever size we give it squared,
+// because we work with 1D arrays as a representation for the matrices, we also
+// align it with 32 bits for better utilization of the SIMD registers
 static inline int *alloc(const int size) {
   int totalSize = size * size * sizeof(int);
   totalSize += ALIGNMENT;
@@ -15,6 +18,7 @@ static inline int *alloc(const int size) {
 static inline void simdMemset(int *restrict dest, const int val,
                               const size_t size) {
 
+  // Has the same functionality as memset except we use SIMD instructions
   size_t idx = 0;
 #if defined(__AVX2__)
   const __m256i valSIMD256 = _mm256_set1_epi32(val);
@@ -37,6 +41,7 @@ static inline void simdMemcpy(int *restrict dest, const int *restrict src,
                               const size_t size) {
 
   size_t idx = 0;
+  // Has the same functionality as memcpy except we use SIMD instructions
 #if defined(__AVX2__)
 #pragma GCC ivdep
   for (; idx + 7 < size; idx += 8) {
@@ -61,6 +66,8 @@ static inline void simdMemcpyAndSet(int *restrict dest, int *restrict src,
 
   size_t idx = 0;
 
+  // Has the same functionality as memcpy and memset except we use SIMD
+  // instructions
 #if defined(__AVX2__)
 #pragma GCC ivdep
   for (; idx + 7 < size; idx += 8) {
