@@ -203,15 +203,15 @@ int main(int argc, char *argv[]) {
       rowIdx++;
     }
 
-    for (size_t i = 0; i < nodes * nodes; i++) {
-      if (i != 0 && i % nodes == 0)
-        printf("\n");
-
-      printf("%d", (graph[i] == INF) ? 0 : graph[i]);
-      if (i % nodes < nodes - 1)
-        printf(" ");
-    }
-    printf("\n");
+    // for (size_t i = 0; i < nodes * nodes; i++) {
+    //   if (i != 0 && i % nodes == 0)
+    //     printf("\n");
+    //
+    //   printf("%d", (graph[i] == INF) ? 0 : graph[i]);
+    //   if (i % nodes < nodes - 1)
+    //     printf(" ");
+    // }
+    // printf("\n");
 
     free(graph);
     free(buf);
