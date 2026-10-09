@@ -55,7 +55,7 @@ static inline void matrixMultiply(int *restrict matrix,
           const __m256i transSIMD =
               _mm256_loadu_si256((const __m256i *)&transRow[k]);
           const __m256i sumSIMD = _mm256_add_epi32(graphSIMD, transSIMD);
-          min = _mm256_min_epi32(sumSIMD, min);
+          min = _mm256_min_epu32(sumSIMD, min);
         }
 
         _mm256_store_si256((__m256i *)temp, min);
@@ -78,7 +78,7 @@ static inline void matrixMultiply(int *restrict matrix,
           const __m128i transSIMD =
               _mm_loadu_si128((const __m128i *)&transRow[k]);
           const __m128i sumSIMD = _mm_add_epi32(graphSIMD, transSIMD);
-          min = _mm_min_epi32(sumSIMD, min);
+          min = _mm_min_epu32(sumSIMD, min);
         }
         _mm_store_si128((__m128i *)temp, min);
 #pragma GCC ivdep
