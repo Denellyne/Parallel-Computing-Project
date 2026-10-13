@@ -98,7 +98,6 @@ int main(int argc, char *argv[]) {
       }
     }
 
-    startTime = MPI_Wtime();
     unsigned short *restrict buf = alloc(nodes);
     size_t pos = 0;
     size_t row = 0;
@@ -123,13 +122,19 @@ int main(int argc, char *argv[]) {
     // Scatters the matrix into sub matrix size subSize*subSize
     // Both the original matrix and subMatrices are 1D arrays for better cache
     // utilization
+
+    MPI_Barrier(gridCommunicator);
+    startTime = MPI_Wtime();
     MPI_Scatter(buf, subSize * subSize, MPI_UNSIGNED_SHORT, subMatrix,
                 subSize * subSize, MPI_UNSIGNED_SHORT, rootRank,
                 gridCommunicator);
     free(buf);
-  } else
+
+  } else {
+    MPI_Barrier(gridCommunicator);
     MPI_Scatter(NULL, 0, MPI_UNSIGNED_SHORT, subMatrix, subSize * subSize,
                 MPI_UNSIGNED_SHORT, rootRank, gridCommunicator);
+  }
 
   // Here we get the number of iterations we have to do to get a matrix with the
   // lowest cost for the node traversal
@@ -219,15 +224,15 @@ int main(int argc, char *argv[]) {
       rowIdx++;
     }
 
-    for (size_t i = 0; i < nodes * nodes; i++) {
-      if (i != 0 && i % nodes == 0)
-        printf("\n");
-
-      printf("%hd", (graph[i] == INF) ? 0 : graph[i]);
-      if (i % nodes < nodes - 1)
-        printf(" ");
-    }
-    printf("\n");
+    // for (size_t i = 0; i < nodes * nodes; i++) {
+    //   if (i != 0 && i % nodes == 0)
+    //     printf("\n");
+    //
+    //   printf("%hd", (graph[i] == INF) ? 0 : graph[i]);
+    //   if (i % nodes < nodes - 1)
+    //     printf(" ");
+    // }
+    // printf("\n");
 
     free(graph);
     free(buf);
@@ -235,6 +240,7 @@ int main(int argc, char *argv[]) {
     MPI_Gather(subMatrix, subSize * subSize, MPI_UNSIGNED_SHORT, NULL, 0,
                MPI_UNSIGNED_SHORT, rootRank, gridCommunicator);
 
+  MPI_Barrier(gridCommunicator);
   const double endTime = MPI_Wtime();
   const double totalTime = endTime - startTime;
   free(subMatrix);
