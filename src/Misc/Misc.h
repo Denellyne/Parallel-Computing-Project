@@ -99,7 +99,7 @@ static inline void simdMinimum(int *restrict dest, const int *restrict src,
   for (; idx + 7 < size * size; idx += 8) {
     const __m256i srcSIMD = _mm256_loadu_si256((const __m256i *)&src[idx]);
     const __m256i destSIMD = _mm256_loadu_si256((__m256i *)&dest[idx]);
-    const __m256i min = _mm256_min_epi32(destSIMD, srcSIMD);
+    const __m256i min = _mm256_min_epu32(destSIMD, srcSIMD);
     _mm256_storeu_si256((__m256i *)&dest[idx], min);
   }
 #endif
@@ -108,7 +108,7 @@ static inline void simdMinimum(int *restrict dest, const int *restrict src,
   for (; idx + 3 < size * size; idx += 4) {
     const __m128i srcSIMD = _mm_loadu_si128((const __m128i *)&src[idx]);
     const __m128i destSIMD = _mm_loadu_si128((__m128i *)&dest[idx]);
-    const __m128i min = _mm_min_epi32(destSIMD, srcSIMD);
+    const __m128i min = _mm_min_epu32(destSIMD, srcSIMD);
     _mm_storeu_si128((__m128i *)&dest[idx], min);
   }
 #endif
