@@ -1,4 +1,3 @@
-
 #include "./Misc/Misc.h"
 #include "Math/Math.h"
 #include <math.h>
@@ -10,7 +9,7 @@
 #define MASTER 0
 
 int main(int argc, char *argv[]) {
-  int numProcs, rank, cartRank, subSize, nodes;
+  int numProcs, rank, cartRank, subSize = 0, nodes;
   // MPI_Request requests[2];
   double startTime;
   MPI_Init(&argc, &argv);
@@ -74,9 +73,9 @@ int main(int argc, char *argv[]) {
     subSize = nodes / sqrtNumProcs;
   }
   // Broadcasts the node of the subMatrix to every process
-  MPI_Bcast(&subSize, 1, MPI_INT, 0, gridCommunicator);
-  int *restrict subMatrix = alloc(subSize);
-  int *restrict graph = NULL;
+  MPI_Bcast(&subSize, 1, MPI_UNSIGNED_SHORT, rootRank, gridCommunicator);
+  unsigned short *restrict subMatrix = alloc(subSize);
+  unsigned short *restrict graph = NULL;
 
   if (rank == 0) {
     graph = alloc(nodes);
@@ -87,9 +86,9 @@ int main(int argc, char *argv[]) {
       // representation, not only does this help us work with them by improving
       // readability but also improves compiler auto-vectorization
 
-      int *restrict graphRow = &graph[i * nodes];
+      unsigned short *restrict graphRow = &graph[i * nodes];
       for (size_t k = 0; k < nodes; k++) {
-        if (fscanf(stdin, "%d", &graphRow[k]) != 1) {
+        if (fscanf(stdin, "%hd", &graphRow[k]) != 1) {
           fprintf(stderr, "ERROR: scanf failed at [%zu][%zu]!\n", i, k);
           MPI_Abort(gridCommunicator, 1);
           return 1;
@@ -100,7 +99,7 @@ int main(int argc, char *argv[]) {
     }
 
     startTime = MPI_Wtime();
-    int *restrict buf = alloc(nodes);
+    unsigned short *restrict buf = alloc(nodes);
     size_t pos = 0;
     size_t row = 0;
     size_t rowIdx = 0;
@@ -111,7 +110,7 @@ int main(int argc, char *argv[]) {
         rowIdx = 0;
       }
 
-      const int *const restrict graphRow =
+      const unsigned short *const restrict graphRow =
           &graph[rowIdx * subSize + (row * nodes)];
 
       for (size_t k = 0; k < subSize; k++) {
@@ -124,12 +123,13 @@ int main(int argc, char *argv[]) {
     // Scatters the matrix into sub matrix size subSize*subSize
     // Both the original matrix and subMatrices are 1D arrays for better cache
     // utilization
-    MPI_Scatter(buf, subSize * subSize, MPI_INT, subMatrix, subSize * subSize,
-                MPI_INT, rootRank, gridCommunicator);
+    MPI_Scatter(buf, subSize * subSize, MPI_UNSIGNED_SHORT, subMatrix,
+                subSize * subSize, MPI_UNSIGNED_SHORT, rootRank,
+                gridCommunicator);
     free(buf);
   } else
-    MPI_Scatter(NULL, 0, MPI_INT, subMatrix, subSize * subSize, MPI_INT,
-                rootRank, gridCommunicator);
+    MPI_Scatter(NULL, 0, MPI_UNSIGNED_SHORT, subMatrix, subSize * subSize,
+                MPI_UNSIGNED_SHORT, rootRank, gridCommunicator);
 
   // Here we get the number of iterations we have to do to get a matrix with the
   // lowest cost for the node traversal
@@ -142,12 +142,12 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  MPI_Bcast(&steps, 1, MPI_INT, rootRank, gridCommunicator);
+  MPI_Bcast(&steps, 1, MPI_UNSIGNED_SHORT, rootRank, gridCommunicator);
 
-  int *const restrict resultMatrix = alloc(subSize);
-  int *const restrict localCopy = alloc(subSize);
-  int *const restrict transposed = alloc(subSize);
-  int *const restrict received = alloc(subSize);
+  unsigned short *const restrict resultMatrix = alloc(subSize);
+  unsigned short *const restrict localCopy = alloc(subSize);
+  unsigned short *const restrict transposed = alloc(subSize);
+  unsigned short *const restrict received = alloc(subSize);
   // The id of the process where we will send our subMatrix
   simdMemset(resultMatrix, INF, subSize * subSize);
   for (size_t i = 0; i < steps; i++) {
@@ -158,7 +158,7 @@ int main(int argc, char *argv[]) {
       if (cartRank == rowGroupRanks[initialIdx])
         simdMemcpy(received, localCopy, subSize * subSize);
 
-      MPI_Bcast(received, subSize * subSize, MPI_INT, initialIdx,
+      MPI_Bcast(received, subSize * subSize, MPI_UNSIGNED_SHORT, initialIdx,
                 rowCommunicator);
 
       // Transposes the subMatrix for better cache locality
@@ -178,8 +178,8 @@ int main(int argc, char *argv[]) {
 
       // Here we send our subMatrix to other and also receive it all in one
       // function
-      MPI_Sendrecv_replace(subMatrix, subSize * subSize, MPI_INT, sendTo, 0,
-                           receiveFrom, 0, columnCommunicator,
+      MPI_Sendrecv_replace(subMatrix, subSize * subSize, MPI_UNSIGNED_SHORT,
+                           sendTo, 0, receiveFrom, 0, columnCommunicator,
                            MPI_STATUS_IGNORE);
 
       // Get the id of the next process to it's subMatrix
@@ -195,9 +195,10 @@ int main(int argc, char *argv[]) {
   free(localCopy);
 
   if (rank == 0) {
-    int *restrict buf = alloc(nodes);
-    MPI_Gather(subMatrix, subSize * subSize, MPI_INT, buf, subSize * subSize,
-               MPI_INT, rootRank, gridCommunicator);
+    unsigned short *restrict buf = alloc(nodes);
+    MPI_Gather(subMatrix, subSize * subSize, MPI_UNSIGNED_SHORT, buf,
+               subSize * subSize, MPI_UNSIGNED_SHORT, rootRank,
+               gridCommunicator);
     size_t rowIdx = 0;
     size_t row = 0;
     // Theses loops are for loading the results from all threads to the main
@@ -209,29 +210,30 @@ int main(int argc, char *argv[]) {
         row += subSize;
         rowIdx = 0;
       }
-      int *restrict graphRow = &graph[rowIdx * subSize + (row * nodes)];
-      const int *restrict bufPos = &buf[i * subSize * subSize];
+      unsigned short *restrict graphRow =
+          &graph[rowIdx * subSize + (row * nodes)];
+      const unsigned short *restrict bufPos = &buf[i * subSize * subSize];
 #pragma GCC ivdep
       for (size_t k = 0; k < subSize; k++)
         simdMemcpy(&graphRow[k * nodes], &bufPos[k * subSize], subSize);
       rowIdx++;
     }
 
-    // for (size_t i = 0; i < nodes * nodes; i++) {
-    //   if (i != 0 && i % nodes == 0)
-    //     printf("\n");
-    //
-    //   printf("%d", (graph[i] == INF) ? 0 : graph[i]);
-    //   if (i % nodes < nodes - 1)
-    //     printf(" ");
-    // }
-    // printf("\n");
+    for (size_t i = 0; i < nodes * nodes; i++) {
+      if (i != 0 && i % nodes == 0)
+        printf("\n");
+
+      printf("%hd", (graph[i] == INF) ? 0 : graph[i]);
+      if (i % nodes < nodes - 1)
+        printf(" ");
+    }
+    printf("\n");
 
     free(graph);
     free(buf);
   } else
-    MPI_Gather(subMatrix, subSize * subSize, MPI_INT, NULL, 0, MPI_INT,
-               rootRank, gridCommunicator);
+    MPI_Gather(subMatrix, subSize * subSize, MPI_UNSIGNED_SHORT, NULL, 0,
+               MPI_UNSIGNED_SHORT, rootRank, gridCommunicator);
 
   const double endTime = MPI_Wtime();
   const double totalTime = endTime - startTime;
