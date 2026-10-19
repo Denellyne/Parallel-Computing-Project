@@ -1,5 +1,5 @@
 CXX = mpicc
-CFLAGS = -O2 -mtune=native -ftree-vectorize -fvect-cost-model=dynamic -fno-math-errno -fno-trapping-math -ffinite-loops -fpredictive-commoning -ffinite-math-only -march=native -ffast-math -funroll-loops -flto -pthread -falign-loops=32 -fno-semantic-interposition -fvisibility=hidden -fopt-info-vec-missed -lm
+CFLAGS = -O2 -mtune=native -ftree-vectorize -fprofile-use -fvect-cost-model=dynamic -fno-math-errno -fno-trapping-math -ffinite-loops -fpredictive-commoning -ffinite-math-only -march=native -ffast-math -funroll-loops -flto -pthread -falign-loops=32 -fno-semantic-interposition -fvisibility=hidden -fopt-info-vec-missed -lm
 OBJ := $(shell find . -name '*.c')
 TEST := *.md
 DEBUG = -g -Wall -Wextra -pedantic

@@ -1,6 +1,9 @@
 # Prerequisites
 *.d
-bin/
+bin/*
+
+src/out*
+data.txt
 
 
 # Object files
