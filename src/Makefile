@@ -11,7 +11,6 @@ cr : clean run
 
 build: $(OBJ)
 	@echo "Linking..."
-	cp ../fox-main.gcda ../bin
 	$(CXX) $(CFLAGS) $(OBJ) -o $(OUT) 
 	
 
