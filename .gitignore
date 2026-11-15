@@ -1,6 +1,7 @@
 # Prerequisites
 *.d
 bin/*
+ex2/bin/*
 
 src/out*
 data.txt
