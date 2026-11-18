@@ -1,11 +1,9 @@
 #include "Misc/Misc.h"
-#include <assert.h>
 #include <stdalign.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #define FOX 'F'
 #define RABBIT 'R'
@@ -65,11 +63,11 @@ static inline void freeVector(struct Vector *const restrict vec) {
 #endif
 
 struct gameInfo {
-  size_t genProcRabbits, genProcFoxes, genFoodFoxes,
-      nGen, // num of generations to compute
-      c,    //
-      r,    //
-      n;    // num objects in the initial game->boardM
+  short genProcRabbits, genProcFoxes, genFoodFoxes;
+  size_t nGen, // num of generations to compute
+      c,       //
+      r,       //
+      n;       // num objects in the initial game->boardM
 
   char *restrict boardM;
   char *restrict swapM;
@@ -154,8 +152,8 @@ void handleMoveRabbit(struct Vector *const restrict head,
                       const struct gameInfo *restrict game, const size_t gen,
                       const size_t i, const size_t j) {
   size_t next_i = i, next_j = j;
-  const bool canProc =
-      (game->procArrM[game->c * i + j] >= game->genProcRabbits);
+  const size_t pos = game->c * i + j;
+  const bool canProc = (game->procArrM[pos] >= game->genProcRabbits);
 
   switch (selectMoveRabbit(game, gen, i, j)) {
   case NORTH:
@@ -198,7 +196,7 @@ void handleMoveRabbit(struct Vector *const restrict head,
       node.i = next_i;
       node.j = next_j;
       node.procreated = false;
-      node.proc = game->procArrM[game->c * i + j] + 1;
+      node.proc = game->procArrM[pos] + 1;
       addNode(head, node);
     }
   }
@@ -213,7 +211,8 @@ void handleMoveFox(struct Vector *const restrict head,
                    const struct gameInfo *const restrict game, const size_t gen,
                    const size_t i, const size_t j) {
   size_t next_i = i, next_j = j;
-  const bool canProc = (game->procArrM[game->c * i + j] >= game->genProcFoxes);
+  const size_t pos = game->c * i + j;
+  const bool canProc = (game->procArrM[pos] >= game->genProcFoxes);
 
   switch (selectMoveFox(game, gen, i, j)) {
   case NORTH:
@@ -237,7 +236,7 @@ void handleMoveFox(struct Vector *const restrict head,
     {
       struct Entry node;
       struct Entry node2;
-      node.hunger = game->hungerArrM[game->c * i + j] + 1;
+      node.hunger = game->hungerArrM[pos] + 1;
       node.i = next_i;
       node.j = next_j;
       node.proc = INIT_PROC;
@@ -255,10 +254,10 @@ void handleMoveFox(struct Vector *const restrict head,
   noMoveFox:
     {
       struct Entry node;
-      node.hunger = game->hungerArrM[game->c * i + j] + 1;
+      node.hunger = game->hungerArrM[pos] + 1;
       node.i = next_i;
       node.j = next_j;
-      node.proc = game->procArrM[game->c * i + j] + 1;
+      node.proc = game->procArrM[pos] + 1;
       node.procreated = false;
       addNode(head, node);
     }
@@ -275,52 +274,58 @@ void handleMoveFox(struct Vector *const restrict head,
 void calculateFoxState(struct Vector *const restrict head,
                        struct gameInfo *restrict game, const size_t gen) {
 #pragma GCC ivdep
-  for (size_t idx = 0; idx < game->r * game->c; idx++) { // i is a row
-    const size_t i = idx / game->c;
-    const size_t j = idx % game->c;
-    switch (game->boardM[game->c * i + j]) {
-    // FOX NEXT POSITION
-    // ----------------------------------------------------------------------------
-    case FOX:
-      handleMoveFox(head, game, gen, i, j);
-      break;
+  for (size_t i = 0; i < game->r; i++)
+#pragma GCC ivdep
+    for (size_t j = 0; j < game->c; j++) {
 
-    case RABBIT:
-      game->swapM[game->c * i + j] = RABBIT;
-      game->procSwapM[game->c * i + j] = game->procArrM[game->c * i + j];
-      break;
+      const size_t pos = game->c * i + j;
 
-    case ROCK:
-      game->n++;
-      game->swapM[game->c * i + j] = ROCK;
-      break;
+      switch (game->boardM[pos]) {
+      // FOX NEXT POSITION
+      // ----------------------------------------------------------------------------
+      case FOX:
+        handleMoveFox(head, game, gen, i, j);
+        break;
+
+      case RABBIT:
+        game->swapM[pos] = RABBIT;
+        game->procSwapM[pos] = game->procArrM[pos];
+        break;
+
+      case ROCK:
+        game->n++;
+        game->swapM[pos] = ROCK;
+        break;
+      }
     }
-  }
 }
+
 // UPDATE RABBIT POSITIONS
 // ----------------------------------------------------------------------------
 void calculateRabbitState(struct Vector *restrict head,
                           struct gameInfo *restrict game, const size_t gen) {
-  for (size_t idx = 0; idx < game->r * game->c; idx++) { // i is a row
-    const size_t i = idx / game->c;
-    const size_t j = idx % game->c;
-    switch (game->boardM[game->c * i + j]) {
-    // RABBIT NEXT POSITION
-    // ----------------------------------------------------------------------------
-    case RABBIT:
-      handleMoveRabbit(head, game, gen, i, j);
-      break;
-    case FOX:
-      game->swapM[game->c * i + j] = FOX;
-      game->procSwapM[game->c * i + j] = game->procArrM[game->c * i + j];
-      game->hungerSwapM[game->c * i + j] = game->hungerArrM[game->c * i + j];
-      break;
+#pragma GCC ivdep
+  for (size_t i = 0; i < game->r; i++)
+#pragma GCC ivdep
+    for (size_t j = 0; j < game->c; j++) {
+      const size_t pos = game->c * i + j;
+      switch (game->boardM[pos]) {
+      // RABBIT NEXT POSITION
+      // ----------------------------------------------------------------------------
+      case RABBIT:
+        handleMoveRabbit(head, game, gen, i, j);
+        break;
+      case FOX:
+        game->swapM[pos] = FOX;
+        game->procSwapM[pos] = game->procArrM[pos];
+        game->hungerSwapM[pos] = game->hungerArrM[pos];
+        break;
 
-    case ROCK:
-      game->swapM[game->c * i + j] = ROCK;
-      break;
+      case ROCK:
+        game->swapM[pos] = ROCK;
+        break;
+      }
     }
-  }
 }
 void updateFoxState(struct Vector *restrict node,
                     struct gameInfo *restrict game) {
@@ -361,11 +366,6 @@ void updateFoxState(struct Vector *restrict node,
       game->hungerSwapM[pos] = INIT_HUNGER;
       game->n--;
       break;
-    case ROCK:
-      game->n++;
-      printf("Impossible to move to ROCK\n");
-      assert(1 == 2);
-      break;
     }
   }
 }
@@ -386,14 +386,6 @@ void updateRabbitState(struct Vector *restrict node,
     case RABBIT:
       game->procSwapM[pos] = MAX(head->proc, game->procSwapM[pos]);
       game->n--;
-      break;
-    case FOX:
-      printf("Impossible to move to FOX\n");
-      assert(1 == 2);
-      break;
-    case ROCK:
-      printf("Impossible to move to ROCK\n");
-      assert(1 == 2);
       break;
     }
   }
@@ -432,40 +424,43 @@ void swapAndClearBoard(struct gameInfo *restrict game) {
 void printProcRowT(const struct gameInfo *restrict game,
                    const short *restrict m, const size_t i) {
   for (size_t j = 0; j < game->c; j++) {
-    if (game->swapM[game->c * i + j] == RABBIT ||
-        game->swapM[game->c * i + j] == FOX)
-      printf("%hd", m[game->c * i + j]);
+
+    const size_t pos = game->c * i + j;
+    if (game->swapM[pos] == RABBIT || game->swapM[pos] == FOX)
+      printf("%hd", m[pos]);
     else
-      printf("%c", game->swapM[game->c * i + j]);
+      printf("%c", game->swapM[pos]);
   }
 }
 void printHungerRowT(const struct gameInfo *restrict game,
                      const short *restrict m, const size_t i) {
   for (size_t j = 0; j < game->c; j++) {
-    if (game->swapM[game->c * i + j] == FOX) {
-      printf("%hd", m[game->c * i + j]);
+    const size_t pos = game->c * i + j;
+    if (game->swapM[pos] == FOX) {
+      printf("%hd", m[pos]);
     } else {
-      printf("%c", game->swapM[game->c * i + j]);
+      printf("%c", game->swapM[pos]);
     }
   }
 }
 void printProcRow(const struct gameInfo *restrict game, const short *restrict m,
                   const size_t i) {
   for (size_t j = 0; j < game->c; j++) {
-    if (game->boardM[game->c * i + j] == RABBIT ||
-        game->boardM[game->c * i + j] == FOX)
-      printf("%hd", m[game->c * i + j]);
+    const size_t pos = game->c * i + j;
+    if (game->boardM[pos] == RABBIT || game->boardM[pos] == FOX)
+      printf("%hd", m[pos]);
     else
-      printf("%c", game->boardM[game->c * i + j]);
+      printf("%c", game->boardM[pos]);
   }
 }
 void printHungerRow(const struct gameInfo *restrict game,
                     const short *restrict m, const size_t i) {
   for (size_t j = 0; j < game->c; j++) {
-    if (game->boardM[game->c * i + j] == FOX) {
-      printf("%hd", m[game->c * i + j]);
+    const size_t pos = game->c * i + j;
+    if (game->boardM[pos] == FOX) {
+      printf("%hd", m[pos]);
     } else {
-      printf("%c", game->boardM[game->c * i + j]);
+      printf("%c", game->boardM[pos]);
     }
   }
 }
@@ -519,7 +514,7 @@ void printState(const struct gameInfo *restrict game) {
 int main(int argc, char *argv[]) {
 
   struct gameInfo game;
-  if (fscanf(stdin, "%zu %zu %zu %zu %zu %zu %zu", &game.genProcRabbits,
+  if (fscanf(stdin, "%hu %hu %hu %zu %zu %zu %zu", &game.genProcRabbits,
              &game.genProcFoxes, &game.genFoodFoxes, &game.nGen, &game.r,
              &game.c, &game.n) < 0) {
     printf("Unable to read initial values\n");
@@ -598,7 +593,7 @@ int main(int argc, char *argv[]) {
   freeVector(vec);
 
   // PRINT FINAL STATE
-  printf("%zd %zd %zd %d %zd %zd %zd\n", game.genProcRabbits, game.genProcFoxes,
+  printf("%d %d %d %d %zd %zd %zd\n", game.genProcRabbits, game.genProcFoxes,
          game.genFoodFoxes, 0, game.r, game.c, game.n);
   for (size_t i = 0; i < game.r; i++) {
     for (size_t j = 0; j < game.c; j++) {
