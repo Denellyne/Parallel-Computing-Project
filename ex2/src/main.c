@@ -52,11 +52,11 @@ int main(int argc, char *argv[]) {
     memset(board[i], EMPTY, c);
     memset(swap[i], EMPTY, c);
 
-    memset(procArr[i], INIT_PROC, c*sizeof(short));
-    memset(procSwap[i], INIT_PROC, c*sizeof(short));
+    memset(procArr[i], INIT_PROC, c*sizeof(procArr[0][0]));
+    memset(procSwap[i], INIT_PROC, c*sizeof(procArr[0][0]));
 
-    memset(hungerArr[i], INIT_HUNGER, c*sizeof(short));
-    memset(hungerSwap[i], INIT_HUNGER, c*sizeof(short));
+    memset(hungerArr[i], INIT_HUNGER, c*sizeof(hungerArr[0][0]));
+    memset(hungerSwap[i], INIT_HUNGER, c*sizeof(hungerArr[0][0]));
   }
 
   for (int i = 0; i < n; i++) {
@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
   }
   
   // ADJACENT CELL HELPERS ----------------------------------------------------------------------------
-  char cellNorth(int row, int col){ //Up
+  char cellNorth(char board[][c], int row, int col){ //Up
     if (row == 0){
       // return board[r-1][col];
       return OUT_OF_BOUNDS;
@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
       return board[row-1][col];
     }
   }
-  char cellSouth(int row, int col){ //Down
+  char cellSouth(char board[][c], int row, int col){ //Down
     if (row+1 == r){
       // return board[0][col];
       return OUT_OF_BOUNDS;
@@ -93,7 +93,7 @@ int main(int argc, char *argv[]) {
       return board[row+1][col];
     }
   }
-  char cellEast(int row, int col){ //Right
+  char cellEast(char board[][c], int row, int col){ //Right
     if(col+1 == c){
       // return board[row][0];
       return OUT_OF_BOUNDS;
@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
       return board[row][col+1];
     }
   }
-  char cellWest(int row, int col){ //Left
+  char cellWest(char board[][c], int row, int col){ //Left
     if(col == 0){
       // return board[row][c-1];
       return OUT_OF_BOUNDS;
@@ -110,33 +110,34 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  // RABBIT MOVE SELECTOR----------------------------------------------------------------------------
-  char selectMoveRabbit(int g, int row, int col) {
-    int i = 0; //a
+  // MOVE SELECTION LOGIC ----------------------------------------------------------------------------
+  // NOTE: Move selection should ALWAYS be made based on the board state and not the swap state
+  char _selectMove(char board[][c], char target, int g, int row, int col) {
+    int i = 0;
     char moves[4]; // priority - N,E,S,W
 
     // Can move N?
-    if (cellNorth(row, col) == EMPTY){
+    if (cellNorth(board, row, col) == target){
       moves[i] = NORTH;
       i++;
     }
     // Can move E?
-    if (cellEast(row, col) == EMPTY){
+    if (cellEast(board, row, col) == target){
       moves[i] = EAST;
       i++;
     }
     // Can move S?
-    if (cellSouth(row, col) == EMPTY){
+    if (cellSouth(board, row, col) == target){
       moves[i] = SOUTH;
       i++;
     }
     // Can move W?
-    if (cellWest(row, col) == EMPTY){
+    if (cellWest(board, row, col) == target){
       moves[i] = WEST;
       i++;
     }
     
-    DEBUG_PRINT("<SelectMoveRab>\tBoard[Row][Col]=%c, G=%d, Row=%d, Col=%d, I=%d\n", board[row][col], g, row, col, i);
+    DEBUG_PRINT("<SelectMove>\tBoard[Row][Col]=%c, G=%d, Row=%d, Col=%d, I=%d\n", board[row][col], g, row, col, i);
     if (i != 0){
       return moves[(g + row + col)%i];
     }else {
@@ -144,37 +145,16 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  // FOX MOVE SELECTOR ----------------------------------------------------------------------------
-  char selectMoveFox(int g, int row, int col){    
-    int i = 0;
-    char moves[4]; // priority - RABBIT in N,E,S,W; THEN EMPTY in N,E,S,W
+  char selectMoveRabbit(int g, int row, int col) {
+    return _selectMove(board, EMPTY, g, row, col);
+  }
 
-    // Can move N?
-    if (cellNorth(row, col) == RABBIT){
-      moves[i] = NORTH;
-      i++;
-    }
-    // Can move E?
-    if (cellEast(row, col) == RABBIT){
-      moves[i] = EAST;
-      i++;
-    }
-    // Can move S?
-    if (cellSouth(row, col) == RABBIT){
-      moves[i] = SOUTH;
-      i++;
-    }
-    // Can move W?
-    if (cellWest(row, col) == RABBIT){
-      moves[i] = WEST;
-      i++;
-    }
-    
-    DEBUG_PRINT("<SelectMoveFox>\tBoard[Row][Col]=%c, G=%d, Row=%d, Col=%d, I=%d\n\t", board[row][col], g, row, col, i);
-    if (i != 0){
-      return moves[(g + row + col)%i]; // RABBIT near
-    }else {
-      return selectMoveRabbit(g, row, col); // no RABBIT near
+  char selectMoveFox(int g, int row, int col){    
+    char rabbitDirection = _selectMove(board, RABBIT, g, row, col);
+    if (rabbitDirection == EMPTY) {
+      return _selectMove(board, EMPTY, g, row, col);
+    } else {
+      return rabbitDirection;
     }
   }
 
@@ -198,6 +178,7 @@ int main(int argc, char *argv[]) {
       if (canProc){ // Proc
         swap[i][j] = RABBIT;
         procSwap[i][j] = 0;
+        n++;
       }else { // clear previous location
         swap[i][j] = EMPTY;
         procSwap[i][j] = INIT_PROC;
@@ -208,6 +189,7 @@ int main(int argc, char *argv[]) {
       if (procSwap[next_i][next_j] < procArr[i][j]){ // max Proc
         procSwap[next_i][next_j] = (canProc) ? 0 : procArr[i][j] + 1;
       }
+      n--;
     } else if (swap[next_i][next_j] == EMPTY) {
       swap[next_i][next_j] = RABBIT;
       procSwap[next_i][next_j] = (canProc) ? 0 : procArr[i][j] + 1;
@@ -221,39 +203,48 @@ int main(int argc, char *argv[]) {
     bool canProc = (procArr[i][j] == genProcFoxes);
     bool starved = (hungerArr[i][j] == genFoodFoxes - 1);
 
-    if (!starved){
-      char move = selectMoveFox(gen, i, j);
-      if (move == NORTH) {
-        next_i--;
-      } else if (move == SOUTH) {
-        next_i++;
-      } else if (move == EAST) {
-        next_j++;
-      } else if (move == WEST) {
-        next_j--;
-      }
+    char move = selectMoveFox(gen, i, j);
+    if (move == NORTH) {
+      next_i--;
+    } else if (move == SOUTH) {
+      next_i++;
+    } else if (move == EAST) {
+      next_j++;
+    } else if (move == WEST) {
+      next_j--;
+    }
 
+    if (starved && (swap[next_i][next_j] != RABBIT) ){
+      // fox died of hunger
+      swap[i][j] = EMPTY;
+      procSwap[i][j] = INIT_PROC;
+      hungerSwap[i][j] = INIT_HUNGER;
+      n--;
+    } else {
       if (canProc){ // Proc
         swap[i][j] = FOX;
         procSwap[i][j] = 0;
         hungerSwap[i][j] = 0;
+        n++;
       } else {
         swap[i][j] = EMPTY;
         procSwap[i][j] = INIT_PROC;
         hungerSwap[i][j] = INIT_HUNGER;
       }
-
+      
       switch (swap[next_i][next_j]){
         case RABBIT:  //eat Rabbit
           swap[next_i][next_j] = FOX;
           procSwap[next_i][next_j] = (canProc) ? 0 : procArr[i][j] + 1;
           hungerSwap[next_i][next_j] = 0;
+          n--;
           break;
         case FOX:     //min Hunger
           if (hungerSwap[next_i][next_j] > hungerArr[i][j]) {
             procSwap[next_i][next_j] = (canProc) ? 0 : procArr[i][j] + 1;
             hungerSwap[next_i][next_j] = hungerArr[i][j] + 1;
           }
+          n--;
           break;
         case EMPTY:
           swap[next_i][next_j] = FOX;
@@ -266,6 +257,11 @@ int main(int argc, char *argv[]) {
     }
   }
 
+  // UPDATE RABBIT POSITIONS ----------------------------------------------------------------------------
+  void updateRabbitState(){
+    memcpy(board, swap, r*c);
+    memcpy(procArr, procSwap, r*c*sizeof(procArr[0][0]));
+  }
   // SWITCH ACTIVE BOARDS AND CLEAR SWAPs ----------------------------------------------------------------------------
   void swapAndClearBoard(){
     char (*tmp)[c] = board;
@@ -283,8 +279,8 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < r; i++)
     {
       memset(swap[i], EMPTY, c);
-      memset(procSwap[i], INIT_PROC, c*sizeof(short));
-      memset(hungerSwap[i], INIT_HUNGER, c*sizeof(short));
+      memset(procSwap[i], INIT_PROC, c*sizeof(procSwap[0][0]));
+      memset(hungerSwap[i], INIT_HUNGER, c*sizeof(hungerSwap[0][0]));
     }
   }
   // PRINT BOARD ----------------------------------------------------------------------------
@@ -308,10 +304,10 @@ int main(int argc, char *argv[]) {
   void printDashes(){
     for (int i = 0; i < c+2; i++)
       putchar('-');
-      printf("\t\tP");
+      printf("   P");
     for (int i = 0; i < c+1; i++)
       putchar('-');
-      printf("\tH");
+      printf(" H");
     for (int i = 0; i < c+1; i++)
       putchar('-');
     printf("\n");
@@ -323,10 +319,10 @@ int main(int argc, char *argv[]) {
       printf("|");
       for (int j = 0; j < c; j++)
         printf("%c", board[i][j]);
-      printf("|\t\t|");
+      printf("|   |");
         
       printProcRow(procArr, i);
-      printf("|\t|");
+      printf("| |");
 
       printHungerRow(hungerArr, i);
       printf("|\n");
@@ -334,11 +330,12 @@ int main(int argc, char *argv[]) {
     printDashes();
   }
 
-  printf("\nGen 0\n");
-  printState();
+  #ifdef DEBUG
+    printf("\nGen 0\n");
+    printState();
+  #endif
 
   for (int gen = 0; gen < nGen; gen++){
-    printf("\nGen %d\n", gen+1);
     for (int i = 0; i < r; i++) { // i is a row
       for (int j = 0; j < c; j++){ // j is a col
         switch (board[i][j]){
@@ -346,21 +343,55 @@ int main(int argc, char *argv[]) {
           case RABBIT:
             handleMoveRabbit(gen, i, j);
             break;
-          
+          case FOX:
+            swap[i][j] = FOX;
+            procSwap[i][j] = procArr[i][j];
+            break;
+          case ROCK:
+            swap[i][j] = ROCK;
+            break;
+        }
+      }
+    }
+    updateRabbitState();
+    
+    for (int i = 0; i < r; i++) { // i is a row
+      for (int j = 0; j < c; j++){ // j is a col
+        switch (board[i][j]){
           // FOX NEXT POSITION ----------------------------------------------------------------------------
           case FOX:
             handleMoveFox(gen, i, j);
-            break;
-            
-          case ROCK:
-            swap[i][j] = ROCK;
             break;
         }
       }
     } 
     // prepare for next generation
     swapAndClearBoard();
-    printState();
+    #ifdef DEBUG
+      printf("\nGen %d\n", gen+1);
+      printState();
+    #endif
+  }
+
+  // PRINT FINAL STATE
+  printf("%d %d %d %d %d %d %d\n", genProcRabbits, genProcFoxes, genFoodFoxes, 0, r, c, n);
+  for (int i = 0; i < r; i++)
+  {
+    for (int j = 0; j < c; j++)
+    {
+      switch (board[i][j])
+      {
+      case RABBIT:
+        printf("%s %d %d\n", "RABBIT", i, j);
+        break;
+      case FOX:
+        printf("%s %d %d\n", "FOX", i, j);
+        break;
+      case ROCK:
+        printf("%s %d %d\n", "ROCK", i, j);
+        break;
+      }
+    }
   }
 
   return EXIT_SUCCESS;
