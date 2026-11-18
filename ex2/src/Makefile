@@ -1,5 +1,6 @@
 CXX = gcc
-CFLAGS = -O2 -mtune=native -ftree-vectorize -fprofile-use -fvect-cost-model=dynamic -fno-math-errno -fno-trapping-math -ffinite-loops -fpredictive-commoning -ffinite-math-only -march=native -ffast-math -funroll-loops -flto -pthread -falign-loops=32 -fno-semantic-interposition -fvisibility=hidden -fdata-sections -ffunction-sections -lm -flto-compression-level=1 -Wl,--gc-sections -Wl,-O1 -fno-plt -Wl,--as-needed -Wl,-z,now
+BFLAGS =
+CFLAGS = -O2 -mtune=native -ftree-vectorize  -fvect-cost-model=dynamic -fno-math-errno -fno-trapping-math -ffinite-loops -fpredictive-commoning -ffinite-math-only -march=native -ffast-math -funroll-loops -flto -pthread -falign-loops=32 -fno-semantic-interposition -fvisibility=hidden -fdata-sections -ffunction-sections -lm -flto-compression-level=1 -Wl,--gc-sections -Wl,-O1 -fno-plt -Wl,--as-needed -Wl,-z,now
 OBJ := $(shell find . -name '*.c')
 TEST := *.md
 DEBUG = -g -Wall -Wextra -pedantic
@@ -11,12 +12,12 @@ cr : clean run
 
 build: $(OBJ)
 	@echo "Linking..."
-	$(CXX) $(CFLAGS) $(OBJ) -o $(OUT) 
+	$(CXX) $(BFLAGS) $(CFLAGS) $(OBJ) -o $(OUT) 
 	
 
 run: $(OBJ)
 	@echo "Linking..."
-	$(CXX) $(CFLAGS) $(OBJ) -o $(OUT) 
+	$(CXX) $(BFLAGS) $(CFLAGS) $(OBJ) -o $(OUT) 
 	 $(OUT)
 
 debug: 
