@@ -179,4 +179,7 @@ static inline void simdMemcpyAndSetShort(short *restrict dest,
 
 #define simdMemcpy(x, y, z)                                                    \
   _Generic((x), short *: simdMemcpyShort, char *: simdMemcpyChar)(x, y, z)
+#define simdMemcpyAndSet(x, y, val, z)                                         \
+  _Generic((x), short *: simdMemcpyAndSetShort, char *: simdMemcpyAndSetChar)( \
+      x, y, val, z)
 #endif // !MISC.H

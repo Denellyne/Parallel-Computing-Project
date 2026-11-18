@@ -20,39 +20,42 @@
 #define INIT_HUNGER 0
 #define INIT_PROC 0
 
-struct node {
-  struct node *next;
+struct Entry {
   size_t i, j;
-  size_t hunger, proc;
+  short hunger, proc;
   bool procreated;
 };
-struct LL {
-  struct node *head, *tail;
+struct Vector {
+  size_t size;
+  size_t capacity;
+  struct Entry *data;
 };
-struct LL *restrict createList() { return calloc(1, sizeof(struct LL)); }
-void addNodes(struct LL *restrict head, struct node *restrict beg,
-              struct node *restrict end) {
-  if (!head->head) {
-    head->head = beg;
-    head->tail = end;
-  } else {
-    head->tail->next = beg;
-    head->tail = end;
+static inline void resetVector(struct Vector *const restrict vec) {
+  vec->size = 0;
+}
+static inline struct Vector *restrict createVector() {
+  struct Vector *restrict vec = malloc(sizeof(struct Vector));
+  vec->size = 0;
+  vec->capacity = 0;
+  vec->data = NULL;
+  return vec;
+}
+static inline void addNode(struct Vector *const restrict vec,
+                           const struct Entry entry) {
+  if (!vec->data) {
+    vec->capacity = 4;
+    vec->data = malloc(vec->capacity * sizeof(struct Entry));
+  } else if (vec->size == vec->capacity) {
+    vec->capacity <<= 1;
+    vec->data = realloc(vec->data, vec->capacity * sizeof(struct Entry));
   }
+
+  vec->data[vec->size++] = entry;
 }
-void removeHead(struct LL *restrict head) {
-  if (!head || !head->head)
-    return;
-  struct node *restrict next = head->head->next;
-  free(head->head);
-  head->head = next;
-  if (!head->head)
-    head->tail = NULL;
-}
-void freeList(struct LL *restrict head) {
-  while (head->head)
-    removeHead(head);
-  free(head);
+static inline void freeVector(struct Vector *const restrict vec) {
+  if (vec->data)
+    free(vec->data);
+  free(vec);
 }
 
 #ifdef DEBUG
@@ -78,41 +81,27 @@ struct gameInfo {
 void printStateTemp(const struct gameInfo *restrict game);
 // ADJACENT CEnode HELPERS
 // ----------------------------------------------------------------------------
-char cenodeNorth(const struct gameInfo *restrict game, const size_t row,
-                 const size_t col) { // Up
-  if (row == 0) {
-    // return game->boardM[game->r*r-1+col];
-    return OUT_OF_BOUNDS;
-  } else {
-    return game->boardM[game->c * (row - 1) + col];
-  }
+static inline char cenodeNorth(const struct gameInfo *const restrict game,
+                               const size_t row,
+                               const size_t col) { // Up
+  return (row == 0) ? OUT_OF_BOUNDS : game->boardM[game->c * (row - 1) + col];
 }
-char cenodeSouth(const struct gameInfo *restrict game, const size_t row,
-                 const size_t col) { // Down
-  if (row + 1 == game->r) {
-    // return game->boardM[game->r*0+col];
-    return OUT_OF_BOUNDS;
-  } else {
-    return game->boardM[game->c * (row + 1) + col];
-  }
+static inline char cenodeSouth(const struct gameInfo *const restrict game,
+                               const size_t row,
+                               const size_t col) { // Down
+  return (row + 1 == game->r) ? OUT_OF_BOUNDS
+                              : game->boardM[game->c * (row + 1) + col];
 }
-char cenodeEast(const struct gameInfo *restrict game, const size_t row,
-                const size_t col) { // Right
-  if (col + 1 == game->c) {
-    // return game->boardM[game->r*row+0];
-    return OUT_OF_BOUNDS;
-  } else {
-    return game->boardM[game->c * row + col + 1];
-  }
+static inline char cenodeEast(const struct gameInfo *const restrict game,
+                              const size_t row,
+                              const size_t col) { // Right
+  return (col + 1 == game->c) ? OUT_OF_BOUNDS
+                              : game->boardM[game->c * row + col + 1];
 }
-char cenodeWest(const struct gameInfo *restrict game, const size_t row,
-                const size_t col) { // Left
-  if (col == 0) {
-    // return game->boardM[game->r*row+c-1];
-    return OUT_OF_BOUNDS;
-  } else {
-    return game->boardM[game->c * row + col - 1];
-  }
+static inline char cenodeWest(const struct gameInfo *const restrict game,
+                              const size_t row,
+                              const size_t col) { // Left
+  return (col == 0) ? OUT_OF_BOUNDS : game->boardM[game->c * row + col - 1];
 }
 
 // MOVE SELECTION LOGIC
@@ -125,54 +114,43 @@ char _selectMove(const struct gameInfo *restrict game, const char target,
   char moves[4]; // priority - N,E,S,W
 
   // Can move N?
-  if (cenodeNorth(game, row, col) == target) {
-    moves[i] = NORTH;
-    i++;
-  }
+  if (cenodeNorth(game, row, col) == target)
+    moves[i++] = NORTH;
   // Can move E?
-  if (cenodeEast(game, row, col) == target) {
-    moves[i] = EAST;
-    i++;
-  }
+  if (cenodeEast(game, row, col) == target)
+    moves[i++] = EAST;
+
   // Can move S?
-  if (cenodeSouth(game, row, col) == target) {
-    moves[i] = SOUTH;
-    i++;
-  }
+  if (cenodeSouth(game, row, col) == target)
+    moves[i++] = SOUTH;
+
   // Can move W?
-  if (cenodeWest(game, row, col) == target) {
-    moves[i] = WEST;
-    i++;
-  }
+  if (cenodeWest(game, row, col) == target)
+    moves[i++] = WEST;
 
   DEBUG_PRINT(
       "<SelectMove>\tBoard[Row][Col]=%c, G=%zu, Row=%zu, Col=%zu, I=%zu\n",
       game->boardM[game->c * row + col], g, row, col, i);
-  if (i != 0) {
-    return moves[(g + row + col) % i];
-  } else {
-    return EMPTY;
-  }
+  return (i != 0) ? moves[(g + row + col) % i] : EMPTY;
 }
 
-char selectMoveRabbit(const struct gameInfo *restrict game, const size_t g,
-                      const size_t row, const size_t col) {
+static inline char selectMoveRabbit(const struct gameInfo *const restrict game,
+                                    const size_t g, const size_t row,
+                                    const size_t col) {
   return _selectMove(game, EMPTY, g, row, col);
 }
 
-char selectMoveFox(const struct gameInfo *restrict game, const size_t g,
-                   const size_t row, const size_t col) {
+static inline char selectMoveFox(const struct gameInfo *const restrict game,
+                                 const size_t g, const size_t row,
+                                 const size_t col) {
   const char rabbitDirection = _selectMove(game, RABBIT, g, row, col);
-  if (rabbitDirection == EMPTY) {
-    return _selectMove(game, EMPTY, g, row, col);
-  } else {
-    return rabbitDirection;
-  }
+  return rabbitDirection == EMPTY ? _selectMove(game, EMPTY, g, row, col)
+                                  : rabbitDirection;
 }
 
 // MOVE HANDLERS
 // ----------------------------------------------------------------------------
-void handleMoveRabbit(struct LL *restrict head,
+void handleMoveRabbit(struct Vector *const restrict head,
                       const struct gameInfo *restrict game, const size_t gen,
                       const size_t i, const size_t j) {
   size_t next_i = i, next_j = j;
@@ -198,31 +176,30 @@ void handleMoveRabbit(struct LL *restrict head,
   }
 
   if (canProc) { // Proc
-    struct node *restrict node = malloc(sizeof(struct node));
-    struct node *restrict node2 = malloc(sizeof(struct node));
-    node->next = node2;
-    node->i = next_i;
-    node->j = next_j;
-    node->procreated = true;
-    node->proc = INIT_PROC;
+    struct Entry node;
+    struct Entry node2;
+    node.i = next_i;
+    node.j = next_j;
+    node.procreated = true;
+    node.proc = INIT_PROC;
 
-    node2->next = NULL;
-    node2->proc = INIT_PROC;
-    node2->i = i;
-    node2->j = j;
-    node2->procreated = false;
-    addNodes(head, node, node2);
+    node2.proc = INIT_PROC;
+    node2.i = i;
+    node2.j = j;
+    node2.procreated = false;
+
+    addNode(head, node);
+    addNode(head, node2);
 
   } else {
   noMove:
     {
-      struct node *restrict node = malloc(sizeof(struct node));
-      node->next = NULL;
-      node->i = next_i;
-      node->j = next_j;
-      node->procreated = false;
-      node->proc = game->procArrM[game->c * i + j] + 1;
-      addNodes(head, node, node);
+      struct Entry node;
+      node.i = next_i;
+      node.j = next_j;
+      node.procreated = false;
+      node.proc = game->procArrM[game->c * i + j] + 1;
+      addNode(head, node);
     }
   }
 
@@ -232,7 +209,7 @@ void handleMoveRabbit(struct LL *restrict head,
               game->procSwapM[game->c * next_i + next_j]);
 }
 
-void handleMoveFox(struct LL *restrict head,
+void handleMoveFox(struct Vector *const restrict head,
                    const struct gameInfo *const restrict game, const size_t gen,
                    const size_t i, const size_t j) {
   size_t next_i = i, next_j = j;
@@ -258,34 +235,32 @@ void handleMoveFox(struct LL *restrict head,
 
   if (canProc) {
     {
-      struct node *restrict node = malloc(sizeof(struct node));
-      struct node *restrict node2 = malloc(sizeof(struct node));
-      node->next = node2;
-      node->hunger = game->hungerArrM[game->c * i + j] + 1;
-      node->i = next_i;
-      node->j = next_j;
-      node->proc = INIT_PROC;
-      node->procreated = true;
+      struct Entry node;
+      struct Entry node2;
+      node.hunger = game->hungerArrM[game->c * i + j] + 1;
+      node.i = next_i;
+      node.j = next_j;
+      node.proc = INIT_PROC;
+      node.procreated = true;
 
-      node2->next = NULL;
-      node2->hunger = INIT_HUNGER;
-      node2->i = i;
-      node2->j = j;
-      node2->proc = INIT_PROC;
-      node2->procreated = false;
-      addNodes(head, node, node2);
+      node2.hunger = INIT_HUNGER;
+      node2.i = i;
+      node2.j = j;
+      node2.proc = INIT_PROC;
+      node2.procreated = false;
+      addNode(head, node);
+      addNode(head, node2);
     }
   } else {
   noMoveFox:
     {
-      struct node *restrict node = malloc(sizeof(struct node));
-      node->next = NULL;
-      node->hunger = game->hungerArrM[game->c * i + j] + 1;
-      node->i = next_i;
-      node->j = next_j;
-      node->proc = game->procArrM[game->c * i + j] + 1;
-      node->procreated = false;
-      addNodes(head, node, node);
+      struct Entry node;
+      node.hunger = game->hungerArrM[game->c * i + j] + 1;
+      node.i = next_i;
+      node.j = next_j;
+      node.proc = game->procArrM[game->c * i + j] + 1;
+      node.procreated = false;
+      addNode(head, node);
     }
   }
 
@@ -297,9 +272,9 @@ void handleMoveFox(struct LL *restrict head,
       game->hungerSwapM[game->c * next_i + next_j]);
 }
 
-struct LL *restrict calculateFoxState(struct LL *restrict head,
-                                      struct gameInfo *restrict game,
-                                      const size_t gen) {
+void calculateFoxState(struct Vector *const restrict head,
+                       struct gameInfo *restrict game, const size_t gen) {
+#pragma GCC ivdep
   for (size_t idx = 0; idx < game->r * game->c; idx++) { // i is a row
     const size_t i = idx / game->c;
     const size_t j = idx % game->c;
@@ -321,13 +296,11 @@ struct LL *restrict calculateFoxState(struct LL *restrict head,
       break;
     }
   }
-  return head;
 }
 // UPDATE RABBIT POSITIONS
 // ----------------------------------------------------------------------------
-struct LL *calculateRabbitState(struct LL *restrict head,
-                                struct gameInfo *restrict game,
-                                const size_t gen) {
+void calculateRabbitState(struct Vector *restrict head,
+                          struct gameInfo *restrict game, const size_t gen) {
   for (size_t idx = 0; idx < game->r * game->c; idx++) { // i is a row
     const size_t i = idx / game->c;
     const size_t j = idx % game->c;
@@ -348,18 +321,21 @@ struct LL *calculateRabbitState(struct LL *restrict head,
       break;
     }
   }
-  return head;
 }
-void updateFoxState(struct LL *restrict node, struct gameInfo *restrict game) {
+void updateFoxState(struct Vector *restrict node,
+                    struct gameInfo *restrict game) {
 
-  while (node->head) {
-    struct node *restrict head = node->head;
+#pragma GCC ivdep
+  for (size_t idx = 0; idx < node->size; idx++) {
+    struct Entry *restrict head = &node->data[idx];
     const size_t pos = game->c * head->i + head->j;
-    if (head->hunger >= game->genFoodFoxes && game->swapM[pos] != RABBIT) {
-      if (head->procreated)
-        removeHead(node);
-      removeHead(node);
-      continue;
+    if (head->hunger >= game->genFoodFoxes) {
+      if (game->boardM[pos] != RABBIT) {
+        if (head->procreated)
+          idx++;
+        continue;
+      }
+      head->hunger = 0;
     }
 
     game->n++;
@@ -370,8 +346,13 @@ void updateFoxState(struct LL *restrict node, struct gameInfo *restrict game) {
       game->hungerSwapM[pos] = head->hunger;
       break;
     case FOX:
-      game->procSwapM[pos] = MAX(head->proc, game->procSwapM[pos]);
-      game->hungerSwapM[pos] = MIN(head->hunger, game->hungerSwapM[pos]);
+      if (head->proc > game->procSwapM[pos]) {
+        game->procSwapM[pos] = head->proc;
+      } else if (head->proc == game->procSwapM[pos]) {
+        game->procSwapM[pos] = head->proc;
+        if (head->hunger < game->hungerSwapM[pos])
+          game->hungerSwapM[pos] = head->hunger;
+      }
       game->n--;
       break;
     case RABBIT:
@@ -381,20 +362,20 @@ void updateFoxState(struct LL *restrict node, struct gameInfo *restrict game) {
       game->n--;
       break;
     case ROCK:
+      game->n++;
       printf("Impossible to move to ROCK\n");
       assert(1 == 2);
       break;
     }
-
-    removeHead(node);
   }
 }
-void updateRabbitState(struct LL *restrict node,
+void updateRabbitState(struct Vector *restrict node,
                        struct gameInfo *restrict game) {
 
   game->n = 0;
-  while (node->head) {
-    struct node *restrict head = node->head;
+#pragma GCC ivdep
+  for (size_t idx = 0; idx < node->size; idx++) {
+    const struct Entry *const restrict head = &node->data[idx];
     game->n++;
     const size_t pos = game->c * head->i + head->j;
     switch (game->swapM[pos]) {
@@ -415,17 +396,13 @@ void updateRabbitState(struct LL *restrict node,
       assert(1 == 2);
       break;
     }
-
-    removeHead(node);
   }
 
-  simdMemcpy(game->boardM, game->swapM, game->r * game->c);
-  simdMemcpy(game->procArrM, game->procSwapM, game->r * game->c);
-  simdMemcpy(game->hungerArrM, game->hungerSwapM, game->r * game->c);
-
-  simdMemset(game->swapM, EMPTY, game->r * game->c);
-  simdMemset(game->procSwapM, INIT_PROC, game->r * game->c);
-  simdMemset(game->hungerSwapM, INIT_HUNGER, game->r * game->c);
+  simdMemcpyAndSet(game->boardM, game->swapM, EMPTY, game->r * game->c);
+  simdMemcpyAndSet(game->procArrM, game->procSwapM, INIT_PROC,
+                   game->r * game->c);
+  simdMemcpyAndSet(game->hungerArrM, game->hungerSwapM, INIT_HUNGER,
+                   game->r * game->c);
 }
 // SWITCH ACTIVE BOARDS AND CLEAR SWAPs
 // ----------------------------------------------------------------------------
@@ -602,13 +579,14 @@ int main(int argc, char *argv[]) {
   printf("\nGen 0\n");
   printState(&game);
 #endif
-  struct LL *restrict head = createList();
+  struct Vector *restrict vec = createVector();
   for (size_t gen = 0; gen < game.nGen; gen++) {
-    head = calculateRabbitState(head, &game, gen);
-    updateRabbitState(head, &game);
-    head = calculateFoxState(head, &game, gen);
-    assert(game.n <= game.r * game.c);
-    updateFoxState(head, &game);
+    calculateRabbitState(vec, &game, gen);
+    updateRabbitState(vec, &game);
+    resetVector(vec);
+    calculateFoxState(vec, &game, gen);
+    updateFoxState(vec, &game);
+    resetVector(vec);
 
     // prepare for next generation
     swapAndClearBoard(&game);
@@ -617,7 +595,7 @@ int main(int argc, char *argv[]) {
     printState(&game);
 #endif
   }
-  freeList(head);
+  freeVector(vec);
 
   // PRINT FINAL STATE
   printf("%zd %zd %zd %d %zd %zd %zd\n", game.genProcRabbits, game.genProcFoxes,
