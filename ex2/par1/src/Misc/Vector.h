@@ -1,8 +1,6 @@
 #ifndef __VECTOR__HEADER__
 #define __VECTOR__HEADER__
 
-#include <stdbool.h>
-#include <stddef.h>
 #include <stdlib.h>
 struct Entry {
   size_t i, j;

@@ -2,6 +2,7 @@
 #include "Misc/Vector.h"
 #include <omp.h>
 #include <stdalign.h>
+#include <stdbool.h>
 #include <stdio.h>
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #define FOX 'F'
@@ -24,10 +25,8 @@
 #endif
 
 struct gameInfo {
-  short genProcRabbits, genProcFoxes, genFoodFoxes;
+  short genProcRabbits, genProcFoxes, genFoodFoxes, r, c;
   size_t nGen, // num of generations to compute
-      c,       //
-      r,       //
       n;       // num objects in the initial game->boardM
 
   char *restrict boardM;
@@ -49,8 +48,9 @@ static inline char checkDirection(const char result, const int condition) {
 // ----------------------------------------------------------------------------
 // NOTE: Move selection should ALWAYS be made based on the game->boardM state
 // and not the game->swapM state
-char _selectMove(const struct gameInfo *restrict const game, const char target,
-                 const size_t g, const size_t row, const size_t col) {
+static inline char _selectMove(const struct gameInfo *restrict const game,
+                               const char target, const size_t g,
+                               const size_t row, const size_t col) {
   size_t i = 0;
   const char *restrict const board = game->boardM;
   const size_t r = game->r, c = game->c;
@@ -89,9 +89,10 @@ static inline char selectMoveFox(const struct gameInfo *const restrict game,
 
 // MOVE HANDLERS
 // ----------------------------------------------------------------------------
-void handleMoveRabbit(struct Vector *const restrict head,
-                      const struct gameInfo *restrict game, const size_t gen,
-                      const size_t i, const size_t j) {
+static inline void handleMoveRabbit(struct Vector *const restrict head,
+                                    const struct gameInfo *restrict game,
+                                    const size_t gen, const size_t i,
+                                    const size_t j) {
   size_t next_i = i, next_j = j;
   const size_t pos = game->c * i + j;
   const short proc = game->procArrM[pos];
@@ -117,12 +118,18 @@ void handleMoveRabbit(struct Vector *const restrict head,
 
   if (canProc) { // Proc
 
-    addNode(head, (struct Entry){.i = next_i,
-                                 .j = next_j,
-                                 .procreated = EMPTY,
-                                 .proc = INIT_PROC});
     addNode(head, (struct Entry){
-                      .i = i, .j = j, .procreated = EMPTY, .proc = INIT_PROC});
+                      .i = next_i,
+                      .j = next_j,
+                      .procreated = NORTH,
+                      .proc = INIT_PROC,
+                  });
+    addNode(head, (struct Entry){
+                      .i = i,
+                      .j = j,
+                      .procreated = EMPTY,
+                      .proc = INIT_PROC,
+                  });
 
   } else {
   noMove:
@@ -138,9 +145,10 @@ void handleMoveRabbit(struct Vector *const restrict head,
               game->procSwapM[game->c * next_i + next_j]);
 }
 
-void handleMoveFox(struct Vector *const restrict head,
-                   const struct gameInfo *const restrict game, const size_t gen,
-                   const size_t i, const size_t j) {
+static inline void handleMoveFox(struct Vector *const restrict head,
+                                 const struct gameInfo *const restrict game,
+                                 const size_t gen, const size_t i,
+                                 const size_t j) {
   size_t next_i = i, next_j = j;
   const size_t pos = game->c * i + j;
   const short proc = game->procArrM[pos];
@@ -167,14 +175,13 @@ void handleMoveFox(struct Vector *const restrict head,
   }
 
   if (canProc) {
-    {
 
-      addNode(head, (struct Entry){.i = next_i,
-                                   .j = next_j,
-                                   .procreated = direction,
-                                   .proc = INIT_PROC,
-                                   .hunger = hunger + 1});
-    }
+    addNode(head, (struct Entry){.i = next_i,
+                                 .j = next_j,
+                                 .procreated = direction,
+                                 .proc = INIT_PROC,
+                                 .hunger = hunger + 1});
+
   } else {
   noMoveFox:
 
@@ -193,15 +200,15 @@ void handleMoveFox(struct Vector *const restrict head,
       game->hungerSwapM[game->c * next_i + next_j]);
 }
 
-void calculateFoxState(struct Vector head[], struct gameInfo *restrict game,
-                       const size_t gen) {
+static inline void calculateFoxState(struct Vector head[],
+                                     struct gameInfo *restrict game,
+                                     const size_t gen) {
   const char *restrict const board = game->boardM;
   const size_t r = game->r, c = game->c;
   char *restrict const swap = game->swapM;
   short *restrict const procSwap = game->procSwapM;
   const short *restrict const proc = game->procArrM;
-  size_t n = 0;
-#pragma omp parallel for collapse(1) reduction(+ : n) schedule(guided)         \
+#pragma omp parallel for collapse(1) schedule(guided)                          \
     shared(board, r, c, head, gen, swap, procSwap, proc)
   for (size_t i = 0; i < r; i++) {
     const int id = omp_get_thread_num();
@@ -212,8 +219,6 @@ void calculateFoxState(struct Vector head[], struct gameInfo *restrict game,
       const size_t pos = c * i + j;
 
       switch (board[pos]) {
-      // FOX NEXT POSITION
-      // ----------------------------------------------------------------------------
       case FOX:
         handleMoveFox(vec, game, gen, i, j);
         break;
@@ -224,29 +229,29 @@ void calculateFoxState(struct Vector head[], struct gameInfo *restrict game,
         break;
 
       case ROCK:
-        n++;
         swap[pos] = ROCK;
         break;
       }
     }
   }
-  game->n += n;
 }
 
 // UPDATE RABBIT POSITIONS
 // ----------------------------------------------------------------------------
-void calculateRabbitState(struct Vector head[], struct gameInfo *restrict game,
-                          const size_t gen) {
+static inline void calculateRabbitState(struct Vector head[],
+                                        struct gameInfo *restrict const game,
+                                        const size_t gen) {
 
   const char *restrict const board = game->boardM;
   const size_t r = game->r, c = game->c;
   char *restrict const swap = game->swapM;
   short *restrict const procSwap = game->procSwapM;
-  const short *restrict const proc = game->procArrM;
+  short *restrict const proc = game->procArrM;
   short *restrict const hungerSwap = game->hungerSwapM;
-  const short *restrict const hunger = game->hungerArrM;
+  short *restrict const hunger = game->hungerArrM;
+
 #pragma omp parallel for collapse(1) schedule(guided)                          \
-    shared(board, r, c, head, gen, swap, procSwap, proc, hungerSwap, hunger)
+    shared(board, r, c, head, gen)
   for (size_t i = 0; i < r; i++) {
     const int id = omp_get_thread_num();
     struct Vector *restrict const vec = &head[id];
@@ -254,8 +259,6 @@ void calculateRabbitState(struct Vector head[], struct gameInfo *restrict game,
     for (size_t j = 0; j < c; j++) {
       const size_t pos = c * i + j;
       switch (board[pos]) {
-      // RABBIT NEXT POSITION
-      // ----------------------------------------------------------------------------
       case RABBIT:
         handleMoveRabbit(vec, game, gen, i, j);
         break;
@@ -272,30 +275,77 @@ void calculateRabbitState(struct Vector head[], struct gameInfo *restrict game,
     }
   }
 }
-void updateFoxState(struct Vector node[], struct gameInfo *restrict game) {
 
+static inline int handleRabbit(const short proc, const size_t pos,
+                               short *restrict const procSwap,
+                               char *restrict const swap) {
+
+  switch (swap[pos]) {
+  case EMPTY:
+    swap[pos] = RABBIT;
+    procSwap[pos] = proc;
+    return 0;
+  case RABBIT:
+    procSwap[pos] = MAX(proc, procSwap[pos]);
+    return -1;
+  }
+  return 0;
+}
+static inline int handleFox(const short hunger, const short proc,
+                            const size_t pos, short *restrict const hungerSwap,
+                            short *restrict const procSwap,
+                            char *restrict const swap) {
+
+  switch (swap[pos]) {
+  case EMPTY:
+    swap[pos] = FOX;
+    procSwap[pos] = proc;
+    hungerSwap[pos] = hunger;
+    return 0;
+  case FOX:
+    if (proc > procSwap[pos]) {
+      procSwap[pos] = proc;
+    } else if (proc == procSwap[pos]) {
+      procSwap[pos] = proc;
+      if (hunger < hungerSwap[pos])
+        hungerSwap[pos] = hunger;
+    }
+    return -1;
+  case RABBIT:
+    swap[pos] = FOX;
+    procSwap[pos] = proc;
+    hungerSwap[pos] = INIT_HUNGER;
+    return -1;
+  }
+  return 0;
+}
+
+static inline void updateFoxState(struct Vector node[],
+                                  struct gameInfo *restrict game) {
   const char *restrict const board = game->boardM;
   const size_t c = game->c;
   char *restrict const swap = game->swapM;
   short *restrict const procSwap = game->procSwapM;
   short *restrict const hungerSwap = game->hungerSwapM;
   const short genFoodFoxes = game->genFoodFoxes;
-  size_t *restrict const n = &game->n;
+  int n = 0;
 
-#pragma GCC ivdep
   for (size_t id = 0; id < omp_get_max_threads(); id++) {
-    for (size_t idx = 0; idx < node[id].size; idx++) {
-      struct Entry *restrict head = &node[id].data[idx];
-      const size_t pos = c * head->i + head->j;
-      if (head->hunger >= genFoodFoxes) {
-        if (board[pos] != RABBIT)
-          continue;
+    struct Vector *restrict const vec = &node[id];
+    for (size_t idx = 0; vec->size > idx; idx++) {
+      struct Entry head = vec->data[idx];
+      const size_t pos = c * head.i + head.j;
 
-        head->hunger = 0;
+      if (board[pos] == RABBIT)
+        head.hunger = 0;
+      else if (head.hunger >= genFoodFoxes) {
+        n--;
+        continue;
       }
-      if (head->procreated != EMPTY) {
+
+      if (head.procreated != EMPTY) {
         size_t childPos = pos;
-        switch (head->procreated) {
+        switch (head.procreated) {
         case NORTH:
           childPos += c;
           break;
@@ -309,66 +359,39 @@ void updateFoxState(struct Vector node[], struct gameInfo *restrict game) {
           childPos++;
           break;
         }
-        (*n)++;
+        n++;
         swap[childPos] = FOX;
         procSwap[childPos] = INIT_PROC;
         hungerSwap[childPos] = INIT_HUNGER;
       }
-
-      (*n)++;
-      switch (swap[pos]) {
-      case EMPTY:
-        swap[pos] = FOX;
-        procSwap[pos] = head->proc;
-        hungerSwap[pos] = head->hunger;
-        break;
-      case FOX:
-        if (head->proc > procSwap[pos]) {
-          procSwap[pos] = head->proc;
-        } else if (head->proc == procSwap[pos]) {
-          procSwap[pos] = head->proc;
-          if (head->hunger < hungerSwap[pos])
-            hungerSwap[pos] = head->hunger;
-        }
-        (*n)--;
-        break;
-      case RABBIT:
-        swap[pos] = FOX;
-        procSwap[pos] = head->proc;
-        hungerSwap[pos] = INIT_HUNGER;
-        (*n)--;
-        break;
-      }
+      n += handleFox(head.hunger, head.proc, pos, hungerSwap, procSwap, swap);
     }
     node[id].size = 0;
   }
+  game->n += n;
 }
-void updateRabbitState(struct Vector node[], struct gameInfo *restrict game) {
+static inline void updateRabbitState(struct Vector node[],
+                                     struct gameInfo *restrict game) {
 
   const char *restrict const board = game->boardM;
   const size_t c = game->c;
   char *restrict const swap = game->swapM;
   short *restrict const procSwap = game->procSwapM;
-  size_t *restrict const n = &game->n;
-  (*n) = 0;
+  int n = 0;
   for (size_t id = 0; id < omp_get_max_threads(); id++) {
-    for (size_t idx = 0; idx < node[id].size; idx++) {
-      const struct Entry *const restrict head = &node[id].data[idx];
-      (*n)++;
-      const size_t pos = c * head->i + head->j;
-      switch (swap[pos]) {
-      case EMPTY:
-        swap[pos] = RABBIT;
-        procSwap[pos] = head->proc;
-        break;
-      case RABBIT:
-        procSwap[pos] = MAX(head->proc, procSwap[pos]);
-        (*n)--;
-        break;
-      }
+    struct Vector *restrict const vec = &node[id];
+    for (size_t idx = 0; idx < vec->size; idx++) {
+      const struct Entry head = vec->data[idx];
+      const size_t pos = c * head.i + head.j;
+
+      if (head.procreated != EMPTY)
+        n++;
+
+      n += handleRabbit(head.proc, pos, procSwap, swap);
     }
     node[id].size = 0;
   }
+  game->n += n;
 
   simdMemcpyAndSet(game->boardM, swap, EMPTY, game->r * c);
   simdMemcpyAndSet(game->procArrM, procSwap, INIT_PROC, game->r * c);
@@ -377,7 +400,7 @@ void updateRabbitState(struct Vector node[], struct gameInfo *restrict game) {
 }
 // SWITCH ACTIVE BOARDS AND CLEAR SWAPs
 // ----------------------------------------------------------------------------
-void swapAndClearBoard(struct gameInfo *restrict game) {
+static inline void swapAndClearBoard(struct gameInfo *restrict game) {
   game->boardM = (char *)((size_t)game->boardM ^ (size_t)game->swapM);
   game->swapM = (char *)((size_t)game->boardM ^ (size_t)game->swapM);
   game->boardM = (char *)((size_t)game->boardM ^ (size_t)game->swapM);
@@ -493,7 +516,7 @@ void printState(const struct gameInfo *restrict game) {
 int main(int argc, char *argv[]) {
 
   struct gameInfo game;
-  if (fscanf(stdin, "%hu %hu %hu %zu %zu %zu %zu", &game.genProcRabbits,
+  if (fscanf(stdin, "%hu %hu %hu %zu %hu %hu %zu", &game.genProcRabbits,
              &game.genProcFoxes, &game.genFoodFoxes, &game.nGen, &game.r,
              &game.c, &game.n) < 0) {
     printf("Unable to read initial values\n");
@@ -553,7 +576,7 @@ int main(int argc, char *argv[]) {
   printf("\nGen 0\n");
   printState(&game);
 #endif
-  const int threads = omp_get_max_threads();
+  const size_t threads = omp_get_max_threads();
   const double startTime = omp_get_wtime();
   struct Vector vec[threads];
 
@@ -564,6 +587,7 @@ int main(int argc, char *argv[]) {
   for (size_t gen = 0; gen < game.nGen; gen++) {
     calculateRabbitState(vec, &game, gen);
     updateRabbitState(vec, &game);
+
     calculateFoxState(vec, &game, gen);
     updateFoxState(vec, &game);
 

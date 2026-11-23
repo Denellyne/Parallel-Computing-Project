@@ -22,9 +22,6 @@ static inline void simdMemsetChar(char *restrict dest, const char val,
 #pragma GCC ivdep
   for (; idx + 15 < size; idx += 16)
     _mm_store_si128((__m128i *)&dest[idx], valSIMD);
-#pragma GCC ivdep
-  for (; idx + 7 < size; idx += 8)
-    _mm_store_si128((__m128i *)&dest[idx], valSIMD);
 
 #endif
 
@@ -46,11 +43,6 @@ static inline void simdMemcpyChar(char *restrict dest, const char *restrict src,
 #if defined(__SSE4_1__)
 #pragma GCC ivdep
   for (; idx + 15 < size; idx += 16) {
-    const __m128i srcSIMD = _mm_load_si128((const __m128i *)&src[idx]);
-    _mm_store_si128((__m128i *)&dest[idx], srcSIMD);
-  }
-#pragma GCC ivdep
-  for (; idx + 7 < size; idx += 8) {
     const __m128i srcSIMD = _mm_load_si128((const __m128i *)&src[idx]);
     _mm_store_si128((__m128i *)&dest[idx], srcSIMD);
   }
@@ -78,12 +70,6 @@ static inline void simdMemcpyAndSetChar(char *restrict dest, char *restrict src,
 #if defined(__SSE4_1__)
 #pragma GCC ivdep
   for (; idx + 15 < size; idx += 16) {
-    const __m128i srcSIMD = _mm_load_si128((__m128i *)&src[idx]);
-    _mm_store_si128((__m128i *)&dest[idx], srcSIMD);
-    _mm_store_si128((__m128i *)&src[idx], _mm_set1_epi8(val));
-  }
-#pragma GCC ivdep
-  for (; idx + 7 < size; idx += 8) {
     const __m128i srcSIMD = _mm_load_si128((__m128i *)&src[idx]);
     _mm_store_si128((__m128i *)&dest[idx], srcSIMD);
     _mm_store_si128((__m128i *)&src[idx], _mm_set1_epi8(val));
