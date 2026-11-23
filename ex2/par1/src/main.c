@@ -201,7 +201,7 @@ void calculateFoxState(struct Vector head[], struct gameInfo *restrict game,
   short *restrict const procSwap = game->procSwapM;
   const short *restrict const proc = game->procArrM;
   size_t n = 0;
-#pragma omp parallel for collapse(1) reduction(+ : n)                          \
+#pragma omp parallel for collapse(1) reduction(+ : n) schedule(guided)         \
     shared(board, r, c, head, gen, swap, procSwap, proc)
   for (size_t i = 0; i < r; i++) {
     const int id = omp_get_thread_num();
@@ -245,7 +245,7 @@ void calculateRabbitState(struct Vector head[], struct gameInfo *restrict game,
   const short *restrict const proc = game->procArrM;
   short *restrict const hungerSwap = game->hungerSwapM;
   const short *restrict const hunger = game->hungerArrM;
-#pragma omp parallel for collapse(1)                                           \
+#pragma omp parallel for collapse(1) schedule(guided)                          \
     shared(board, r, c, head, gen, swap, procSwap, proc, hungerSwap, hunger)
   for (size_t i = 0; i < r; i++) {
     const int id = omp_get_thread_num();
