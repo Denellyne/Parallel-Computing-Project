@@ -7,7 +7,7 @@
 struct Entry {
   size_t i, j;
   short hunger, proc;
-  bool procreated;
+  char procreated;
 };
 struct Vector {
   size_t size;

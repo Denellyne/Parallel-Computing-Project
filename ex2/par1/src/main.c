@@ -119,16 +119,16 @@ void handleMoveRabbit(struct Vector *const restrict head,
 
     addNode(head, (struct Entry){.i = next_i,
                                  .j = next_j,
-                                 .procreated = true,
+                                 .procreated = EMPTY,
                                  .proc = INIT_PROC});
     addNode(head, (struct Entry){
-                      .i = i, .j = j, .procreated = false, .proc = INIT_PROC});
+                      .i = i, .j = j, .procreated = EMPTY, .proc = INIT_PROC});
 
   } else {
   noMove:
     addNode(head, (struct Entry){.i = next_i,
                                  .j = next_j,
-                                 .procreated = false,
+                                 .procreated = EMPTY,
                                  .proc = proc + 1});
   }
 
@@ -147,7 +147,8 @@ void handleMoveFox(struct Vector *const restrict head,
   const short hunger = game->hungerArrM[pos];
   const bool canProc = (proc >= game->genProcFoxes);
 
-  switch (selectMoveFox(game, gen, i, j)) {
+  const char direction = selectMoveFox(game, gen, i, j);
+  switch (direction) {
   case NORTH:
     next_i--;
     break;
@@ -170,21 +171,16 @@ void handleMoveFox(struct Vector *const restrict head,
 
       addNode(head, (struct Entry){.i = next_i,
                                    .j = next_j,
-                                   .procreated = true,
+                                   .procreated = direction,
                                    .proc = INIT_PROC,
                                    .hunger = hunger + 1});
-      addNode(head, (struct Entry){.i = i,
-                                   .j = j,
-                                   .procreated = false,
-                                   .proc = INIT_PROC,
-                                   .hunger = INIT_HUNGER});
     }
   } else {
   noMoveFox:
 
     addNode(head, (struct Entry){.i = next_i,
                                  .j = next_j,
-                                 .procreated = false,
+                                 .procreated = EMPTY,
                                  .proc = proc + 1,
                                  .hunger = hunger + 1});
   }
@@ -204,9 +200,9 @@ void calculateFoxState(struct Vector head[], struct gameInfo *restrict game,
   char *restrict const swap = game->swapM;
   short *restrict const procSwap = game->procSwapM;
   const short *restrict const proc = game->procArrM;
-  size_t *restrict const n = &game->n;
-#pragma omp parallel for collapse(1)                                           \
-    shared(board, r, c, head, gen, swap, procSwap, proc, n)
+  size_t n = 0;
+#pragma omp parallel for collapse(1) reduction(+ : n)                          \
+    shared(board, r, c, head, gen, swap, procSwap, proc)
   for (size_t i = 0; i < r; i++) {
     const int id = omp_get_thread_num();
     struct Vector *restrict const vec = &head[id];
@@ -228,13 +224,13 @@ void calculateFoxState(struct Vector head[], struct gameInfo *restrict game,
         break;
 
       case ROCK:
-#pragma omp atomic
-        (*n)++;
+        n++;
         swap[pos] = ROCK;
         break;
       }
     }
   }
+  game->n += n;
 }
 
 // UPDATE RABBIT POSITIONS
@@ -292,12 +288,31 @@ void updateFoxState(struct Vector node[], struct gameInfo *restrict game) {
       struct Entry *restrict head = &node[id].data[idx];
       const size_t pos = c * head->i + head->j;
       if (head->hunger >= genFoodFoxes) {
-        if (board[pos] != RABBIT) {
-          if (head->procreated)
-            idx++;
+        if (board[pos] != RABBIT)
           continue;
-        }
+
         head->hunger = 0;
+      }
+      if (head->procreated != EMPTY) {
+        size_t childPos = pos;
+        switch (head->procreated) {
+        case NORTH:
+          childPos += c;
+          break;
+        case SOUTH:
+          childPos -= c;
+          break;
+        case EAST:
+          childPos--;
+          break;
+        case WEST:
+          childPos++;
+          break;
+        }
+        (*n)++;
+        swap[childPos] = FOX;
+        procSwap[childPos] = INIT_PROC;
+        hungerSwap[childPos] = INIT_HUNGER;
       }
 
       (*n)++;

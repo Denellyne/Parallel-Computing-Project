@@ -1,6 +1,6 @@
 CXX = gcc
 BFLAGS =
-CFLAGS = -O2  -ftree-vectorize  -fvect-cost-model=dynamic -fno-math-errno -fno-trapping-math -ffinite-loops -fpredictive-commoning -ffinite-math-only -march=native -ffast-math -funroll-loops -flto -pthread -falign-loops=32 -fno-semantic-interposition -fvisibility=hidden -fdata-sections -ffunction-sections -lm -fopenmp
+CFLAGS = -O2 -ftree-vectorize  -fvect-cost-model=dynamic -fno-math-errno -fno-trapping-math -ffinite-loops -fpredictive-commoning -ffinite-math-only -march=native -ffast-math -funroll-loops -flto -pthread -falign-loops=32 -fno-semantic-interposition -fvisibility=hidden -fdata-sections -ffunction-sections -lm -fopenmp -pthread
 OBJ := $(shell find . -name '*.c')
 TEST := *.md
 DEBUG = -g -Wall -Wextra -pedantic
