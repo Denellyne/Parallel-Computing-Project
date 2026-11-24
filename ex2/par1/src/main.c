@@ -513,6 +513,32 @@ void printState(const struct gameInfo *restrict game) {
   printDashes(game->c);
 }
 
+// void a(int x) {
+//   if (x == 3)
+//     return;
+//
+// #pragma omp task
+//   {
+//
+// #pragma omp task untied
+//     {
+//       printf("%d %d\n", x, omp_get_thread_num());
+//       a(x + 1);
+//     }
+//     printf("%d done:%d\n", x, omp_get_thread_num());
+// #pragma omp task untied
+//     {
+//       printf("%d %d\n", x, omp_get_thread_num());
+//       a(x + 1);
+//     }
+//   }
+// }
+//
+// #pragma omp parallel
+//   {
+// #pragma omp single
+//     a(0);
+//   }
 int main(int argc, char *argv[]) {
 
   struct gameInfo game;
