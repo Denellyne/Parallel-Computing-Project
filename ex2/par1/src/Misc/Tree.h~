@@ -1,0 +1,393 @@
+#ifndef __VECTOR__HEADER__
+#define __VECTOR__HEADER__
+
+#include <stdlib.h>
+#include <stdio.h>
+
+// --------------------------------------------------------------------------- //
+
+// Some important notes:
+
+// These implementatins were not made with optimization in mind.
+
+// For instance, only integers are assumed, most functions that
+// were used were handcrafted, and structure-changing functions
+// return the new structure. The latter can be useful for the
+// creation of expressions à la functional for making any desired
+// change without attention to memory-related side-effects.
+
+// Less flexibility is more.
+// Negative freedom is key for a group project.
+
+// Also, do excuse my code structure.
+// It may seem strange at first.
+// But fret not. It has its own advantages.
+
+// --------------------------------------------------------------------------- //
+
+// The order in which sections of code can be found is as follows.
+
+// First, the basic code for the data structures can be found.
+
+// Next, the code for decision-making based on entropy values
+// can be found.
+
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+
+// The code sections begin here.
+
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+
+
+// The code section for entropy-based decision-making follows.
+
+// --------------------------------------------------------------------------- //
+
+// For pairs of integers.
+struct IntPair {
+  int fst ;
+  int snd ;
+} ;
+
+// --------------------------------------------------------------------------- //
+
+// For Binary Search Trees.
+// The left and right members refer
+// to child nodes.
+
+// The botLeftCorner and topRightCorner
+// refer to the bottom left and the top
+// right corners of each partition, which
+// alone can identify the borders of their
+// respective partition.
+struct BST {
+  struct BST*     left           ;
+  struct BST*     right          ;
+  struct IntPair* botLeftCorner  ;
+  struct IntPair* topRightCorner ;
+} ;
+
+// --------------------------------------------------------------------------- //
+
+// The CutAxis enum is probably not going to be useful.
+// enum CutAxis { CutHori , CutVerti } ;
+
+// --------------------------------------------------------------------------- //
+
+// Simple introduction and elimination forms for
+// pairs of integers (elements of the IntPair type).
+
+// This function, newIntPair, creates a pair out of
+// two integers (Introduction form).
+struct IntPair newIntPair ( int first , int second ) {
+  return
+    ( struct IntPair )
+      { . fst = first
+      , . snd = second
+      } ;
+}
+
+// --------------------------------------------------------------------------- //
+
+// The following two functions, fstIntPair and sndIntPair,
+// each extract the first and second element of the given
+// pair, respectively (Elimination forms).
+int fstIntPair ( struct IntPair* pair ) {
+  return pair -> fst ;
+}
+
+int sndIntPair ( struct IntPair* pair ) {
+  return pair -> snd ;
+}
+
+// --------------------------------------------------------------------------- //
+
+// The following function, printIntPair, prints a given IntPair,
+// that is, it shows each of its entries as a pair ( fst , snd ).
+void printIntPair ( struct IntPair* pair ) {
+  if ( pair == NULL ) {
+    printf( "\n\nERROR: Attempted to print a pair that is a null-pointer!\n\n" ) ;
+    abort() ;
+  } else {
+    printf( "( %d , %d )" , pair -> fst , pair -> snd ) ;
+  }
+}
+
+// --------------------------------------------------------------------------- //
+
+// The following functions, insertLeftIntPair and insertRightIntPair,
+// exist so that insertion into either entry of an IntPair is done
+// efficiently. Respectively, they insert into the fst and the snd entries.
+void insertFstIntPair ( struct IntPair* pair , int newValueFst ) {
+  pair -> fst = newValueFst ;
+}
+
+void insertFstSndPair ( struct IntPair* pair , int newValueSnd ) {
+  pair -> snd = newValueSnd ;
+}
+
+// --------------------------------------------------------------------------- //
+
+// This function, newBST, creates an empty BST.
+
+// Note that a BST must always refer to some map of the game,
+// which is why it requires two arguments (for each corner
+// coordinate of the map).
+struct BST newBST ( struct IntPair* leftPair , struct IntPair* rightPair ) {
+  return
+    ( struct BST )
+      { . left           = NULL
+      , . right          = NULL
+      , . botLeftCorner  = leftPair
+      , . topRightCorner = rightPair
+      } ;
+}
+
+// --------------------------------------------------------------------------- //
+
+// Convenience functions (not necessary but might be convenient).
+
+// Both insertLeftBST and insertRightBST have the purpose of
+// enabling the program to "insert" other BSTs into one of
+// the sides of an existing tree. Respectively, into the left
+// and the right sides.
+
+// Not sure if they are going to be useful.
+
+void insertLeftBST ( struct BST* root , struct BST* newLeft ) {
+  free ( root -> left ) ;
+
+  root -> left = newLeft ;
+}
+
+void insertRightBST ( struct BST* root , struct BST* newRight ) {
+  free ( root -> right ) ;
+
+  root -> right = newRight ;
+}
+
+// Inserts into both the left and right child nodes of a
+// given tree.
+void insertLeftRightBST ( struct BST* root
+			, struct BST* newLeft
+			, struct BST* newRight  ) {
+  free ( root -> left  ) ;
+  free ( root -> right ) ;
+
+  root -> left  = newLeft  ;
+  root -> right = newRight ;
+}
+
+// --------------------------------------------------------------------------- //
+
+// The following function, mergeBST, takes a tree and merges its
+// children. As each node of the tree is an entire partition of
+// the map of a game, and its children are two (possibly uneven)
+// halves itself, all that needs to be done is get rid of its
+// children.
+
+// Feel free to comment out the satefy check. I'd say it's better
+// to leave it only when performance actually matters. During
+// development, I'd advise against its removal. It can save time.
+// The point here is that certain behaviours are meaningless.
+void mergeBST ( struct BST* root ) {
+  if ( root -> left == NULL || root -> right == NULL ) {
+    printf( "\n\nERROR: Attempted to merge a BST with null children!\n\n" ) ;
+    abort() ;
+  }
+
+  free( root -> left  ) ;
+  free( root -> right ) ;
+
+  root -> left  = NULL ;
+  root -> right = NULL ;
+}
+
+// --------------------------------------------------------------------------- //
+
+/**************************************************/
+/* Regarding the fstCoord and sndCoord arguments, */
+/* the coordinate arguments of the splitBST()	  */
+/* functions:					  */
+/**************************************************/
+/**************************************************/
+/* When determining the corners of the resulting  */
+/* partitions (from the cut, a pair of two	  */
+/* coordinates):				  */
+/* 						  */
+/* + An horizontal axis cut implies that the	  */
+/*   leftmost coordinate of the cut is used as	  */
+/*   the bottom left corner of the new top-side	  */
+/*   partition. On the other hand, the rightmost  */
+/*   coordinate is used as the top right corner	  */
+/*   of the new bottom-side partition.		  */
+/* + Similarly, a vertical axis cut implies that  */
+/*   the topmost coordinate of the cut is used	  */
+/*   as the top right corner of the new left-side */
+/*   partition. On the other hand, the bottommost */
+/*   coordinate is used as the bottom left corner */
+/*   of the new right-side partition.		  */
+/* 						  */
+/* For simplicity and uniformity, we will use	  */
+/* the first coordinate argument as both the	  */
+/* leftmost coordinate (in the implied case	  */
+/* of the horizontal axis cut) and the topmost	  */
+/* coordinate (again, in the implied case of	  */
+/* the vertical axis cut). The second variable	  */
+/* will represent the second (respective)	  */
+/* coordinate of the cut, as described above.	  */
+/**************************************************/
+
+/*****************************************************/
+/* Note that, when searching the tree, the order of  */
+/* the partitions is always left-right and top-down. */
+/* 						     */
+/* Particularly, the left child of a BST node is     */
+/* always either going to be the left-side partition */
+/* or the top-side partition. Predictably, the right */
+/* child of a BST node is always either going to be  */
+/* the right-side partition or the bottom-side	     */
+/* partition.					     */
+/*****************************************************/
+
+// Feel free to comment out the satefy check. I'd say it's better
+// to leave it only when performance actually matters. During
+// development, I'd advise against its removal. It can save time.
+// The point here is that certain behaviours are meaningless.
+void splitBST ( struct BST*     root
+	      , struct IntPair* fstCoord
+	      , struct IntPair* sndCoord ) {
+  if ( root -> left != NULL || root -> right != NULL ) {
+    printf( "\n\nERROR: Attempted to split a BST with non null children!\n\n" ) ;
+    abort() ;
+  }
+
+  struct BST rootLeft  = newBST( root -> botLeftCorner , fstCoord  ) ;
+  struct BST rootRight = newBST( sndCoord , root -> topRightCorner ) ;
+
+  root -> left  = &( rootLeft  ) ;
+  root -> right = &( rootRight ) ;
+}
+
+// --------------------------------------------------------------------------- //
+
+void printBST ( struct BST* root ) {
+  if ( root == NULL ) {
+    printf( "NullTree" ) ;
+  } else {
+    printf( "( BST " ) ;
+    printIntPair( root -> botLeftCorner  ) ;
+    printf( " " ) ;
+    printIntPair( root -> topRightCorner ) ;
+    printf( " " ) ;
+    printBST( root -> left  ) ;
+    printf( " " ) ;
+    printBST( root -> right ) ;
+    printf( " )" ) ;
+  }
+}
+
+// --------------------------------------------------------------------------- //
+
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+
+// The code section for entropy-based decision-making follows.
+
+// --------------------------------------------------------------------------- //
+
+// My own 2-ary min/max functions.
+int min ( int x , int y ) { return x < y ? x : y ; }
+
+int max ( int x , int y ) { return x > y ? x : y ; }
+
+// --------------------------------------------------------------------------- //
+
+/************************************************************/
+/* Although this structure is predictable, it can take some */
+/* getting used to. For smaller expressions it has a clear  */
+/* negative effect. I hope that this did not end up looking */
+/* too horrid.						    */
+/************************************************************/
+/************************************************************/
+/* In essence, this function is a candidate for		    */
+/* determining the entropy. It takes the number of	    */
+/* bunnies and foxes, the total space in the partition	    */
+/* of relevance, and the amount of steps (iterations)	    */
+/* between each entropy recalculation.			    */
+/*                                                          */
+/* It attempts to predict the growth in the number of	    */
+/* entities, by multiplying <nBunnies> - <nFoxes> by 2	    */
+/* (thus the left-shift (<<)) <stepIterations> times.	    */
+/* <nBunnies> - <nFoxes> may be lower than 0, so we use	    */
+/* the max function for making sure it is not lower than 0. */
+/*                                                          */
+/* Finally, we add the number of foxes since they do not    */
+/* usually go away. Finally, using the min function,	    */
+/* we make sure this number is never greater than the	    */
+/* <totalSpace>, since it is the greatest number of	    */
+/* entities in a space. This is merely an heuristic	    */
+/* though.						    */
+/* 							    */
+/* Enteties may cross to other partitions so this is	    */
+/* not a great effort at predicting. It is optimistic	    */
+/* in some senses and pessimistic in others. We could	    */
+/* try tweaking the numbers using floats, but that is	    */
+/* overhead on a (possibly) frequent calculation.	    */
+/************************************************************/
+int calculateEntropy ( int nBunnies   , int nFoxes
+		     , int totalSpace , int stepIterations ) {
+  return min ( ( max ( nBunnies - nFoxes
+		     , 0
+		     )
+	         << stepIterations
+	       ) + nFoxes
+	     , totalSpace
+	     ) ;
+}
+
+// --------------------------------------------------------------------------- //
+
+
+
+// --------------------------------------------------------------------------- //
+
+// TODO
+// Data-collection (for entropy).
+// Decision-making function.
+
+
+// --------------------------------------------------------------------------- //
+
+
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+// --------------------------------------------------------------------------- //
+
+// The code sections end here.
+
+// --------------------------------------------------------------------------- //
+
+#endif // !VECTOR
